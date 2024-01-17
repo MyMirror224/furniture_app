@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "11058742887",
+    "project_id": "furniture-app-endgame",
+    "storage_bucket": "furniture-app-endgame.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:11058742887:android:0b71fbe8bf9b3829f236c2",
+        "android_client_info": {
+          "package_name": "com.example.furniture_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPEI-Fpv1k1zNL0yqU_w26b6Tk9-Y6ED8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
