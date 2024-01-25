@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+<string name="facebook_app_id">2159970027690547</string>
+<string name="fb_login_protocol_scheme">fb2159970027690547</string>
+<string name="facebook_client_token">5eb193f198b940b4d643c3f2e4a92222</string>
+<string name="app_name">FurnitureApp</string>
+
+</resources>
