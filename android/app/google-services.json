@@ -12,7 +12,12 @@
           "package_name": "com.example.furniture_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "11058742887-d0f88l7hi1go5mulmdom2287gk6533q9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCPEI-Fpv1k1zNL0yqU_w26b6Tk9-Y6ED8"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "11058742887-d0f88l7hi1go5mulmdom2287gk6533q9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "11058742887-8jo5b55h94ju16enkhjdshu3dm24stj2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.furnitureApp.RunnerTests"
+              }
+            }
+          ]
         }
       }
     }

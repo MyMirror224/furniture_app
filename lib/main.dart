@@ -1,6 +1,8 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 
+import 'package:furniture_app/pages/login_page.dart';
+
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -9,7 +11,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   final savedThemeMode = await AdaptiveTheme.getThemeMode();
   runApp(MyApp(savedThemeMode: savedThemeMode));
 }
@@ -22,6 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AdaptiveTheme(
+      initial: AdaptiveThemeMode.light,
       light: ThemeData(
         useMaterial3: true,
         brightness: Brightness.light,
@@ -32,13 +35,12 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         colorSchemeSeed: Colors.blue,
       ),
-      initial: savedThemeMode ?? AdaptiveThemeMode.light,
       builder: (theme, darkTheme) => MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Adaptive Theme Demo',
         theme: theme,
         darkTheme: darkTheme,
-        home: const MyHomePage(),
+        home: const Login(),
       ),
     );
   }
