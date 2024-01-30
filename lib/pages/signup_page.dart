@@ -4,13 +4,21 @@ import 'package:furniture_app/components/login_signup/button_login.dart';
 
 import 'package:furniture_app/components/login_signup/field_login.dart';
 import 'package:furniture_app/pages/login_page.dart';
+import 'package:furniture_app/pages/verify_email_view.dart';
+import 'package:furniture_app/state/auth/auth_state_provider.dart';
+import 'package:furniture_app/state/auth/is_not_verify_provider.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SignUp extends StatelessWidget {
-  const SignUp({super.key});
+class SignUp extends ConsumerWidget {
+  SignUp({super.key});
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+   
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -41,16 +49,34 @@ class SignUp extends StatelessWidget {
                   ),
                 ),
                 const Gap(10),
-                myTextField(Icons.person, 'name'),
+                myTextField(Icons.person, 'name', nameController),
                 const Gap(10),
-                myTextField(Icons.email, 'Email'), // icon cũng cần đổ màu
+                myTextField(Icons.email, 'Email',
+                    emailController), // icon cũng cần đổ màu
                 const Gap(10),
-                myTextField(Icons.lock, 'Password'),
+                myTextField(Icons.lock, 'Password', passwordController),
                 const Gap(10),
-                myTextField(Icons.lock, 'Confirm Password'),
+                myTextField(Icons.lock, 'Confirm Password', passwordController),
 
                 const Gap(15),
-                ButtonLogin("Sign up", Colors.grey),
+                buttonLogin(
+                  "Sign up",
+                  Colors.grey,
+                  onpressed: () {ref
+                      .read(authStateProvider.notifier)
+                      .registerWithEmailandPassword(
+                          emailController.text, passwordController.text);
+                       final isNotVeryfied = ref.watch(isNotVerifyEmail); 
+                      if(isNotVeryfied){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const VerifyEmailView(),
+                          )
+                        );
+                      }
+                  }
+                ),
                 const Gap(15),
                 const Center(
                   child: Text(

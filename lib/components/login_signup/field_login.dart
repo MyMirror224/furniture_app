@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-Widget myTextField(IconData icon, String hintText) {
+Widget myTextField(IconData icon, String hintText,TextEditingController controller) {
   return Padding(
     padding: const EdgeInsets.only(
       left: 25,
@@ -24,6 +24,7 @@ Widget myTextField(IconData icon, String hintText) {
           ),
           Expanded(
             child: TextFormField(
+              controller: controller,
               style: const TextStyle(color: Colors.black),
               obscureText:
                   hintText == 'Password' || hintText == 'Confirm Password'

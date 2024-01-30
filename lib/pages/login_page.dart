@@ -6,13 +6,17 @@ import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/components/login_signup/field_login.dart';
 import 'package:furniture_app/pages/forgot_password/forgot_password.dart';
 import 'package:furniture_app/pages/signup_page.dart';
+import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class Login extends StatelessWidget {
+class Login extends ConsumerWidget {
   const Login({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
     Size size = MediaQuery.of(context).size; // ------ lấy nhanh size màn hình
     return Scaffold(
       backgroundColor: Colors.white,
@@ -45,9 +49,10 @@ class Login extends StatelessWidget {
                   ),
                 ),
                 const Gap(5),
-                myTextField(Icons.person, 'Email'), // icon cũng cần đổ màu
+                myTextField(Icons.person, 'Email',
+                    emailController), // icon cũng cần đổ màu
                 const Gap(15),
-                myTextField(Icons.lock, 'Password'),
+                myTextField(Icons.lock, 'Password', passwordController),
                 const Gap(5),
                 Container(
                   padding: const EdgeInsets.only(right: 30),
@@ -69,7 +74,12 @@ class Login extends StatelessWidget {
                   ),
                 ),
                 const Gap(15),
-                ButtonLogin("Login", Colors.grey),
+                buttonLogin("Login", Colors.grey, onpressed: () {
+                  ref
+                      .read(authStateProvider.notifier)
+                      .loginWithEmailandPassword(emailController.toString(),
+                          passwordController.toString());
+                }),
                 const Gap(15),
                 const Center(
                   child: Text(
@@ -82,14 +92,18 @@ class Login extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: () => null,
+                      onPressed: () => ref
+                          .read(authStateProvider.notifier)
+                          .loginWithFacebook(),
                       icon: const FaIcon(
                         FontAwesomeIcons.facebook,
                         color: Colors.blue,
                       ),
                     ),
                     IconButton(
-                      onPressed: () => null,
+                      onPressed: () => ref
+                          .read(authStateProvider.notifier)
+                          .loginWithGoogle(),
                       icon: const FaIcon(FontAwesomeIcons.google,
                           color: Colors.red),
                     ), // Use the correct named parameter 'data' and provide a positional argument.
@@ -105,17 +119,19 @@ class Login extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SignUp())),
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>  SignUp(),
+                        )
+                      ),
                       child: const Text(
                         " Sign Up",
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 15,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
+                        )
+                      )
+                    )
                   ],
                 ),
               ],
