@@ -8,7 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class Authenticator {
   const Authenticator();
-  bool get isAlreadyLoggedIn => userId == null;
+  bool get isAlreadyLoggedIn => userId != null;
 
   bool get isVerified => FirebaseAuth.instance.currentUser!.emailVerified;
 
@@ -48,9 +48,9 @@ class Authenticator {
     required String email,
     required String password,
   }) async {
-    if (isVerified != true) {
-      return AuthResult.notVerified;
-    }
+    // if (isVerified != true) {
+    //   return AuthResult.notVerified;
+    // }
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
@@ -71,7 +71,7 @@ class Authenticator {
         email: email,
         password: password,
       );
-      return AuthResult.resgistered;
+      return AuthResult.notVerified;
     } catch (e) {
       return AuthResult.failure;
     }

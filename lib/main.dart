@@ -1,7 +1,11 @@
-import 'package:adaptive_theme/adaptive_theme.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:furniture_app/pages/login_page.dart';
+import 'package:furniture_app/pages/mainview.dart';
+import 'package:furniture_app/state/auth/is_logged_in_provider.dart';
+import 'package:furniture_app/state/auth/is_verify_provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,46 +15,58 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  final savedThemeMode = await AdaptiveTheme.getThemeMode();
-  runApp(MyApp(savedThemeMode: savedThemeMode));
+  runApp(const ProviderScope(
+    child:  App(),
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  final AdaptiveThemeMode? savedThemeMode;
 
-  const MyApp({super.key, this.savedThemeMode});
+
+class App extends ConsumerWidget {
+  const App({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return AdaptiveTheme(
-      initial: AdaptiveThemeMode.light,
-      light: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.light,
-        colorSchemeSeed: Colors.blue,
-      ),
-      dark: ThemeData(
-        useMaterial3: true,
+  Widget build(BuildContext context, WidgetRef ref) {
+    // calculate widget to show
+    return MaterialApp(
+      darkTheme: ThemeData(
         brightness: Brightness.dark,
-        colorSchemeSeed: Colors.blue,
+        primarySwatch: Colors.blueGrey,
+        indicatorColor: Colors.blueGrey,
       ),
-      builder: (theme, darkTheme) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Adaptive Theme Demo',
-        theme: theme,
-        darkTheme: darkTheme,
-        home: const Login(),
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: Colors.blue,
+      ),
+      themeMode: ThemeMode.dark,
+      debugShowCheckedModeBanner: false,
+      home: Consumer(
+        builder: (context, ref, child) {
+          // install the loading screen
+          // ref.listen<bool>(
+          //   isLoadingProvider,
+          //   (_, isLoading) {
+          //     if (isLoading) {
+          //       LoadingScreen.instance().show(
+          //         context: context,
+          //       );
+          //     } else {
+          //       LoadingScreen.instance().hide();
+          //     }
+          //   },
+          // );
+          final isLoggedIn = ref.watch(isLoggedInProvider);
+          final isVerify = ref.watch(isVerifyEmail);
+          if (isLoggedIn && isVerify) {
+            return const MainView();
+          } else {
+            return const Login();
+          }
+          
+        },
       ),
     );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold();
   }
 }

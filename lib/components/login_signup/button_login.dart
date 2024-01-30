@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-Widget ButtonLogin(String text, Color color, {Function()? onTap}) {
+Widget buttonLogin(String text, Color color, {Function()? onpressed}) {
   return GestureDetector(
-    onTap: onTap,
     child: Padding(
       padding: const EdgeInsets.only(left: 25, right: 25),
       child: Container(
@@ -13,14 +12,16 @@ Widget ButtonLogin(String text, Color color, {Function()? onTap}) {
         ),
         padding: const EdgeInsets.all(10),
         child: Center(
-          child: Text(
-            text,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          child: TextButton(
+              onPressed: onpressed,
+              child: Text(
+                text,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
         ),
       ),
     ),
