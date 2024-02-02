@@ -1,10 +1,9 @@
-
-
 import 'package:furniture_app/state/auth/auth_result.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final isNotVerifyEmail= Provider<bool>((ref) {
+final isRegistered = Provider<bool>((ref) {
   final authState = ref.watch(authStateProvider);
-  return authState.authResult == AuthResult.notVerified;
+
+  return authState.authResult == AuthResult.resgistered;
 });

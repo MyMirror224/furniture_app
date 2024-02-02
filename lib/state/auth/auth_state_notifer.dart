@@ -89,20 +89,20 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.logInWithEmailPassword(
         email: email, password: password);
-    // if (result == AuthResult.notVerified) {
-    //   return sendEmailVerification();
-    // } else {
-    //   state = AuthState(
-    //     isLoading: false,
-    //     authResult: result,
-    //     userId: _authenticator.userId,
-    //   );
-    // }
-    state = AuthState(
+    if (result != AuthResult.verified) {
+      return sendEmailVerification();
+    } else {
+      state = AuthState(
         isLoading: false,
         authResult: result,
         userId: _authenticator.userId,
       );
+    }
+    state = AuthState(
+      isLoading: false,
+      authResult: result,
+      userId: _authenticator.userId,
+    );
   }
 
   Future<void> registerWithEmailandPassword(
@@ -120,11 +120,12 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
           password: password);
     }
     state = AuthState(
-        isLoading: false,
-        authResult: result,
-        userId: _authenticator.userId,
-      );
+      isLoading: false,
+      authResult: result,
+      userId: _authenticator.userId,
+    );
   }
+
   Future<void> resetPassword(String email) async {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.sendPasswordReset(toEmail: email);
@@ -134,5 +135,4 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       userId: _authenticator.userId,
     );
   }
-  
 }

@@ -1,6 +1,5 @@
-
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import 'package:furniture_app/pages/login_page.dart';
 import 'package:furniture_app/pages/mainview.dart';
 import 'package:furniture_app/state/auth/is_logged_in_provider.dart';
@@ -8,7 +7,6 @@ import 'package:furniture_app/state/auth/is_verify_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,11 +14,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const ProviderScope(
-    child:  App(),
+    child: App(),
   ));
 }
-
-
 
 class App extends ConsumerWidget {
   const App({
@@ -64,7 +60,6 @@ class App extends ConsumerWidget {
           } else {
             return const Login();
           }
-          
         },
       ),
     );

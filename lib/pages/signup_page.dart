@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/login_signup/button_login.dart';
-
-import 'package:furniture_app/components/login_signup/field_login.dart';
 import 'package:furniture_app/pages/login_page.dart';
 import 'package:furniture_app/pages/verify_email_view.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
-import 'package:furniture_app/state/auth/is_not_verify_provider.dart';
+import 'package:furniture_app/state/auth/is_registered.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+// ignore: must_be_immutable
 class SignUp extends ConsumerWidget {
   SignUp({super.key});
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-   
+    final loginNotifier = ref.watch(loginProvider);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -49,34 +46,164 @@ class SignUp extends ConsumerWidget {
                   ),
                 ),
                 const Gap(10),
-                myTextField(Icons.person, 'name', nameController),
-                const Gap(10),
-                myTextField(Icons.email, 'Email',
-                    emailController), // icon cũng cần đổ màu
-                const Gap(10),
-                myTextField(Icons.lock, 'Password', passwordController),
-                const Gap(10),
-                myTextField(Icons.lock, 'Confirm Password', passwordController),
-
+                SizedBox(
+                  width: 350.0,
+                  child: TextFormField(
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                    decoration: const InputDecoration(
+                      labelText: "Email Address",
+                      labelStyle: TextStyle(color: Colors.black),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(
+                            color: Colors
+                                .red), // Màu sắc của đường biên khi có lỗi
+                      ),
+                      prefixIcon: Icon(
+                        Icons.email,
+                        color: Colors.black,
+                        size: 30.0,
+                      ),
+                      suffixIcon: Padding(padding: EdgeInsets.only(left: 30.0)),
+                    ),
+                  ),
+                ), // icon cũng cần đổ màu
                 const Gap(15),
-                buttonLogin(
-                  "Sign up",
-                  Colors.grey,
-                  onpressed: () {ref
+                SizedBox(
+                  width: 350.0,
+                  child: TextFormField(
+                    controller: passwordController,
+                    textAlign: TextAlign.center,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "please enter your password";
+                      } else if (value.length < 6) {
+                        return "password must be at least 6 characters";
+                      }
+                      return null;
+                    },
+                    obscureText: loginNotifier.isObscure,
+                    decoration: InputDecoration(
+                      labelText: "Password",
+                      labelStyle: const TextStyle(color: Colors.black),
+                      focusColor: Colors.blueAccent,
+                      enabledBorder: const OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))),
+                      focusedBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                      errorBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(
+                            color: Colors
+                                .red), // Màu sắc của đường biên khi có lỗi
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.lock,
+                        color: Colors.black,
+                        size: 30.0,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          loginNotifier.isObscure
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.black,
+                          size: 30.0,
+                        ),
+                        onPressed: () {
+                          loginNotifier.togglePasswordVisibility();
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                const Gap(15),
+                SizedBox(
+                  width: 350.0,
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                    obscureText: loginNotifier.isObscure,
+                    decoration: InputDecoration(
+                      labelText: "Confirm Password",
+                      labelStyle: const TextStyle(color: Colors.black),
+                      focusColor: Colors.blueAccent,
+                      enabledBorder: const OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))),
+                      focusedBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                      errorBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(
+                            color: Colors
+                                .red), // Màu sắc của đường biên khi có lỗi
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.lock,
+                        color: Colors.black,
+                        size: 30.0,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          loginNotifier.isObscure
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.black,
+                          size: 30.0,
+                        ),
+                        onPressed: () {
+                          loginNotifier.togglePasswordVisibility();
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                const Gap(15),
+
+                buttonLogin("Sign up", Colors.grey, onpressed: () {
+                  ref
                       .read(authStateProvider.notifier)
                       .registerWithEmailandPassword(
                           emailController.text, passwordController.text);
-                       final isNotVeryfied = ref.watch(isNotVerifyEmail); 
-                      if(isNotVeryfied){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const VerifyEmailView(),
-                          )
-                        );
-                      }
+                  final registered = ref.watch(isRegistered);
+                  if (registered) {
+                    ref
+                        .read(authStateProvider.notifier)
+                        .sendEmailVerification();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const VerifyEmailView(),
+                        ));
                   }
-                ),
+                }),
                 const Gap(15),
                 const Center(
                   child: Text(
@@ -133,3 +260,7 @@ class SignUp extends ConsumerWidget {
     );
   }
 }
+
+// Create a provider to manage the state of your form
+
+final passwordProvider = StateProvider<String?>((ref) => "");

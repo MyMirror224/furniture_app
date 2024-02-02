@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:furniture_app/state/auth/auth_result.dart';
 import 'package:furniture_app/state/auth/constants.dart';
-
 import 'package:furniture_app/typedef/user_id.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -48,9 +47,9 @@ class Authenticator {
     required String email,
     required String password,
   }) async {
-    // if (isVerified != true) {
-    //   return AuthResult.notVerified;
-    // }
+    if (isVerified != true) {
+      return AuthResult.notVerified;
+    }
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
@@ -71,7 +70,7 @@ class Authenticator {
         email: email,
         password: password,
       );
-      return AuthResult.notVerified;
+      return AuthResult.resgistered;
     } catch (e) {
       return AuthResult.failure;
     }
