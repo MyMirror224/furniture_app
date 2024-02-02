@@ -1,14 +1,13 @@
-
-
 import 'package:flutter/material.dart';
 // Import the dart:ui package for Radius.circular.
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/login_signup/button_login.dart';
-
 import 'package:furniture_app/pages/forgot_password/forgot_password.dart';
 import 'package:furniture_app/pages/signup_page.dart';
+import 'package:furniture_app/pages/verify_email_view.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
+import 'package:furniture_app/state/auth/is_verify_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -17,6 +16,7 @@ class Login extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loginNotifier = ref.watch(loginProvider);
+    final isVerify = ref.watch(isVerifyEmail);
     String? email;
     String? password;
     final double deviceHeight = MediaQuery.of(context).size.height;
@@ -169,9 +169,18 @@ class Login extends ConsumerWidget {
                 ),
                 const Gap(15),
                 buttonLogin("Login", Colors.grey, onpressed: () {
-                  ref
-                      .read(authStateProvider.notifier)
-                      .loginWithEmailandPassword(email!, password!);
+                  if (!isVerify) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const VerifyEmailView(),
+                      ),
+                    );
+                  } else {
+                    ref
+                        .read(authStateProvider.notifier)
+                        .loginWithEmailandPassword(email!, password!);
+                  }
                 }),
                 const Gap(15),
                 const Center(
@@ -212,13 +221,13 @@ class Login extends ConsumerWidget {
                     ),
                     GestureDetector(
                         onTap: () => {
-                          Navigator.canPop(context),
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SignUp(),
-                            )),
-                        } ,
+                              Navigator.canPop(context),
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SignUp(),
+                                  )),
+                            },
                         child: const Text(" Sign Up",
                             style: TextStyle(
                               color: Colors.black,
@@ -240,8 +249,6 @@ final loginProvider = ChangeNotifierProvider((ref) => LoginNotifier());
 
 class LoginNotifier extends ChangeNotifier {
   bool isObscure = true;
-  
-
 
   void togglePasswordVisibility() {
     isObscure = !isObscure;
@@ -251,16 +258,11 @@ class LoginNotifier extends ChangeNotifier {
   String? isValidEmail(String value) {
     RegExp regex = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
     if (value.isEmpty) {
-      return'Please enter your email';
-      
-      
+      return 'Please enter your email';
     } else {
       if (!regex.hasMatch(value)) {
         return 'Enter valid email';
-        
-        
-      } 
-        
+      }
     }
     return null;
   }
@@ -269,13 +271,11 @@ class LoginNotifier extends ChangeNotifier {
     if (value.isEmpty) {
       notifyListeners();
       return 'Please enter your password';
-       
     } else if (value.length < 6) {
       notifyListeners();
-        return  'Password must be at least 6 characters';
-    
-    } 
-      notifyListeners();
-      return "";
+      return 'Password must be at least 6 characters';
+    }
+    notifyListeners();
+    return "";
   }
 }

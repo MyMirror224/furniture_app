@@ -4,7 +4,7 @@ import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/pages/login_page.dart';
 import 'package:furniture_app/pages/verify_email_view.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
-import 'package:furniture_app/state/auth/is_not_verify_provider.dart';
+import 'package:furniture_app/state/auth/is_registered.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -192,8 +192,8 @@ class SignUp extends ConsumerWidget {
                       .read(authStateProvider.notifier)
                       .registerWithEmailandPassword(
                           emailController.text, passwordController.text);
-                  final isNotVeryfied = ref.watch(isNotVerifyEmail);
-                  if (isNotVeryfied) {
+                  final registered = ref.watch(isRegistered);
+                  if (registered) {
                     ref
                         .read(authStateProvider.notifier)
                         .sendEmailVerification();
