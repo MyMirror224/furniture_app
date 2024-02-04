@@ -2,8 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_app/pages/login_page.dart';
 import 'package:furniture_app/pages/mainview.dart';
+import 'package:furniture_app/pages/verify_email_view.dart';
 import 'package:furniture_app/state/auth/is_logged_in_provider.dart';
+import 'package:furniture_app/state/auth/is_not_verify_provider.dart';
 import 'package:furniture_app/state/auth/is_verify_provider.dart';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'firebase_options.dart';
@@ -53,12 +56,15 @@ class App extends ConsumerWidget {
           //     }
           //   },
           // );
+          final isNotVerify = ref.watch(isNotVerifyEmailProvider);
           final isLoggedIn = ref.watch(isLoggedInProvider);
-          final isVerify = ref.watch(isVerifyEmail);
-          if (isLoggedIn && isVerify) {
+          
+          if (isLoggedIn ) {
             return const MainView();
+          } else if(isNotVerify){
+            return const VerifyEmailView();
           } else {
-            return const Login();
+            return  Login();
           }
         },
       ),
