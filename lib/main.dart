@@ -55,13 +55,14 @@ class App extends ConsumerWidget {
           // );
           final isLoggedIn = ref.watch(isLoggedInProvider);
           final isVerify = ref.watch(isVerifyEmail);
-          if (isLoggedIn && isVerify) {
+          if (isLoggedIn) {
             return const MainView();
           } else {
             return const Login();
           }
         },
       ),
+      //home: const SelectAddress(),
     );
   }
 }

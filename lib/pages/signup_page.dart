@@ -15,6 +15,7 @@ class SignUp extends ConsumerWidget {
   TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    Size size = MediaQuery.of(context).size;
     final loginNotifier = ref.watch(loginProvider);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -187,7 +188,8 @@ class SignUp extends ConsumerWidget {
                 ),
                 const Gap(15),
 
-                buttonLogin("Sign up", Colors.grey, onpressed: () {
+                buttonLogin("Sign up", Colors.grey, (size.width * 0.5).toInt(),
+                    (size.height * 0.07).toInt(), onpressed: () {
                   ref
                       .read(authStateProvider.notifier)
                       .registerWithEmailandPassword(

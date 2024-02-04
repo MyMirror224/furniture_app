@@ -17,6 +17,7 @@ class Login extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final loginNotifier = ref.watch(loginProvider);
     final isVerify = ref.watch(isVerifyEmail);
+    Size size = MediaQuery.of(context).size;
     String? email;
     String? password;
     final double deviceHeight = MediaQuery.of(context).size.height;
@@ -168,15 +169,16 @@ class Login extends ConsumerWidget {
                   ),
                 ),
                 const Gap(15),
-                buttonLogin("Login", Colors.grey, onpressed: () {
-                  if (!isVerify) {
+                buttonLogin("Login", Colors.grey, (size.width * 0.5).toInt(),
+                    (size.height * 0.07).toInt(), onpressed: () {
+                  if (!isVerify && email != null && password != null) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const VerifyEmailView(),
                       ),
                     );
-                  } else {
+                  } else if (email != null && password != null) {
                     ref
                         .read(authStateProvider.notifier)
                         .loginWithEmailandPassword(email!, password!);
