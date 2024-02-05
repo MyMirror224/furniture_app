@@ -1,12 +1,14 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/information_user_field.dart';
 import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/pages/user_information/change_password.dart';
+import 'package:furniture_app/pages/user_information/select_address.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class PersonalInformation extends ConsumerWidget {
+class UserInformation extends ConsumerWidget {
   //late DateTime birthDay = DateTime.now();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,20 +27,49 @@ class PersonalInformation extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Center(
-                child: Container(
-                  height: size.height * 0.1,
-                  width: size.height * 0.1,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(60.0),
-                  ),
-                  child: const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 50,
-                  ),
-                ),
+              Column(
+                children: [
+                  Stack(
+                    children: [
+                      SizedBox(
+                        height: 120,
+                        width: 120,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          // child: Image.asset(
+                          //   "assets/images/avt.jpg",
+                          //   fit: BoxFit.cover,
+                          // ),
+
+                          child: Icon(
+                            Icons.person,
+                            size: size.height * 0.1,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.yellow,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: IconButton(
+                              onPressed: () {
+                                // chon anh
+                              },
+                              icon: const Icon(
+                                Icons.edit,
+                                color: Colors.black,
+                                size: 20,
+                              ),
+                            )),
+                      )
+                    ],
+                  )
+                ],
               ),
               const InformationFields(type: "name", text: 'Name'),
               const InformationFields(type: "field", text: 'Full name'),
@@ -122,7 +153,12 @@ class PersonalInformation extends ConsumerWidget {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SelectAddress()));
+                      },
                       icon: const Icon(
                         Icons.edit,
                         color: Colors.black,
@@ -168,11 +204,74 @@ class PersonalInformation extends ConsumerWidget {
                 children: [
                   buttonLogin(
                       "Canned", Colors.black, (size.width * 0.3).toInt(), 50,
-                      onpressed: () {}),
+                      onpressed: () {
+                    // xoa cac truong da nhap
+                  }),
                   const Gap(20),
                   buttonLogin(
-                      "Save", Colors.black, (size.width * 0.3).toInt(), 50,
-                      onpressed: () {}),
+                    "Save",
+                    Colors.black,
+                    (size.width * 0.3).toInt(),
+                    50,
+                    onpressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: const Text('Do you want to save?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      final snackBar = SnackBar(
+                                        /// need to set following properties for best effect of awesome_snackbar_content
+                                        elevation: 0,
+                                        behavior: SnackBarBehavior.floating,
+                                        backgroundColor: Colors.transparent,
+                                        content: AwesomeSnackbarContent(
+                                          title: '!!',
+                                          message:
+                                              'Your Action has been canceled!',
+
+                                          /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+                                          contentType: ContentType.failure,
+                                        ),
+                                      );
+
+                                      ScaffoldMessenger.of(context)
+                                        ..hideCurrentSnackBar()
+                                        ..showSnackBar(snackBar);
+
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('No'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      final snackBar = SnackBar(
+                                        /// need to set following properties for best effect of awesome_snackbar_content
+                                        elevation: 0,
+                                        behavior: SnackBarBehavior.floating,
+                                        backgroundColor: Colors.transparent,
+                                        content: AwesomeSnackbarContent(
+                                          title: 'OwO',
+                                          message:
+                                              'Your address has been set as default successfully',
+
+                                          /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+                                          contentType: ContentType.success,
+                                        ),
+                                      );
+
+                                      ScaffoldMessenger.of(context)
+                                        ..hideCurrentSnackBar()
+                                        ..showSnackBar(snackBar);
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Yes'),
+                                  ),
+                                ],
+                              ));
+                    },
+                  ),
                 ],
               )
             ],

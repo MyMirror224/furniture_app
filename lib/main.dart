@@ -1,9 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:furniture_app/pages/login_page.dart';
-import 'package:furniture_app/pages/mainview.dart';
-import 'package:furniture_app/state/auth/is_logged_in_provider.dart';
-import 'package:furniture_app/state/auth/is_verify_provider.dart';
+import 'package:furniture_app/pages/user_information/user_information.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'firebase_options.dart';
@@ -38,31 +35,31 @@ class App extends ConsumerWidget {
       ),
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
-      home: Consumer(
-        builder: (context, ref, child) {
-          // install the loading screen
-          // ref.listen<bool>(
-          //   isLoadingProvider,
-          //   (_, isLoading) {
-          //     if (isLoading) {
-          //       LoadingScreen.instance().show(
-          //         context: context,
-          //       );
-          //     } else {
-          //       LoadingScreen.instance().hide();
-          //     }
-          //   },
-          // );
-          final isLoggedIn = ref.watch(isLoggedInProvider);
-          final isVerify = ref.watch(isVerifyEmail);
-          if (isLoggedIn) {
-            return const MainView();
-          } else {
-            return const Login();
-          }
-        },
-      ),
-      //home: const SelectAddress(),
+      // home: Consumer(
+      //   builder: (context, ref, child) {
+      //     // install the loading screen
+      //     // ref.listen<bool>(
+      //     //   isLoadingProvider,
+      //     //   (_, isLoading) {
+      //     //     if (isLoading) {
+      //     //       LoadingScreen.instance().show(
+      //     //         context: context,
+      //     //       );
+      //     //     } else {
+      //     //       LoadingScreen.instance().hide();
+      //     //     }
+      //     //   },
+      //     // );
+      //     final isLoggedIn = ref.watch(isLoggedInProvider);
+      //     final isVerify = ref.watch(isVerifyEmail);
+      //     if (isLoggedIn) {
+      //       return const MainView();
+      //     } else {
+      //       return const Login();
+      //     }
+      //   },
+      // ),
+      home: UserInformation(),
     );
   }
 }
