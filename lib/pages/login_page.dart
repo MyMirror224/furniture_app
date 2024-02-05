@@ -19,8 +19,8 @@ class Login extends ConsumerWidget {
   final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final loginNotifier = ref.watch(obscurePasswordProvider);
 
+    final loginNotifier = ref.watch(obscurePasswordProvider);
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -190,6 +190,7 @@ class Login extends ConsumerWidget {
                       style: TextStyle(color: Colors.black, fontSize: 10),
                     ),
                   ),
+
                   const Gap(10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -211,6 +212,7 @@ class Login extends ConsumerWidget {
                             color: Colors.red),
                       ), // Use the correct named parameter 'data' and provide a positional argument.
                     ],
+
                   ),
                   const Gap(10),
                   Row(

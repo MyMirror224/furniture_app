@@ -16,12 +16,14 @@ class SignUp extends ConsumerWidget {
   final  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     
     final RegExp emailRegex = RegExp(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
     final RegExp passwordRegex = RegExp(
         r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
     final loginNotifier = ref.watch(obscurePasswordProvider);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -214,11 +216,13 @@ class SignUp extends ConsumerWidget {
                       ),
                     ),
                   ),
+
                   const Gap(15),
             
                   buttonLogin("Sign up", Colors.grey, onpressed: () async{
                     if(_formKey.currentState!.validate()){
                       ref
+
                         .read(authStateProvider.notifier)
                         .registerWithEmailandPassword(
                             emailController.text, passwordController.text);

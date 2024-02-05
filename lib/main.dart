@@ -58,8 +58,10 @@ class App extends ConsumerWidget {
           // );
           final isNotVerify = ref.watch(isNotVerifyEmailProvider);
           final isLoggedIn = ref.watch(isLoggedInProvider);
+
           
           if (isLoggedIn ) {
+
             return const MainView();
           } else if(isNotVerify){
             return const VerifyEmailView();
@@ -68,6 +70,7 @@ class App extends ConsumerWidget {
           }
         },
       ),
+      //home: const SelectAddress(),
     );
   }
 }
