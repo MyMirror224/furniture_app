@@ -9,7 +9,7 @@ class Authenticator {
   const Authenticator();
   bool get isAlreadyLoggedIn => userId != null;
 
-  bool get isVerified => FirebaseAuth.instance.currentUser!.emailVerified;
+  User? get currentUser => FirebaseAuth.instance.currentUser;
 
   UserId? get userId => FirebaseAuth.instance.currentUser?.uid;
 
@@ -40,22 +40,22 @@ class Authenticator {
 
   Future<AuthResult> signInAnonymously() async {
     await FirebaseAuth.instance.signInAnonymously();
-    return AuthResult.success;
+    return AuthResult.sussess;
   }
 
   Future<AuthResult> logInWithEmailPassword({
     required String email,
     required String password,
   }) async {
-    if (isVerified != true) {
-      return AuthResult.notVerified;
-    }
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return AuthResult.success;
+      if (currentUser?.emailVerified == false) {
+        return AuthResult.notVerified;
+      }
+      return AuthResult.sussess;
     } catch (e) {
       return AuthResult.failure;
     }
@@ -77,8 +77,8 @@ class Authenticator {
   }
 
   Future<AuthResult> sendEmailVerification() async {
-    await FirebaseAuth.instance.currentUser?.sendEmailVerification();
-    if (isVerified == true) {
+    await currentUser?.sendEmailVerification();
+    if(currentUser!.emailVerified){
       return AuthResult.verified;
     }
     return AuthResult.notVerified;
@@ -102,7 +102,7 @@ class Authenticator {
       await FirebaseAuth.instance.signInWithCredential(
         oauthCredentials,
       );
-      return AuthResult.success;
+      return AuthResult.sussess;
     } on FirebaseAuthException catch (e) {
       final email = e.email;
       final credential = e.credential;
@@ -115,7 +115,7 @@ class Authenticator {
           await loginWithGoogle();
           FirebaseAuth.instance.currentUser?.linkWithCredential(credential);
         }
-        return AuthResult.success;
+        return AuthResult.sussess;
       }
       return AuthResult.failure;
     }
@@ -141,7 +141,7 @@ class Authenticator {
       await FirebaseAuth.instance.signInWithCredential(
         oauthCredentials,
       );
-      return AuthResult.success;
+      return AuthResult.sussess;
     } catch (e) {
       return AuthResult.failure;
     }

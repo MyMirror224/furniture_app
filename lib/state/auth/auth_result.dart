@@ -1,9 +1,10 @@
 enum AuthResult {
   aborted,
-  success,
   failure,
+  reset,
+  sussess,
+  verified,
   notVerified,
   resgistered,
-  verified,
-  reset,
 }
+

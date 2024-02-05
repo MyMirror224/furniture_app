@@ -7,5 +7,5 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final isLoggedInProvider = Provider<bool>((ref) {
   final authState = ref.watch(authStateProvider);
-  return authState.authResult == AuthResult.success;
+  return authState.authResult == AuthResult.sussess;  
 });

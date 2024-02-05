@@ -1,6 +1,9 @@
 
 import 'package:flutter/material.dart';
+
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
+
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class VerifyEmailView extends ConsumerWidget {
@@ -8,7 +11,7 @@ class VerifyEmailView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    
+
     return Scaffold(
       body: Center(
         child: TextButton(
