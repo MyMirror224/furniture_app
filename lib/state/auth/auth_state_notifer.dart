@@ -10,13 +10,14 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   final _userInfoStorage = const UserInfoStorage();
 
   AuthStateNotifier() : super(const AuthState.unknown()) {
-    if (_authenticator.isAlreadyLoggedIn) {
+    if (_authenticator.isAlreadyLoggedIn && _authenticator.currentUser!.emailVerified) {
       state = AuthState(
         isLoading: false,
-        authResult: AuthResult.success,
+        authResult: AuthResult.sussess,
         userId: _authenticator.userId,
       );
     }
+  
   }
 
   Future<void> logOut() async {
@@ -29,7 +30,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.signInAnonymously();
     final userId = _authenticator.userId;
-    if (result == AuthResult.success && userId != null) {
+    if (result == AuthResult.sussess && userId != null) {
       state = AuthState(
         isLoading: false,
         authResult: result,
@@ -42,7 +43,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.loginWithGoogle();
     final userId = _authenticator.userId;
-    if (result == AuthResult.success && userId != null) {
+    if (result == AuthResult.sussess && userId != null) {
       await createUserInfoWithGGandFB(userId: userId);
     }
     state = AuthState(
@@ -56,7 +57,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.loginWithFacebook();
     final userId = _authenticator.userId;
-    if (result == AuthResult.success && userId != null) {
+    if (result == AuthResult.sussess && userId != null) {
       await createUserInfoWithGGandFB(userId: userId);
     }
     state = AuthState(
@@ -89,9 +90,14 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.logInWithEmailPassword(
         email: email, password: password);
-    if (result != AuthResult.verified) {
+    if (result == AuthResult.notVerified) {  
+      state = AuthState(
+        isLoading: false,
+        authResult: result,
+        userId: _authenticator.userId,
+      );
       return sendEmailVerification();
-    } else {
+    } else if(result == AuthResult.sussess ) {
       state = AuthState(
         isLoading: false,
         authResult: result,
@@ -118,6 +124,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
           displayName: _authenticator.displayName,
           email: email,
           password: password);
+      return sendEmailVerification();
     }
     state = AuthState(
       isLoading: false,
