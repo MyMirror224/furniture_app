@@ -1,8 +1,21 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
 import 'package:furniture_app/components/navigation_bar_main_view.dart';
 import 'package:furniture_app/themes/app_theme.dart';
 import 'package:furniture_app/themes/theme_provider.dart';
+
+
+import 'package:furniture_app/pages/home_page.dart';
+import 'package:furniture_app/pages/login_page.dart';
+import 'package:furniture_app/pages/mainview.dart';
+import 'package:furniture_app/pages/verify_email_view.dart';
+import 'package:furniture_app/state/auth/is_logged_in_provider.dart';
+import 'package:furniture_app/state/auth/is_not_verify_provider.dart';
+import 'package:furniture_app/state/auth/is_verify_provider.dart';
+
+
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'firebase_options.dart';
@@ -75,6 +88,7 @@ class App extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appThemeState = ref.watch(appThemeStateNotifier);
     return MaterialApp(
+
       darkTheme: AppTheme.darkTheme,
       theme: AppTheme.lightTheme,
       themeMode:
@@ -98,6 +112,7 @@ class App extends HookConsumerWidget {
       //     // );
       //     final isNotVerify = ref.watch(isNotVerifyEmailProvider);
       //     final isLoggedIn = ref.watch(isLoggedInProvider);
+
 
       //     if (isLoggedIn) {
       //       return const MainView();
