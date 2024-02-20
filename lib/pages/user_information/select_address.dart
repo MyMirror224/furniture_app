@@ -1,6 +1,8 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
+import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final List address = [
   " Số nhà: 1, Đường phố: Nguyễn Trãi,Phường: Thanh Xuân Trung,Quận: Thanh Xuân,Thành phố: Hà Nội,Mã bưu điện: 100000",
@@ -10,11 +12,11 @@ final List address = [
   "Số nhà: 5, Đường phố: Nguyễn Trãi,Phường: Thanh Xuân Trung,Quận: Thanh Xuân,Thành phố: Hà Nội,Mã bưu điện: 100000",
 ];
 
-class SelectAddress extends StatelessWidget {
+class SelectAddress extends ConsumerWidget {
   const SelectAddress({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef Ref) {
     final TextEditingController addAddressController = TextEditingController();
 
     return SafeArea(
@@ -26,7 +28,7 @@ class SelectAddress extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
               children: List.generate(
-                  address.length, (i) => builderAddress(context, i))),
+                  address.length, (i) => builderAddress(context, i, Ref))),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -111,7 +113,8 @@ class SelectAddress extends StatelessWidget {
     );
   }
 
-  Widget builderAddress(BuildContext context, int i) {
+  Widget builderAddress(BuildContext context, int i, WidgetRef ref) {
+    final appThemeState = ref.watch(appThemeStateNotifier);
     Size size = MediaQuery.of(context).size;
     final TextEditingController editAddressController = TextEditingController();
     return Container(
@@ -120,7 +123,9 @@ class SelectAddress extends StatelessWidget {
         padding: const EdgeInsets.only(top: 15, bottom: 10, left: 15),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Colors.grey.shade600,
+          color: appThemeState.isDarkModeEnabled
+              ? const Color(0xff93b1a7)
+              : const Color(0xff93b1a7),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(

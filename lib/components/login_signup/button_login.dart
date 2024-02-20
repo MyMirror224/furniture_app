@@ -6,8 +6,9 @@ Widget buttonLogin(String text, Color color, int x, int y,
     onPressed: onpressed,
     child: Text(text, style: const TextStyle(fontSize: 20)),
     style: ElevatedButton.styleFrom(
-      primary: Colors.grey,
-      onPrimary: Colors.white,
+      // primary: Colors.grey,
+      // onPrimary: Colors.white,
+      primary: Color(0xff193d3d),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
