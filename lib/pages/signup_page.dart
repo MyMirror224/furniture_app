@@ -4,20 +4,19 @@ import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/pages/login_page.dart';
 import 'package:furniture_app/pages/verify_email_view.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
-  
+import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-
-class SignUp extends ConsumerWidget {
+class SignUp extends HookConsumerWidget {
   SignUp({super.key});
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
-    
+    Size size = MediaQuery.of(context).size;
+    final appThemeState = ref.watch(appThemeStateNotifier);
     final RegExp emailRegex = RegExp(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
     final RegExp passwordRegex = RegExp(
@@ -30,12 +29,12 @@ class SignUp extends ConsumerWidget {
         child: SingleChildScrollView(
           child: Center(
             child: Form(
-              key: _formKey ,
+              key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    //ClipRRect làm tròn 4 góc
+                    //ClipRRect làm tròn 2 góc
                     borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(16),
                         bottomRight: Radius.circular(16)),
@@ -47,10 +46,12 @@ class SignUp extends ConsumerWidget {
                     ),
                   ),
                   const Gap(5),
-                  const Text(
+                  Text(
                     'create new account',
                     style: TextStyle(
-                      color: Colors.black, // cần đổ màu
+                      color: appThemeState.isDarkModeEnabled
+                          ? Colors.white
+                          : Colors.black, // cần đổ màu
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
                     ),
@@ -68,7 +69,7 @@ class SignUp extends ConsumerWidget {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "please enter your email";
-                        } else if(!emailRegex.hasMatch(value)){
+                        } else if (!emailRegex.hasMatch(value)) {
                           return "please enter a valid email";
                         }
                         return null;
@@ -98,7 +99,8 @@ class SignUp extends ConsumerWidget {
                           color: Colors.black,
                           size: 30.0,
                         ),
-                        suffixIcon: Padding(padding: EdgeInsets.only(left: 30.0)),
+                        suffixIcon:
+                            Padding(padding: EdgeInsets.only(left: 30.0)),
                       ),
                     ),
                   ), // icon cũng cần đổ màu
@@ -113,7 +115,7 @@ class SignUp extends ConsumerWidget {
                         color: Colors.black,
                       ),
                       validator: (value) {
-                        if (value== null || value.isEmpty) {
+                        if (value == null || value.isEmpty) {
                           return "please enter your password";
                         } else if (!passwordRegex.hasMatch(value)) {
                           return "please enter a valid password";
@@ -121,7 +123,6 @@ class SignUp extends ConsumerWidget {
                         return null;
                       },
                       obscureText: loginNotifier.isObscure,
-                      
                       decoration: InputDecoration(
                         labelText: "Password",
                         labelStyle: const TextStyle(color: Colors.black),
@@ -170,7 +171,7 @@ class SignUp extends ConsumerWidget {
                       obscureText: loginNotifier.isObscure,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
-                        if (value== null || value.isEmpty) {
+                        if (value == null || value.isEmpty) {
                           return "please enter your password";
                         } else {
                           if (value != passwordController.text) {
@@ -218,23 +219,22 @@ class SignUp extends ConsumerWidget {
                   ),
 
                   const Gap(15),
-            
-                  buttonLogin("Sign up", Colors.grey, onpressed: () async{
-                    if(_formKey.currentState!.validate()){
-                      ref
 
-                        .read(authStateProvider.notifier)
-                        .registerWithEmailandPassword(
-                            emailController.text, passwordController.text);
+                  buttonLogin(
+                      "Sign up", Colors.grey, (size.height * 0.3).toInt(), 50,
+                      onpressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      ref
+                          .read(authStateProvider.notifier)
+                          .registerWithEmailandPassword(
+                              emailController.text, passwordController.text);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const VerifyEmailView(),
                           ));
                     }
-                    }
-                    
-                  ),
+                  }),
                   const Gap(15),
                   const Center(
                     child: Text(
@@ -273,10 +273,8 @@ class SignUp extends ConsumerWidget {
                         style: TextStyle(color: Colors.grey, fontSize: 15),
                       ),
                       GestureDetector(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>  Login())),
+                        onTap: () => Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Login())),
                         child: const Text(
                           " Login now",
                           style: TextStyle(
@@ -296,4 +294,3 @@ class SignUp extends ConsumerWidget {
     );
   }
 }
-

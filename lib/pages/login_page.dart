@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/pages/forgot_password/forgot_password.dart';
-
 import 'package:furniture_app/pages/signup_page.dart';
-
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
-
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -17,9 +14,10 @@ class Login extends ConsumerWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
+    Size size = MediaQuery.of(context).size;
     final loginNotifier = ref.watch(obscurePasswordProvider);
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
@@ -50,8 +48,7 @@ class Login extends ConsumerWidget {
                   const Text(
                     'Sign In',
                     style: TextStyle(
-                      color: Colors.black, // cần đổ màu
-                      fontSize: 25,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -175,7 +172,9 @@ class Login extends ConsumerWidget {
                     ),
                   ),
                   const Gap(15),
-                  buttonLogin("Login", Colors.grey, onpressed: () {
+                  buttonLogin(
+                      "Login", Colors.grey, (size.width * 0.3).toInt(), 50,
+                      onpressed: () {
                     if (_formKey.currentState!.validate()) {
                       ref
                           .read(authStateProvider.notifier)
@@ -212,7 +211,6 @@ class Login extends ConsumerWidget {
                             color: Colors.red),
                       ), // Use the correct named parameter 'data' and provide a positional argument.
                     ],
-
                   ),
                   const Gap(10),
                   Row(

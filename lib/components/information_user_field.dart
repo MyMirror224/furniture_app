@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:furniture_app/themes/theme_provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class InformationFields extends StatelessWidget {
+class InformationFields extends ConsumerWidget {
   final String text;
   final String? type;
   const InformationFields({super.key, this.type, required this.text});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appThemeState = ref.watch(appThemeStateNotifier);
     if (type == 'field') {
       return Container(
         decoration: BoxDecoration(
-          color: Colors.grey,
+          color: appThemeState.isDarkModeEnabled
+              ? const Color(0xff93b1a7)
+              : const Color(0xff93b1a7),
           borderRadius: BorderRadius.circular(16.0),
         ),
         padding: const EdgeInsets.only(
@@ -43,7 +48,6 @@ class InformationFields extends StatelessWidget {
           text,
           style: const TextStyle(
             fontSize: 15,
-            color: Colors.grey,
           ),
         ),
       );

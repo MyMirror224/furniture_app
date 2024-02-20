@@ -18,6 +18,7 @@ class ForgotPassword extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.deepOrangeAccent,
+        toolbarHeight: 150,
         title: const Text(
           'Forgot Password',
           style: TextStyle(
@@ -51,6 +52,12 @@ class ForgotPassword extends StatelessWidget {
                       height: 80,
                     ),
                   ),
+                  // const Text("Forgot Password",
+                  //     style: TextStyle(
+                  //       color: Colors.black, // chinh mau
+                  //       fontSize: 25,
+                  //       fontWeight: FontWeight.bold,
+                  //     )),
                 ],
               ),
               const Gap(35),
