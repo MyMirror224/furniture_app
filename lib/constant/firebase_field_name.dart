@@ -11,5 +11,8 @@ class FirebaseFieldName {
   static const userImage ='user_image';
   static const address ='address';
   static const phoneNumber='phone_number';
+  static const cateloryId ='catelory_id';
+  static const cateloryName ='catelory_name';
+  static const cateloryImage='catelory_image';
   const FirebaseFieldName._();
 }
