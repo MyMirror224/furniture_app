@@ -10,18 +10,21 @@ class NavigationMainView extends ConsumerWidget {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colors.grey.shade200, // nền dưới thanh navigation
+        height: 60,
+        backgroundColor: Color(0xff92b0a6), // nền dưới thanh navigation
+        color: Color(0xff5d8374), // màu nền trên của navigation
+        buttonBackgroundColor: Color(0xff193d3d), // nền của nút
+
         animationDuration:
             const Duration(milliseconds: 300), // thời gian chuyển màn hình
         animationCurve: Curves.easeInOutCirc, // kiểu chuyển màn hình
-        buttonBackgroundColor: Colors.black54, // nền của nút
-        color: Colors.black, // màu nền trên của navigation
+
         items: const [
-          Icon(Icons.favorite),
-          Icon(Icons.category),
-          Icon(Icons.home),
-          Icon(Icons.shopping_cart),
-          Icon(Icons.person),
+          Icon(Icons.favorite, size: 30, color: Colors.white),
+          Icon(Icons.category, size: 30, color: Colors.white),
+          Icon(Icons.home, size: 30, color: Colors.white),
+          Icon(Icons.shopping_cart, size: 30, color: Colors.white),
+          Icon(Icons.person, size: 30, color: Colors.white),
         ],
       ),
     );

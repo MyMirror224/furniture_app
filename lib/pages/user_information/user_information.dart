@@ -4,21 +4,22 @@ import 'package:furniture_app/components/information_user_field.dart';
 import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/pages/user_information/change_password.dart';
 import 'package:furniture_app/pages/user_information/select_address.dart';
+import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
 class UserInformation extends ConsumerWidget {
   //late DateTime birthDay = DateTime.now();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final appThemeState = ref.watch(appThemeStateNotifier);
     final no = ref.watch(inforProvider);
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
           title: const Text('Personal Information'),
         ),
         body: SingleChildScrollView(
@@ -41,10 +42,15 @@ class UserInformation extends ConsumerWidget {
                           //   fit: BoxFit.cover,
                           // ),
 
-                          child: Icon(
-                            Icons.person,
-                            size: size.height * 0.1,
-                            color: Colors.black,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: Colors.grey,
+                            ),
+                            child: Icon(
+                              Icons.person,
+                              size: size.height * 0.1,
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                       ),
@@ -52,6 +58,9 @@ class UserInformation extends ConsumerWidget {
                         bottom: 0,
                         right: 0,
                         child: Container(
+                            height: 35,
+                            width: 35,
+                            margin: const EdgeInsets.only(right: 5),
                             decoration: BoxDecoration(
                               color: Colors.yellow,
                               borderRadius: BorderRadius.circular(100),
@@ -76,7 +85,9 @@ class UserInformation extends ConsumerWidget {
               const InformationFields(type: "name", text: 'Birth Day'),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: appThemeState.isDarkModeEnabled
+                      ? const Color(0xff93b1a7)
+                      : const Color(0xff93b1a7),
                   borderRadius: BorderRadius.circular(16.0),
                 ),
                 padding: const EdgeInsets.only(
@@ -109,7 +120,9 @@ class UserInformation extends ConsumerWidget {
               const InformationFields(type: "name", text: 'Number'),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: appThemeState.isDarkModeEnabled
+                      ? const Color(0xff93b1a7)
+                      : const Color(0xff93b1a7),
                   borderRadius: BorderRadius.circular(16.0),
                 ),
                 padding: const EdgeInsets.only(
@@ -170,7 +183,9 @@ class UserInformation extends ConsumerWidget {
               const InformationFields(type: "name", text: "Password"),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: appThemeState.isDarkModeEnabled
+                      ? const Color(0xff93b1a7)
+                      : const Color(0xff93b1a7),
                   borderRadius: BorderRadius.circular(16.0),
                 ),
                 padding: const EdgeInsets.only(
