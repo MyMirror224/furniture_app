@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
 import 'package:furniture_app/pages/home_page.dart';
 import 'package:furniture_app/pages/login_page.dart';
 import 'package:furniture_app/pages/mainview.dart';
@@ -7,6 +8,7 @@ import 'package:furniture_app/pages/verify_email_view.dart';
 import 'package:furniture_app/state/auth/is_logged_in_provider.dart';
 import 'package:furniture_app/state/auth/is_not_verify_provider.dart';
 import 'package:furniture_app/state/auth/is_verify_provider.dart';
+
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -42,6 +44,7 @@ class App extends ConsumerWidget {
       ),
       themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
+
       home: Consumer(
         builder: (context, ref, child) {
           // install the loading screen
@@ -59,9 +62,11 @@ class App extends ConsumerWidget {
           // );
           final isNotVerify = ref.watch(isNotVerifyEmailProvider);
           final isLoggedIn = ref.watch(isLoggedInProvider);
+
           
           if (isLoggedIn ) {
             return  HomePage();
+
           } else if(isNotVerify){
             return const VerifyEmailView();
           } else {
@@ -69,6 +74,8 @@ class App extends ConsumerWidget {
           }
         },
       ),
+      //home: const SelectAddress(),
+
     );
   }
 }
