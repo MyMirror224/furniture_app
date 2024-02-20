@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:furniture_app/pages/home_page.dart';
 import 'package:furniture_app/pages/login_page.dart';
 import 'package:furniture_app/pages/mainview.dart';
 import 'package:furniture_app/pages/verify_email_view.dart';
@@ -39,7 +40,7 @@ class App extends ConsumerWidget {
         brightness: Brightness.light,
         primarySwatch: Colors.blue,
       ),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
       home: Consumer(
         builder: (context, ref, child) {
@@ -60,7 +61,7 @@ class App extends ConsumerWidget {
           final isLoggedIn = ref.watch(isLoggedInProvider);
           
           if (isLoggedIn ) {
-            return const MainView();
+            return  HomePage();
           } else if(isNotVerify){
             return const VerifyEmailView();
           } else {
