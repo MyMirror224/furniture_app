@@ -95,35 +95,35 @@ class App extends HookConsumerWidget {
           appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
       debugShowCheckedModeBanner: false,
 
-      // home: Consumer(
-      //   builder: (context, ref, child) {
-      //     // install the loading screen
-      //     // ref.listen<bool>(
-      //     //   isLoadingProvider,
-      //     //   (_, isLoading) {
-      //     //     if (isLoading) {
-      //     //       LoadingScreen.instance().show(
-      //     //         context: context,
-      //     //       );
-      //     //     } else {
-      //     //       LoadingScreen.instance().hide();
-      //     //     }
-      //     //   },
-      //     // );
-      //     final isNotVerify = ref.watch(isNotVerifyEmailProvider);
-      //     final isLoggedIn = ref.watch(isLoggedInProvider);
+      home: Consumer(
+        builder: (context, ref, child) {
+          // install the loading screen
+          // ref.listen<bool>(
+          //   isLoadingProvider,
+          //   (_, isLoading) {
+          //     if (isLoading) {
+          //       LoadingScreen.instance().show(
+          //         context: context,
+          //       );
+          //     } else {
+          //       LoadingScreen.instance().hide();
+          //     }
+          //   },
+          // );
+          final isNotVerify = ref.watch(isNotVerifyEmailProvider);
+          final isLoggedIn = ref.watch(isLoggedInProvider);
 
 
-      //     if (isLoggedIn) {
-      //       return const MainView();
-      //     } else if (isNotVerify) {
-      //       return const VerifyEmailView();
-      //     } else {
-      //       return Login();
-      //     }
-      //   },
-      // ),
-      home: NavigationMainView(),
+          if (isLoggedIn) {
+            return  HomePage();
+          } else if (isNotVerify) {
+            return const VerifyEmailView();
+          } else {
+            return Login();
+          }
+        },
+      ),
+      //home: NavigationMainView(),
     );
   }
 }

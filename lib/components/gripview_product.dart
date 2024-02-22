@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:furniture_app/pages/home_page.dart';
+import 'package:furniture_app/pages/product_detail_page.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -39,7 +40,7 @@ class GripViewProduct extends ConsumerWidget {
           ),
           childrenDelegate: SliverChildBuilderDelegate(
             (context, index) => GestureDetector(
-              onTap: () => null,
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailPage())),
               child: ItemCard(products[index]),
             ),
             childCount: length,
@@ -63,7 +64,7 @@ class ItemCard extends HookConsumerWidget {
           fit: BoxFit.cover,
         ),
       ),
-      Gap(10),
+      const Gap(10),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -78,7 +79,7 @@ class ItemCard extends HookConsumerWidget {
           )
         ],
       ),
-      Gap(10),
+      const Gap(10),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
