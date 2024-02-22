@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:furniture_app/components/admin/button_filed.dart';
+import 'package:furniture_app/pages/Admin/AdminProduct.dart';
 import 'package:gap/gap.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -35,38 +38,24 @@ class MyDrawer extends StatelessWidget {
                 )),
               ),
               // ListTile
-              Padding(
-                padding: const EdgeInsets.only(left: 25.0),
-                child: ListTile(
-                  leading: Icon(
-                    Icons.home,
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                  ),
-                  title: Text(
-                    "H O M E",
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary),
-                  ),
+              ButtonField(
+                  icon: const Icon(Icons.home_filled),
+                  textField: "Home ",
+                  onTap: () {}),
+              ButtonField(
+                  icon: const Icon(FontAwesomeIcons.cartShopping),
+                  textField: "Products ",
                   onTap: () {
-                    //tắt drawer
                     Navigator.pop(context);
-                  },
-                ),
-              ),
-              //setting
-              Padding(
-                padding: const EdgeInsets.only(left: 25.0),
-                child: ListTile(
-                  leading: Icon(
-                    Icons.settings,
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                  ),
-                  title: Text("S E T T I N G",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary)),
-                  onTap: () {},
-                ),
-              ),
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AdminProduct()));
+                  }),
+              ButtonField(
+                  icon: const Icon(Icons.class_rounded),
+                  textField: "Catorgories ",
+                  onTap: () {}),
             ],
           ),
           //logout
@@ -80,9 +69,11 @@ class MyDrawer extends StatelessWidget {
                     Icons.logout,
                     color: Theme.of(context).colorScheme.inversePrimary,
                   ),
-                  title: Text("L O G O U T",
+                  title: Text("Logout",
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary)),
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold)),
                   onTap: () {},
                 ),
               ),

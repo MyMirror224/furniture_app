@@ -155,7 +155,7 @@ class HomePage extends ConsumerWidget {
                     },
                     itemCount: items.length),
               ),
-              const SlideHome(),
+              SlideHome(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ButtonField extends StatefulWidget {
-  ButtonField({super.key, required this.icon, required this.textField});
+  ButtonField(
+      {super.key,
+      required this.icon,
+      required this.textField,
+      required this.onTap});
   final Icon icon;
   final String textField;
+  final Function onTap;
   @override
   State<ButtonField> createState() => _ButtonFliedState();
 }
@@ -20,11 +25,13 @@ class _ButtonFliedState extends State<ButtonField> {
         ),
         title: Text(
           widget.textField,
-          style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+          style: TextStyle(
+              color: Theme.of(context).colorScheme.inversePrimary,
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
         ),
         onTap: () {
-          //tắt drawer
-          Navigator.pop(context);
+          widget.onTap();
         },
       ),
     );
