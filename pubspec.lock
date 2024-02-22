@@ -321,6 +321,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.6.17"
+  fixnum:
+    dependency: transitive
+    description:
+      name: fixnum
+      sha256: "25517a4deb0c03aa0f32fd12db525856438902d9c16536311e76cdc57b31d7d1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -395,7 +403,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.9"
-
   flutter_staggered_grid_view:
     dependency: "direct main"
     description:
@@ -404,7 +411,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.0"
-
   flutter_svg:
     dependency: "direct main"
     description:
@@ -671,16 +677,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-
-  nested:
-    dependency: transitive
-    description:
-      name: nested
-      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
-
   octo_image:
     dependency: transitive
     description:
@@ -689,7 +685,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
-
   package_config:
     dependency: transitive
     description:
@@ -802,14 +797,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.7.4"
-  provider:
-    dependency: "direct main"
-    description:
-      name: provider
-      sha256: "9a96a0a19b594dbc5bf0f1f27d2bc67d5f95957359b461cd9feb44ed6ae75096"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.1"
   pub_semver:
     dependency: transitive
     description:
@@ -1071,37 +1058,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
-
+  uuid:
+    dependency: transitive
+    description:
+      name: uuid
+      sha256: cd210a09f7c18cbe5a02511718e0334de6559871052c90a90c0cca46a4aa81c8
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.3.3"
   vector_graphics:
     dependency: transitive
     description:
       name: vector_graphics
-
       sha256: "18f6690295af52d081f6808f2f7c69f0eed6d7e23a71539d75f4aeb8f0062172"
       url: "https://pub.dev"
     source: hosted
     version: "1.1.9+2"
-
   vector_graphics_codec:
     dependency: transitive
     description:
       name: vector_graphics_codec
-
       sha256: "531d20465c10dfac7f5cd90b60bbe4dd9921f1ec4ca54c83ebb176dbacb7bb2d"
       url: "https://pub.dev"
     source: hosted
     version: "1.1.9+2"
-
   vector_graphics_compiler:
     dependency: transitive
     description:
       name: vector_graphics_compiler
-
       sha256: "03012b0a33775c5530576b70240308080e1d5050f0faf000118c20e6463bc0ad"
       url: "https://pub.dev"
     source: hosted
     version: "1.1.9+2"
-
   vector_math:
     dependency: transitive
     description:

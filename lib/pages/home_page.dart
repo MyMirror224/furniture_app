@@ -11,170 +11,174 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class HomePage extends ConsumerWidget {
   final TextEditingController searchController = TextEditingController();
 
+  int index = 2;
   HomePage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String longText = "Hi, Nhat Minh Tran";
+    String longText = "Nhat Minh Tran";
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            //bỏ ni test
-            Container(
-              height: 40,
-              margin: const EdgeInsets.only(
-                  top: 30.0, bottom: 15.0, left: 20, right: 20),
-              padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 30,
-                          margin: const EdgeInsets.only(top: 5.0, bottom: 5.0),
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: const CircleAvatar(
-                            radius: 180,
-                            backgroundColor: Colors.grey,
-                            child: ClipOval(
-                              child: Image(
-                                height: 50,
-                                image: AssetImage(
-                                  'assets/images/user.jpg',
-                                ),
-                                filterQuality: FilterQuality.high,
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              //bỏ ni test
+              Container(
+                height: 40,
+                margin: const EdgeInsets.only(
+                    top: .0, bottom: 15.0, left: 20, right: 20),
+                padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            width: 40,
+                            height: 40,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.asset(
+                                'assets/images/user.jpg',
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
-                        ),
-                        const Gap(10),
-                        Text(
-                          longText.length > 15
-                              ? "${longText.substring(0, 15)}..."
-                              : longText,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.roboto(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                          const Gap(10),
+                          Text(
+                            longText.length > 15
+                                ? "Hi, "
+                                    "...${longText.substring(9, longText.length)}"
+                                : "Hi, $longText",
+                            // //with vn language
+                            // longText.length > 15
+                            // ? "Hi, "
+                            //     "...${longText.substring(4, longText.length)}"
+                            // : "Hi, $longText",
+                            maxLines: 1,
+                            overflow: TextOverflow.fade,
+                            style: GoogleFonts.roboto(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButtonCircle(
-                          icon: Icons.message,
-                          onTap: () {},
-                        ),
-                        const Gap(5),
-                        IconButtonCircle(
-                          icon: Icons.notifications,
-                          onTap: () {},
-                        ),
-                        const Gap(5),
-                        IconButtonCircle(
-                          icon: Icons.shopping_cart,
-                          onTap: () {},
-                        ),
-                      ],
-                    )
-                  ]),
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-              padding: const EdgeInsets.only(
-                left: 20,
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButtonCircle(
+                            icon: Icons.message,
+                            onTap: () {},
+                          ),
+                          const Gap(5),
+                          IconButtonCircle(
+                            icon: Icons.notifications,
+                            onTap: () {},
+                          ),
+                          const Gap(5),
+                          IconButtonCircle(
+                            icon: Icons.shopping_cart,
+                            onTap: () {},
+                          ),
+                        ],
+                      )
+                    ]),
               ),
-              height: 45,
-              decoration: const BoxDecoration(
-                color: Color(0xFF93B1A6),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20.0),
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+                padding: const EdgeInsets.only(
+                  left: 20,
+                ),
+                height: 45,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF93B1A6),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20.0),
+                  ),
+                ),
+                child: TextField(
+                  textAlign: TextAlign.left,
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.only(top: 5),
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    prefixIcon: null,
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.search),
+                      color: Colors.black87,
+                      onPressed: () {},
+                    ),
+                    border: InputBorder.none,
+                    hintText: 'Search',
+                    hintStyle: GoogleFonts.roboto(
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
               ),
-              child: TextField(
-                textAlign: TextAlign.left,
-                controller: searchController,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(top: 5),
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  prefixIcon: null,
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.search),
-                    color: Colors.black87,
+              const Gap(20),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  TitleOfPage(name: "Categories"),
+                ],
+              ),
+              const Gap(20),
+              Container(
+                margin:
+                    const EdgeInsets.only(bottom: 15.0, left: 20, right: 20),
+                height: 40,
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (_, index) {
+                      return GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                            padding: const EdgeInsets.only(
+                              left: 5,
+                              right: 5,
+                            ),
+                            margin: const EdgeInsets.only(right: 10.0),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF93B1A6),
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: Center(child: Text(items[index].lable))),
+                      );
+                    },
+                    itemCount: items.length),
+              ),
+              const SlideHome(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const TitleOfPage(name: "Popular"),
+                  TextButton(
                     onPressed: () {},
-                  ),
-                  border: InputBorder.none,
-                  hintText: 'Search',
-                  hintStyle: GoogleFonts.roboto(
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-            ),
-            const Gap(20),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                TitleOfPage(name: "Categories"),
-              ],
-            ),
-            const Gap(20),
-            Container(
-              margin: const EdgeInsets.only(bottom: 15.0, left: 20, right: 20),
-              height: 40,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (_, index) {
-                    return GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                          padding: const EdgeInsets.only(
-                            left: 5,
-                            right: 5,
-                          ),
-                          margin: const EdgeInsets.only(right: 10.0),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF93B1A6),
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          child: Center(child: Text(items[index].lable))),
-                    );
-                  },
-                  itemCount: items.length),
-            ),
-            const SlideHome(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const TitleOfPage(name: "Popular"),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'See All...',
-                    style: GoogleFonts.roboto(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF183D3D),
+                    child: Text(
+                      'See All...',
+                      style: GoogleFonts.roboto(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF183D3D),
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ),
-            GripViewProduct( products: itemProducts, length: itemProducts.length,),
-          ],
+                  )
+                ],
+              ),
+              GripViewProduct(
+                products: itemProducts,
+                length: itemProducts.length,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -257,17 +261,16 @@ class ItemData {
   ItemData({required this.lable});
 }
 
-class ItemProduct{
+class ItemProduct {
   String image;
   String name;
   String price;
   String description;
-  ItemProduct({
-    required this.image,
-    required this.name,
-    required this.price,
-    required this.description
-  });
+  ItemProduct(
+      {required this.image,
+      required this.name,
+      required this.price,
+      required this.description});
 }
 
 List<ItemProduct> itemProducts = [
@@ -282,8 +285,13 @@ List<ItemProduct> itemProducts = [
     name: 'Sofa',
     price: '200.000',
     description: 'Description',
-  )
-  ,
+  ),
+  ItemProduct(
+    image: 'assets/ui-design/images/abctest.jpg',
+    name: 'Sofa',
+    price: '200.000',
+    description: 'Description',
+  ),
   ItemProduct(
     image: 'assets/ui-design/images/abctest.jpg',
     name: 'Sofa',
@@ -297,11 +305,6 @@ List<ItemProduct> itemProducts = [
     description: 'Description',
   ),
   ItemProduct(
-    image: 'assets/ui-design/images/abctest.jpg',
-    name: 'Sofa',
-    price: '200.000',
-    description: 'Description',
-  ),ItemProduct(
     image: 'assets/ui-design/images/abctest.jpg',
     name: 'Sofa',
     price: '200.000',

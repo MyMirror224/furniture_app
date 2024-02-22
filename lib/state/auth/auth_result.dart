@@ -6,5 +6,5 @@ enum AuthResult {
   verified,
   notVerified,
   resgistered,
+  isAdmin
 }
-

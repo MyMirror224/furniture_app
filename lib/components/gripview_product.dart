@@ -3,7 +3,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:furniture_app/pages/home_page.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class GripViewProduct extends ConsumerWidget {
@@ -23,12 +22,12 @@ class GripViewProduct extends ConsumerWidget {
       child: GridView.custom(
           gridDelegate: SliverWovenGridDelegate.count(
             crossAxisCount: 2,
-            mainAxisSpacing: 8,
-            crossAxisSpacing: 8,
+            mainAxisSpacing: 0,
+            crossAxisSpacing: 0,
             pattern: [
               const WovenGridTile(
-                0.9,
-                crossAxisRatio: 0.9,
+                0.85,
+                crossAxisRatio: 0.95,
               ),
               const WovenGridTile(
                 5 / 7,
@@ -93,7 +92,6 @@ class ItemCard extends HookConsumerWidget {
               color: const Color(0xff183D3D),
             ),
             child: GestureDetector(
-              
               onTap: () {},
               child: const Icon(
                 Icons.arrow_forward_ios,
