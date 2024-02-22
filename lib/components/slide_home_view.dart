@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SlideHome extends ConsumerWidget {
-  const SlideHome({super.key});
-
+  SlideHome({
+    super.key,
+    double? viewportFraction,
+  }) : viewportFraction = viewportFraction ?? 0.8;
+  final double viewportFraction;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final PageController pageController = PageController(viewportFraction: 0.8);
+    final PageController pageController =
+        PageController(viewportFraction: viewportFraction);
+
     pageController.addListener(() {
       double currPageValue = pageController.page ?? 0.0;
       ref.read(slideHomeProvider.notifier).updateCurrPage(currPageValue);
@@ -17,15 +22,15 @@ class SlideHome extends ConsumerWidget {
         controller: pageController,
         itemCount: 5,
         itemBuilder: (context, index) {
-          return _buiderPageItem(index, ref);
+          return _buiderPageItem(index, ref, viewportFraction);
         },
       ),
     );
   }
 
-  Widget _buiderPageItem(int index, WidgetRef ref) {
-    double currPageValue = ref.watch(slideHomeProvider)._currPageValue;
-    const double scaleFactor = 0.8;
+  Widget _buiderPageItem(int index, WidgetRef ref, double scaleFactor) {
+    double currPageValue = ref.watch(slideHomeProvider).currPageValue;
+
     const double height = 220;
     Matrix4 matrix = Matrix4.identity();
     if (index == currPageValue.floor()) {

@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:furniture_app/pages/Admin/AdminPage.dart';
+import 'package:furniture_app/pages/homeScreen.dart';
+import 'package:furniture_app/pages/login_page.dart';
+import 'package:furniture_app/pages/verify_email_view.dart';
+import 'package:furniture_app/state/auth/is_logged_in_provider.dart';
+import 'package:furniture_app/state/auth/is_not_verify_provider.dart';
 import 'package:furniture_app/themes/app_theme.dart';
 import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -51,34 +55,35 @@ class App extends HookConsumerWidget {
       themeMode:
           appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
       debugShowCheckedModeBanner: false,
-      // home: Consumer(
-      //   builder: (context, ref, child) {
-      //     // install the loading screen
-      //     // ref.listen<bool>(
-      //     //   isLoadingProvider,
-      //     //   (_, isLoading) {
-      //     //     if (isLoading) {
-      //     //       LoadingScreen.instance().show(
-      //     //         context: context,
-      //     //       );
-      //     //     } else {
-      //     //       LoadingScreen.instance().hide();
-      //     //     }
-      //     //   },
-      //     // );
-      //     final isNotVerify = ref.watch(isNotVerifyEmailProvider);
-      //     final isLoggedIn = ref.watch(isLoggedInProvider);
-      //     // final IsAdmin = ref.watch(isAdmin);
-      //     if (isLoggedIn) {
-      //       return const MainView();
-      //     } else if (isNotVerify) {
-      //       return const VerifyEmailView();
-      //     } else {
-      //       return Login();
-      //     }
-      //   },
-      // ),
-      home: const AdminPage(),
+
+      home: Consumer(
+        builder: (context, ref, child) {
+          // install the loading screen
+          // ref.listen<bool>(
+          //   isLoadingProvider,
+          //   (_, isLoading) {
+          //     if (isLoading) {
+          //       LoadingScreen.instance().show(
+          //         context: context,
+          //       );
+          //     } else {
+          //       LoadingScreen.instance().hide();
+          //     }
+          //   },
+          // );
+          final isNotVerify = ref.watch(isNotVerifyEmailProvider);
+          final isLoggedIn = ref.watch(isLoggedInProvider);
+
+          if (isLoggedIn) {
+            return HomeScreen();
+          } else if (isNotVerify) {
+            return const VerifyEmailView();
+          } else {
+            return Login();
+          }
+        },
+      ),
+      //home: NavigationMainView(),
     );
   }
 }
