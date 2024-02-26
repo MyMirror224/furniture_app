@@ -10,7 +10,7 @@ class UserInfoPayload extends MapView<String, dynamic> {
   final String displayName;
   final String email;
   final String? password;
-  final List<String?>? address;
+  final List<dynamic> address;
   final String userType;
   final String? userImage;
   final String? phoneNumber;
@@ -29,7 +29,7 @@ class UserInfoPayload extends MapView<String, dynamic> {
             FirebaseFieldName.displayName: displayName,
             FirebaseFieldName.email: email,
             FirebaseFieldName.password: password??"",
-            FirebaseFieldName.address: address?.where((element) => element != null).toList() ?? [],
+            FirebaseFieldName.address: address.toList() ,
             FirebaseFieldName.userType: userType,
             FirebaseFieldName.userImage: userImage ??"",
             FirebaseFieldName.phoneNumber: phoneNumber??"",

@@ -1,12 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:furniture_app/constant/firebase_field_collection.dart';
+import 'package:furniture_app/constant/firebase_field_name.dart';
 import 'package:furniture_app/state/auth/auth_result.dart';
 import 'package:furniture_app/state/auth/constants.dart';
+
+
 import 'package:furniture_app/typedef/user_id.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Authenticator {
-  const Authenticator();
+  Authenticator();
+  
   bool get isAlreadyLoggedIn => userId != null;
 
   User? get currentUser => FirebaseAuth.instance.currentUser;
@@ -55,10 +61,37 @@ class Authenticator {
       if (currentUser?.emailVerified == false) {
         return AuthResult.notVerified;
       }
+      if (await checkAdmin()) {
+        return AuthResult.admin;
+      }
       return AuthResult.sussess;
     } catch (e) {
       return AuthResult.failure;
     }
+  }
+
+  Future<bool> checkAdmin() async {
+    bool check = false;
+    try {
+      final userInfo = await FirebaseFirestore.instance
+          .collection(
+            FirebaseCollectionName.users,
+          )
+          .where(
+            FirebaseFieldName.userId,
+            isEqualTo: userId,
+          )
+          .limit(1)
+          .get();
+      String value =
+          userInfo.docs.first.get(FirebaseFieldName.userType).toString();
+
+      value == 'admin' ? check = true : check = false;
+    } catch (e) {
+      return false;
+    }
+
+    return check;
   }
 
   Future<AuthResult> registerWithEmailPassword({
@@ -78,7 +111,7 @@ class Authenticator {
 
   Future<AuthResult> sendEmailVerification() async {
     await currentUser?.sendEmailVerification();
-    if(currentUser!.emailVerified){
+    if (currentUser!.emailVerified) {
       return AuthResult.verified;
     }
     return AuthResult.notVerified;

@@ -6,6 +6,7 @@ import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/pages/forgot_password/forgot_password.dart';
 import 'package:furniture_app/pages/signup_page.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
+import 'package:furniture_app/state/auth/user_id_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

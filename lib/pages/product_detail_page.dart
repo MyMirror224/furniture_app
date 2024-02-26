@@ -18,9 +18,9 @@ class ProductDetailPage extends ConsumerWidget {
   ProductDetailPage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TextEditingController countController =
-        TextEditingController(text: '1');
-    bool isContainerInvisible = countController.text != '1';
+    final TextEditingController textController = ref.watch(countProvider)._countText;
+    final countController = ref.watch(countProvider).count;
+    bool isContainerInvisible = countController != 1;
 
     return Scaffold(
       body: CustomScrollView(
@@ -115,29 +115,18 @@ class ProductDetailPage extends ConsumerWidget {
             ),
             pinned: true,
             expandedHeight: 300,
-            flexibleSpace: ListView.builder(
-              itemCount: imagePaths.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
-                  )),
-                  child:
-                      // Your other list view items (if any)
+            flexibleSpace: 
                       ImageSlideshow(
-                          height: 260,
-                          initialPage: index,
+                          indicatorBottomPadding :30 ,
+                          height: 240,
+                          initialPage: 0,
                           autoPlayInterval: 3000,
                           isLoop:
                               true, // Optional: Set autoplay interval // Optional: Customize indicator position
                           onPageChanged: (index) =>
                               print('Page changed to: $index'),
                           children: imageWidgets),
-                );
-              },
-            ),
+                
           ),
           SliverToBoxAdapter(
             child: Column(children: [
@@ -196,7 +185,10 @@ class ProductDetailPage extends ConsumerWidget {
                     )),
                     const Gap(30),
                     GestureDetector(
-                      onTap: isContainerInvisible ? () {} : null,
+                      onTap: isContainerInvisible ? () {
+                        ref.read(countProvider.notifier).removeCount();
+                        ref.read(countProvider.notifier).updateCountText();
+                      } : null,
                       child: Opacity(
                         opacity: isContainerInvisible ? 1 : 0.5,
                         child: Container(
@@ -217,14 +209,14 @@ class ProductDetailPage extends ConsumerWidget {
                     ),
                     const Gap(10),
                     SizedBox(
-                      width: 20,
+                      width: 35,  
                       child: TextField(
                         decoration: const InputDecoration(
                           border: InputBorder.none, // Remove underline
                         ),
                         textAlign: TextAlign.center,
                         keyboardType: TextInputType.number,
-                        controller: countController,
+                        controller: textController,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
                         ],
@@ -239,7 +231,10 @@ class ProductDetailPage extends ConsumerWidget {
                         border: Border.all(color: Colors.black),
                       ),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          ref.read(countProvider.notifier).increment();
+                          ref.read(countProvider.notifier).updateCountText();
+                        },
                         child: Icon(
                           Icons.add,
                           size: 20,
@@ -404,5 +399,33 @@ class TextDescriptionNotifier extends ChangeNotifier {
   void updateHidetext(bool newValue) {
     _hidetext = newValue;
     notifyListeners();
+  }
+}
+final countProvider = ChangeNotifierProvider(
+  (ref) => CountProduct(),
+);
+
+class CountProduct extends ChangeNotifier {
+  int _count = 1;
+  int get count => _count;
+  final TextEditingController _countText = TextEditingController(text: '1');
+  TextEditingController get countText => _countText;
+  void updateCountText() {
+    _countText.text = _count.toString();
+    notifyListeners();
+  }
+  
+  double  total = 0;
+  double  get totalprice => total;
+  void increment() {
+    _count++;
+    notifyListeners();
+  }
+  void removeCount() {
+    _count--;
+    notifyListeners();
+  }
+  void totalPrice( double price){
+    total = _count * price;
   }
 }
