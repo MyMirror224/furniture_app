@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:furniture_app/state/auth/auth_result.dart';
@@ -55,10 +56,30 @@ class Authenticator {
       if (currentUser?.emailVerified == false) {
         return AuthResult.notVerified;
       }
+      if (checkAdmin(email) == true) {
+        return AuthResult.isAdmin;
+      }
       return AuthResult.sussess;
     } catch (e) {
       return AuthResult.failure;
     }
+  }
+
+  Future<bool> checkAdmin(String email) async {
+    QuerySnapshot querySnapshot = FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get() as QuerySnapshot;
+    // DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+    //     .collection('users')
+    //     .where('email', isEqualTo: email)
+    //     .doc('user_type')
+    //     .get();
+    //nếu tài khoản có email trên thuộc type admin thì trả về true
+    if (querySnapshot.docs[0].get('type') == 'admin') {
+      return true;
+    } else
+      return false;
   }
 
   Future<AuthResult> registerWithEmailPassword({
@@ -78,7 +99,7 @@ class Authenticator {
 
   Future<AuthResult> sendEmailVerification() async {
     await currentUser?.sendEmailVerification();
-    if(currentUser!.emailVerified){
+    if (currentUser!.emailVerified) {
       return AuthResult.verified;
     }
     return AuthResult.notVerified;

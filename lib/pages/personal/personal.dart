@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/personal_button.dart';
 import 'package:furniture_app/pages/user_information/user_information.dart';
+import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -30,21 +31,21 @@ class PersonalPage extends ConsumerWidget {
                       width: 120,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        // child: Image.asset(
-                        //   "assets/images/avt.jpg",
-                        //   fit: BoxFit.cover,
-                        // ),
-                        child: Container(
-                          color: Colors.grey,
-                          child: Icon(
-                            Icons.person,
-                            size: size.height * 0.1,
-                            color: Colors.black,
-                          ),
+                        child: Image.asset(
+                          'assets/images/user.jpg',
+                          fit: BoxFit.cover,
                         ),
+                        // child: Container(
+                        // color: Colors.grey,
+                        // child: Icon(
+                        //   Icons.person,
+                        //   size: size.height * 0.1,
+                        //   color: Colors.black,
+                        // ),
                       ),
                     ),
                   ),
+
                   const Gap(10),
                   const Center(
                     child: Text(
@@ -159,6 +160,11 @@ class PersonalPage extends ConsumerWidget {
                     ),
                   ),
                   const Gap(10),
+                  PersonalButton(
+                    text: "Logout",
+                    onTap: () => ref.read(authStateProvider.notifier).logOut(),
+                    icon: FontAwesomeIcons.signOutAlt,
+                  ),
                 ],
               ),
             ],

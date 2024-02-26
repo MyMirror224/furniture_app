@@ -17,6 +17,7 @@ class ForgotPassword extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Colors.deepOrangeAccent,
         toolbarHeight: 150,
         title: const Text(
