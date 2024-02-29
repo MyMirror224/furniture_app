@@ -53,7 +53,7 @@ class HomePage extends ConsumerWidget {
                                 ? "Hi, "
                                     "...${longText.substring(9, longText.length)}"
                                 : "Hi, $longText",
-                            // //with vn language
+                            // with vn language
                             // longText.length > 15
                             // ? "Hi, "
                             //     "...${longText.substring(4, longText.length)}"

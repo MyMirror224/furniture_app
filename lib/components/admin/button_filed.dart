@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ButtonField extends StatefulWidget {
-  ButtonField(
+class TitleField extends StatefulWidget {
+  TitleField(
       {super.key,
       required this.icon,
       required this.textField,
@@ -10,10 +10,10 @@ class ButtonField extends StatefulWidget {
   final String textField;
   final Function onTap;
   @override
-  State<ButtonField> createState() => _ButtonFliedState();
+  State<TitleField> createState() => _ButtonFliedState();
 }
 
-class _ButtonFliedState extends State<ButtonField> {
+class _ButtonFliedState extends State<TitleField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
