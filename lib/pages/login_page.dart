@@ -1,5 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // Import the dart:ui package for Radius.circular.
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -21,7 +19,6 @@ class Login extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Size size = MediaQuery.of(context).size;
     final loginNotifier = ref.watch(obscurePasswordProvider);
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
@@ -51,28 +48,6 @@ class Login extends ConsumerWidget {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      // const Gap(5),
-
-                      // Positioned(
-                      //   // đặt text tại vị trí ở nửa dưới của hình
-                      //   bottom: 0,
-                      //   left: size.width * 0.27,
-                      //   child: Opacity(
-                      //     opacity: 0.95,
-                      //     child: Container(
-                      //       padding: const EdgeInsets.only(left: 20, right: 20),
-                      //       decoration: const BoxDecoration(
-                      //         color: Color(0xff93b1a7),
-                      //         borderRadius: BorderRadius.only(
-                      //           topLeft: Radius.circular(16),
-                      //           topRight: Radius.circular(16),
-                      //         ),
-                      //       ),
-                      //       child:
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                   const Gap(20),
@@ -205,34 +180,14 @@ class Login extends ConsumerWidget {
                   ),
                   const Gap(15),
                   buttonLogin(
-                      "Login", Colors.grey, (size.width * 0.3).toInt(), 50,
+                      "Login", Colors.grey, (deviceWidth * 0.3).toInt(), 50,
                       onpressed: () {
-                    // if (_formKey.currentState!.validate()) {
-                    //   ref
-                    //       .read(authStateProvider.notifier)
-                    //       .loginWithEmailandPassword(
-                    //           emailController.text, passwordController.text);
-                    // }
-                    final isAdmin = checkAdmin(emailController.text);
-                    if (isAdmin == 'admin') {
-                      final snackBar = SnackBar(
-                        /// need to set following properties for best effect of awesome_snackbar_content
-                        elevation: 0,
-                        behavior: SnackBarBehavior.floating,
-                        backgroundColor: Colors.transparent,
-                        content: AwesomeSnackbarContent(
-                          title: '!!',
-                          message: 'Your Action has been canceled!',
-
-                          /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
-                          contentType: ContentType.failure,
-                        ),
-                      );
-
-                      ScaffoldMessenger.of(context)
-                        ..hideCurrentSnackBar()
-                        ..showSnackBar(snackBar);
-                    } else {}
+                    if (_formKey.currentState!.validate()) {
+                      ref
+                          .read(authStateProvider.notifier)
+                          .loginWithEmailandPassword(
+                              emailController.text, passwordController.text);
+                    }
                   }),
                   const Gap(15),
                   const Center(
@@ -309,22 +264,4 @@ class ObscurePasswordNotier extends ChangeNotifier {
     isObscure = !isObscure;
     notifyListeners();
   }
-}
-
-Future<String> checkAdmin(String email) async {
-  // final userDoc =
-  //     await FirebaseFirestore.instance.collection('users').doc(email).get();
-  // final user = userDoc.data();
-  // if (userDoc.exists) {
-  //   if (user != null) {
-  //     return user['user_type'];
-  //   }
-  // }
-
-  // return 'user';
-  QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-      .collection('users')
-      .where('email', isEqualTo: email)
-      .get();
-  return querySnapshot.docs[0].get('user_type');
 }
