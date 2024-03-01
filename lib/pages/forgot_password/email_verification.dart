@@ -15,6 +15,7 @@ class emailVerification extends StatelessWidget {
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Colors.deepOrangeAccent,
         title: const Text(
           'Email Verification',

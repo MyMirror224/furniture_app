@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
-import 'package:furniture_app/components/slide_home_view.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 List<String> imagePaths = [
-  'assets/images/background.jpg',
-  'assets/images/background.jpg',
-  'assets/images/background.jpg',
+  'assets/images/background1.jpg',
+  'assets/images/background1.jpg',
+  'assets/images/background1.jpg',
 ];
 
 // ignore: must_be_immutable
@@ -278,7 +276,7 @@ class ProductDetailPage extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(20),
                     color: Color(0xff183D3D),
                   ),
-                  child:  Text(
+                  child: Text(
                     ("\$0.08 "),
                     style: GoogleFonts.roboto(
                       color: Colors.white,
@@ -299,14 +297,14 @@ class ProductDetailPage extends ConsumerWidget {
                   child: InkWell(
                       onTap: () {},
                       highlightColor: Colors.blue.withOpacity(0.2),
-                      child: Row(
-                        
-                        children: [
-                          Text('Add to Card'),
-                          Gap(10),
-                          Icon(Icons.shopping_bag, color: Colors.white,)
-                        ]
-                      ) ),
+                      child: Row(children: [
+                        Text('Add to Card'),
+                        Gap(10),
+                        Icon(
+                          Icons.shopping_bag,
+                          color: Colors.white,
+                        )
+                      ])),
                 )
               ],
             ),

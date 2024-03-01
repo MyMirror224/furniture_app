@@ -8,4 +8,3 @@ enum AuthResult {
   notVerified,
   resgistered,
 }
-

@@ -8,7 +8,7 @@ Widget buttonLogin(String text, Color color, int x, int y,
     style: ElevatedButton.styleFrom(
       // primary: Colors.grey,
       // onPrimary: Colors.white,
-      primary: Color(0xff193d3d),
+      
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),

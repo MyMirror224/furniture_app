@@ -37,21 +37,21 @@ class UserInformation extends ConsumerWidget {
                         width: 120,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(100),
-                          // child: Image.asset(
-                          //   "assets/images/avt.jpg",
-                          //   fit: BoxFit.cover,
-                          // ),
-
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: Colors.grey,
-                            ),
-                            child: Icon(
-                              Icons.person,
-                              size: size.height * 0.1,
-                              color: Colors.black,
-                            ),
+                          child: Image.asset(
+                            'assets/images/user.jpg',
+                            fit: BoxFit.cover,
                           ),
+
+                          // child: Container(
+                          //   decoration: const BoxDecoration(
+                          //     color: Colors.grey,
+                          //   ),
+                          //   child: Icon(
+                          //     Icons.person,
+                          //     size: size.height * 0.1,
+                          //     color: Colors.black,
+                          //   ),
+                          // ),
                         ),
                       ),
                       Positioned(

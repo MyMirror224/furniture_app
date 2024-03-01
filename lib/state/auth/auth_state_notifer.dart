@@ -14,7 +14,6 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   Future<void> logOut() async {
     state = state.copiedWithIsLoading(true);
     await _authenticator.signOut();
-    
     state = const AuthState.unknown();
   }
 
@@ -27,6 +26,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         isLoading: false,
         authResult: result,
         userId: userId,
+        errorMessage: '',
       );
     }
   }
@@ -42,6 +42,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       isLoading: false,
       authResult: result,
       userId: _authenticator.userId,
+      errorMessage: '',
     );
   }
 
@@ -56,6 +57,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       isLoading: false,
       authResult: result,
       userId: _authenticator.userId,
+      errorMessage: '',
     );
   }
 
@@ -75,6 +77,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       isLoading: false,
       authResult: result,
       userId: _authenticator.userId,
+      errorMessage: '',
     );
   }
 
@@ -87,6 +90,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         isLoading: false,
         authResult: result,
         userId: _authenticator.userId,
+        errorMessage: '',
       );
       return sendEmailVerification();
     }
@@ -95,6 +99,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         isLoading: false,
         authResult: result,
         userId: _authenticator.userId,
+        errorMessage: '',
       );
     }
     if (result == AuthResult.sussess) {
@@ -102,12 +107,15 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         isLoading: false,
         authResult: result,
         userId: _authenticator.userId,
+        errorMessage: '',
       );
     }
+    
     state = AuthState(
       isLoading: false,
       authResult: result,
       userId: _authenticator.userId,
+      errorMessage: _authenticator.errorMessage,
     );
   }
 
@@ -130,6 +138,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       isLoading: false,
       authResult: result,
       userId: _authenticator.userId,
+      errorMessage: _authenticator.errorMessage,
     );
   }
 
@@ -140,6 +149,11 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       isLoading: false,
       authResult: result,
       userId: _authenticator.userId,
+      errorMessage: '',
     );
   }
+  Future<void> resetResult()  async {
+    state = state.copiedWithIsResult(AuthResult.aborted, );
+  }
+ 
 }

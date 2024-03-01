@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SlideHome extends ConsumerWidget {
-  const SlideHome({
+  SlideHome({
     super.key,
     double? viewportFraction,
   }) : viewportFraction = viewportFraction ?? 0.8;
@@ -11,6 +11,7 @@ class SlideHome extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final PageController pageController =
         PageController(viewportFraction: viewportFraction);
+
     pageController.addListener(() {
       double currPageValue = pageController.page ?? 0.0;
       ref.read(slideHomeProvider.notifier).updateCurrPage(currPageValue);
@@ -68,7 +69,7 @@ class SlideHome extends ConsumerWidget {
                   : const Color(0xFF9294cc),
               image: const DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/images/background.jpg'),
+                image: AssetImage('assets/images/background1.jpg'),
               ),
             ),
           ),
