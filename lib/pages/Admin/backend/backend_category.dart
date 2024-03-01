@@ -6,15 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-final cateloryProvider = ChangeNotifierProvider((ref) => CateloryProvider());
+final categoryProvider = ChangeNotifierProvider((ref) => CategoryProvider());
 
-class CateloryProvider extends ChangeNotifier {
+class CategoryProvider extends ChangeNotifier {
   final ImagePicker _picker = ImagePicker();
 
   List<String>? imageURLList;
   XFile? imageFileList;
   dynamic _pickedImageError;
-  TextEditingController cateloryController = TextEditingController();
+  TextEditingController categoryController = TextEditingController();
   void pickProductImage() async {
     try {
       final pickedImages = await _picker.pickImage(
@@ -48,7 +48,7 @@ class CateloryProvider extends ChangeNotifier {
 
   void cleanImage() {
     imageFileList = null;
-    cateloryController.clear();
+    categoryController.clear();
     notifyListeners();
   } //done
 
@@ -67,7 +67,7 @@ class CateloryProvider extends ChangeNotifier {
           final File file = File(imageFileList!.path); // tạo file từ image
           final ref = FirebaseStorage.instance // tạo ref để lưu file
               .ref()
-              .child('catelory')
+              .child('category')
               .child(DateTime.now().toString() + '.jpg');
           await ref.putFile(file).whenComplete(() async {
             await ref.getDownloadURL().then((value) {
@@ -106,9 +106,9 @@ class CateloryProvider extends ChangeNotifier {
     if (imageURLList != null) {
       try {
         CollectionReference productRef =
-            FirebaseFirestore.instance.collection('catelory');
+            FirebaseFirestore.instance.collection('category');
         await productRef.doc().set({
-          'name_catelory': cateName,
+          'name_category': cateName,
           'imageURL': imageURLList,
         }).whenComplete(() {
           imageFileList = null;
@@ -129,13 +129,13 @@ class CateloryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //handle delete catelory
+  //handle delete category
   void handleDelete(String id, context) async {
     showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-              title: const Text('Delete Catelory'),
-              content: const Text('Are you sure to delete this catelory?'),
+              title: const Text('Delete Category'),
+              content: const Text('Are you sure to delete this category?'),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -146,7 +146,7 @@ class CateloryProvider extends ChangeNotifier {
                 TextButton(
                   onPressed: () async {
                     await FirebaseFirestore.instance
-                        .collection('catelory')
+                        .collection('category')
                         .doc(id)
                         .delete()
                         .whenComplete(() {
@@ -159,7 +159,7 @@ class CateloryProvider extends ChangeNotifier {
             ));
   } //done
 
-  //handle update catelory
+  //handle update category
   final ImagePicker _pickerUpdate = ImagePicker();
 
   List<String>? imageURLListUpdate;
@@ -210,7 +210,7 @@ class CateloryProvider extends ChangeNotifier {
   //       final File file = File(imageFileListUpdate!.path); // tạo file từ image
   //       final ref = FirebaseStorage.instance // tạo ref để lưu file
   //           .ref()
-  //           .child('catelory')
+  //           .child('category')
   //           .child(DateTime.now().toString() + '.jpg');
   //       await ref.putFile(file).whenComplete(() async {
   //         await ref.getDownloadURL().then((value) {
@@ -239,8 +239,8 @@ class CateloryProvider extends ChangeNotifier {
     showDialog(
         context: _,
         builder: (BuildContext context) => AlertDialog(
-              title: const Text('Update Catelory'),
-              content: const Text('Are you sure to update this catelory?'),
+              title: const Text('Update Category'),
+              content: const Text('Are you sure to update this category?'),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -253,9 +253,9 @@ class CateloryProvider extends ChangeNotifier {
                     if (cateNameUpdate != '') {
                       try {
                         CollectionReference productRef =
-                            FirebaseFirestore.instance.collection('catelory');
+                            FirebaseFirestore.instance.collection('category');
                         await productRef.doc(id).update({
-                          'name_catelory': cateNameUpdate,
+                          'name_category': cateNameUpdate,
                           // 'imageURL': imageURLListUpdate,
                         }).whenComplete(() {
                           // imageFileListUpdate = null;
@@ -275,7 +275,7 @@ class CateloryProvider extends ChangeNotifier {
                             return AlertDialog(
                               title: const Text('Error'),
                               content:
-                                  const Text('Please fill to Catelory name'),
+                                  const Text('Please fill to Category name'),
                               actions: [
                                 TextButton(
                                   onPressed: () {

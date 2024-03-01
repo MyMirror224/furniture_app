@@ -1,19 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:furniture_app/pages/Admin/backend/catelory/backend_catelory.dart';
+import 'package:furniture_app/pages/Admin/backend/backend_category.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CateloryScreen extends ConsumerWidget {
-  const CateloryScreen({super.key});
+class CategoryScreen extends ConsumerWidget {
+  const CategoryScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cateProvi = ref.watch(cateloryProvider);
+    final cateProvi = ref.watch(categoryProvider);
     var size = MediaQuery.of(context).size;
-    CollectionReference cateloryRef =
-        FirebaseFirestore.instance.collection('catelory');
+    CollectionReference categoryRef =
+        FirebaseFirestore.instance.collection('category');
     return ScaffoldMessenger(
       key: cateProvi.ScaffoldKey,
       child: Scaffold(
@@ -104,10 +104,10 @@ class CateloryScreen extends ConsumerWidget {
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width * 0.9,
                         child: TextFormField(
-                          controller: cateProvi.cateloryController,
+                          controller: cateProvi.categoryController,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Please enter catelory name';
+                              return 'Please enter category name';
                             }
                             return null;
                           },
@@ -115,8 +115,8 @@ class CateloryScreen extends ConsumerWidget {
                             cateProvi.cateName = value!;
                           },
                           decoration: cateProvi.textFormDecoration.copyWith(
-                            labelText: 'Catelory Name',
-                            hintText: 'Catelory Name',
+                            labelText: 'category Name',
+                            hintText: 'category Name',
                           ),
                         ),
                       ),
@@ -153,9 +153,9 @@ class CateloryScreen extends ConsumerWidget {
                       ),
                     ),
 
-                    // list of catelory plan 2
+                    // list of category plan 2
                     StreamBuilder(
-                      stream: cateloryRef.snapshots(),
+                      stream: categoryRef.snapshots(),
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (snapshot.hasError) {
@@ -174,7 +174,7 @@ class CateloryScreen extends ConsumerWidget {
                               Map<String, dynamic> data =
                                   document.data()! as Map<String, dynamic>;
                               return ListTile(
-                                leading: Text(data['name_catelory']),
+                                leading: Text(data['name_category']),
                                 subtitle: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -295,11 +295,11 @@ class CateloryScreen extends ConsumerWidget {
                                                                             child) {
                                                                           return TextFormField(
                                                                             initialValue:
-                                                                                document['name_catelory'],
+                                                                                document['name_category'],
                                                                             validator:
                                                                                 (value) {
                                                                               if (value!.isEmpty) {
-                                                                                return 'Please enter Catelory name update';
+                                                                                return 'Please enter category name update';
                                                                               }
                                                                               return null;
                                                                             },
@@ -313,8 +313,8 @@ class CateloryScreen extends ConsumerWidget {
                                                                                 3,
                                                                             decoration:
                                                                                 cateProvi.textFormDecoration.copyWith(
-                                                                              labelText: 'Catelory name update',
-                                                                              hintText: 'Enter Catelory name update',
+                                                                              labelText: 'category name update',
+                                                                              hintText: 'Enter category name update',
                                                                             ),
                                                                           );
                                                                         });
@@ -343,7 +343,7 @@ class CateloryScreen extends ConsumerWidget {
                                                                 //     MaterialPageRoute(
                                                                 //         builder:
                                                                 //             (context) =>
-                                                                //                 const CateloryScreen()));
+                                                                //                 const categoryScreen()));
                                                               },
                                                               child: const Text(
                                                                   'Save'),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/admin/button_filed.dart';
 import 'package:furniture_app/pages/Admin/admin_product.dart';
-import 'package:furniture_app/pages/Admin/catelory.dart';
+import 'package:furniture_app/pages/Admin/category.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -63,7 +63,7 @@ class MyDrawer extends ConsumerWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const CateloryScreen()));
+                            builder: (context) => const CategoryScreen()));
                   }),
             ],
           ),

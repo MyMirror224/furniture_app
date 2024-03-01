@@ -134,23 +134,27 @@ class ProductProvider extends ChangeNotifier {
   Future<void> upLoadData() async {
     if (imageURLList!.isNotEmpty) {
       try {
-        for (var image in imageFileList!) {
-          CollectionReference productRef =
-              FirebaseFirestore.instance.collection('furniture');
-          await productRef.doc().set({
-            'catelory_id': selectCate,
-            'price': price,
-            'quantity': quantity,
-            'name_furniture': proName,
-            'description': proDesc,
-            'imageURL': imageURLList,
-          }).whenComplete(() {
-            imageFileList = [];
-            selectCate = null;
-            formKey.currentState!.reset();
-            notifyListeners();
-          });
-        }
+        CollectionReference productRef =
+            FirebaseFirestore.instance.collection('furniture');
+        await productRef.doc().set({
+          'category_id': selectCate,
+          'price': price,
+          'quantity': quantity,
+          'name_furniture': proName,
+          'description': proDesc,
+          'imageURL': imageURLList,
+        }).whenComplete(() {
+          imageFileList = [];
+          imageURLList = [];
+          nameController.clear();
+          priceController.clear();
+          quantityController.clear();
+          descriptionController.clear();
+
+          selectCate = null;
+          formKey.currentState!.reset();
+          notifyListeners();
+        });
       } catch (e) {
         print(e);
       }
@@ -163,7 +167,7 @@ class ProductProvider extends ChangeNotifier {
     await upLoadImage().whenComplete(() => upLoadData());
   }
 
-  // get Catelory to dropdown
-  CollectionReference cateloryRef =
-      FirebaseFirestore.instance.collection('catelory');
+  // get Category to dropdown
+  CollectionReference categoryRef =
+      FirebaseFirestore.instance.collection('category');
 }
