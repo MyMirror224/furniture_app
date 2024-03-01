@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:furniture_app/pages/Admin/backend/catelory/backend_add_product.dart';
+import 'package:furniture_app/pages/Admin/backend/backend_add_product.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -52,7 +52,7 @@ class UploadProductScreen extends ConsumerWidget {
                               const Text('Select Category',
                                   style: TextStyle(color: Colors.red)),
                               StreamBuilder(
-                                stream: productProvi.cateloryRef.snapshots(),
+                                stream: productProvi.categoryRef.snapshots(),
                                 builder: (BuildContext context,
                                     AsyncSnapshot<QuerySnapshot> snapshot) {
                                   if (snapshot.hasData) {
@@ -61,11 +61,12 @@ class UploadProductScreen extends ConsumerWidget {
                                       items.add(DropdownMenuItem<String>(
                                         value: doc
                                             .id, // Sử dụng ID của document làm giá trị
-                                        child: Text(doc['name_catelory']),
+                                        child: Text(doc['name_category']),
                                       ));
                                     });
 
                                     return DropdownButton<String>(
+                                      hint: const Text('Select Category'),
                                       value: productProvi
                                           .selectCate, // Đặt giá trị mặc định cho dropdown
                                       items: items,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/pages/Admin/admin_product.dart';
-import 'package:furniture_app/pages/Admin/catelory.dart';
+import 'package:furniture_app/pages/Admin/category.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -15,8 +15,8 @@ class AdminScreen extends ConsumerWidget {
     var container;
     if (adProvi.currentPage == DrawerSections.product) {
       container = const ProductScreen();
-    } else if (adProvi.currentPage == DrawerSections.catelory) {
-      container = const CateloryScreen();
+    } else if (adProvi.currentPage == DrawerSections.category) {
+      container = const CategoryScreen();
     }
     return Scaffold(
       drawer: Drawer(
@@ -81,7 +81,7 @@ class AdminScreen extends ConsumerWidget {
   }
 }
 
-enum DrawerSections { product, catelory, promotion, user, message }
+enum DrawerSections { product, category, promotion, user, message }
 
 final adminProvider = ChangeNotifierProvider((ref) => AdminProvider());
 
@@ -92,7 +92,7 @@ class AdminProvider extends ChangeNotifier {
     if (id == 1) {
       currentPage = DrawerSections.product;
     } else if (id == 2) {
-      currentPage = DrawerSections.catelory;
+      currentPage = DrawerSections.category;
     }
 
     notifyListeners();
@@ -108,8 +108,8 @@ class AdminProvider extends ChangeNotifier {
         children: [
           menuItem(1, "Product", Icons.dashboard_outlined,
               currentPage == DrawerSections.product ? true : false, _, ref),
-          menuItem(2, "Catelory", Icons.people_alt_outlined,
-              currentPage == DrawerSections.catelory ? true : false, _, ref),
+          menuItem(2, "Category", Icons.people_alt_outlined,
+              currentPage == DrawerSections.category ? true : false, _, ref),
         ],
       ),
     );
@@ -120,9 +120,9 @@ class AdminProvider extends ChangeNotifier {
       return AppBar(
         title: const Text('Product Management'),
       );
-    } else if (currernPage == DrawerSections.catelory) {
+    } else if (currernPage == DrawerSections.category) {
       return AppBar(
-        title: const Text('Catelory Management'),
+        title: const Text('Category Management'),
       );
     }
   }
