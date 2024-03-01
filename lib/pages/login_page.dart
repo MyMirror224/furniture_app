@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 // Import the dart:ui package for Radius.circular.
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/pages/forgot_password/forgot_password.dart';
 import 'package:furniture_app/pages/signup_page.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
+
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Login extends ConsumerWidget {
@@ -21,6 +24,9 @@ class Login extends ConsumerWidget {
     final loginNotifier = ref.watch(obscurePasswordProvider);
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
+    final RegExp emailRegex = RegExp(
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -31,28 +37,55 @@ class Login extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  ClipRRect(
-                    //ClipRRect làm tròn 4 góc
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(16),
-                        bottomRight: Radius.circular(16)),
+                  Stack(
+                    children: [
+                      ClipRRect(
+                        //ClipRRect làm tròn 4 góc
+                        borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(16),
+                            bottomRight: Radius.circular(16)),
 
-                    child: Image.asset(
-                      'assets/images/background.jpg',
-                      height: deviceHeight * 0.3,
-                      width: deviceWidth,
-                      fit: BoxFit.cover,
-                    ),
+                        child: Image.asset(
+                          'assets/images/background.png',
+                          height: deviceHeight * 0.3,
+                          width: deviceWidth,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      // const Gap(5),
+
+                      // Positioned(
+                      //   // đặt text tại vị trí ở nửa dưới của hình
+                      //   bottom: 0,
+                      //   left: size.width * 0.27,
+                      //   child: Opacity(
+                      //     opacity: 0.95,
+                      //     child: Container(
+                      //       padding: const EdgeInsets.only(left: 20, right: 20),
+                      //       decoration: const BoxDecoration(
+                      //         color: Color(0xff93b1a7),
+                      //         borderRadius: BorderRadius.only(
+                      //           topLeft: Radius.circular(16),
+                      //           topRight: Radius.circular(16),
+                      //         ),
+                      //       ),
+                      //       child:
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                    ],
                   ),
-                  const Gap(5),
-                  const Text(
-                    'Sign In',
-                    style: TextStyle(
-                      fontSize: 30,
+                  const Gap(20),
+                  Text(
+                    'SIGN IN',
+                    style: GoogleFonts.roboto(
                       fontWeight: FontWeight.bold,
+                      fontSize: 40,
+                      color: Colors.black,
                     ),
                   ),
-                  const Gap(5),
+                  const Gap(20),
                   SizedBox(
                     width: 350.0,
                     child: TextFormField(
@@ -61,12 +94,16 @@ class Login extends ConsumerWidget {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your email';
                         }
+                        if (!emailRegex.hasMatch(value)) {
+                          return 'Please enter a valid email';
+                        }
                         return null;
                       },
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.black,
                       ),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller: emailController,
                       decoration: const InputDecoration(
                         labelText: "Email Address",
@@ -174,13 +211,15 @@ class Login extends ConsumerWidget {
                   const Gap(15),
                   buttonLogin(
                       "Login", Colors.grey, (size.width * 0.3).toInt(), 50,
-                      onpressed: () {
+                      onpressed: ()  {
                     if (_formKey.currentState!.validate()) {
                       ref
                           .read(authStateProvider.notifier)
                           .loginWithEmailandPassword(
                               emailController.text, passwordController.text);
+                      
                     }
+                    
                   }),
                   const Gap(15),
                   const Center(

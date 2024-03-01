@@ -11,8 +11,7 @@ class ForgotButton extends StatelessWidget {
       onPressed: onTap, // chua co
       child: Text(text, style: const TextStyle(fontSize: 20)),
       style: ElevatedButton.styleFrom(
-        primary: Colors.grey,
-        onPrimary: Colors.white,
+        
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),

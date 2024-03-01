@@ -3,8 +3,8 @@ enum AuthResult {
   failure,
   reset,
   sussess,
+  admin,
   verified,
   notVerified,
   resgistered,
 }
-

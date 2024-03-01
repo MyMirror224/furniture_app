@@ -8,7 +8,21 @@ import 'package:furniture_app/typedef/user_id.dart';
 @immutable
 class UserInfoStorage {
   const UserInfoStorage();
-  
+  Future<String> getUserType(UserId userId) async {
+    try {
+      final userInfo = await FirebaseFirestore.instance
+          .collection(
+            FirebaseCollectionName.users,
+
+          ).where(
+            FirebaseFieldName.userId,
+          ).limit(1).get();
+        return userInfo.docs.first.get(FirebaseFieldName.userType).toString();
+    } catch (_) {
+      return "customer";
+    }
+  }
+
   Future<bool> createUserInfo({
     required UserId userId,
     required String displayName,
@@ -36,7 +50,7 @@ class UserInfoStorage {
         displayName: displayName,
         email: email ,
         password: password?? "",
-        address:  const [],
+        address:  const [""],
         userType: "customer",
         userImage: "",
         phoneNumber: "",
@@ -56,7 +70,7 @@ class UserInfoStorage {
      String displayName,
      String email,
      String? password,
-     List<String?>? address,
+     List<dynamic> address,
      String userType,
      String? userImage,
      String? phoneNumber,
