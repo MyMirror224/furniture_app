@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:furniture_app/state/auth/auth_result.dart';
 import 'package:furniture_app/state/auth/auth_state.dart';
 import 'package:furniture_app/state/auth/authenticator.dart';
@@ -6,18 +7,26 @@ import 'package:furniture_app/typedef/user_id.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AuthStateNotifier extends StateNotifier<AuthState> {
-  final _authenticator = const Authenticator();
+  final _authenticator = Authenticator();
   final _userInfoStorage = const UserInfoStorage();
 
   AuthStateNotifier() : super(const AuthState.unknown()) {
-    if (_authenticator.isAlreadyLoggedIn && _authenticator.currentUser!.emailVerified) {
+    if (_authenticator.isAdmin2) {
+      state = AuthState(
+        isLoading: false,
+        authResult: AuthResult.isAdmin,
+        userId: _authenticator.userId,
+      );
+    }
+
+    if (_authenticator.isAlreadyLoggedIn &&
+        _authenticator.currentUser!.emailVerified) {
       state = AuthState(
         isLoading: false,
         authResult: AuthResult.sussess,
         userId: _authenticator.userId,
       );
     }
-  
   }
 
   Future<void> logOut() async {
@@ -90,14 +99,21 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.logInWithEmailPassword(
         email: email, password: password);
-    if (result == AuthResult.notVerified) {  
+    debugPrint('result: $result');
+    if (result == AuthResult.notVerified) {
       state = AuthState(
         isLoading: false,
         authResult: result,
         userId: _authenticator.userId,
       );
       return sendEmailVerification();
-    } else if(result == AuthResult.sussess ) {
+    } else if (result == AuthResult.sussess) {
+      state = AuthState(
+        isLoading: false,
+        authResult: result,
+        userId: _authenticator.userId,
+      );
+    } else if (result == AuthResult.isAdmin) {
       state = AuthState(
         isLoading: false,
         authResult: result,

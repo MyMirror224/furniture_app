@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/pages/Admin/admin_product.dart';
+import 'package:furniture_app/pages/Admin/admin_promotion.dart';
 import 'package:furniture_app/pages/Admin/category.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:gap/gap.dart';
@@ -17,6 +19,8 @@ class AdminScreen extends ConsumerWidget {
       container = const ProductScreen();
     } else if (adProvi.currentPage == DrawerSections.category) {
       container = const CategoryScreen();
+    } else if (adProvi.currentPage == DrawerSections.promotion) {
+      container = const PromotionScreen();
     }
     return Scaffold(
       drawer: Drawer(
@@ -93,6 +97,8 @@ class AdminProvider extends ChangeNotifier {
       currentPage = DrawerSections.product;
     } else if (id == 2) {
       currentPage = DrawerSections.category;
+    } else if (id == 3) {
+      currentPage = DrawerSections.promotion;
     }
 
     notifyListeners();
@@ -106,10 +112,12 @@ class AdminProvider extends ChangeNotifier {
       child: Column(
         // shows the list of menu drawer
         children: [
-          menuItem(1, "Product", Icons.dashboard_outlined,
+          menuItem(1, "Product", FontAwesomeIcons.bagShopping,
               currentPage == DrawerSections.product ? true : false, _, ref),
           menuItem(2, "Category", Icons.people_alt_outlined,
               currentPage == DrawerSections.category ? true : false, _, ref),
+          menuItem(3, "Promotion", Icons.local_offer_outlined,
+              currentPage == DrawerSections.promotion ? true : false, _, ref),
         ],
       ),
     );
@@ -123,6 +131,10 @@ class AdminProvider extends ChangeNotifier {
     } else if (currernPage == DrawerSections.category) {
       return AppBar(
         title: const Text('Category Management'),
+      );
+    } else if (currernPage == DrawerSections.promotion) {
+      return AppBar(
+        title: const Text('Promotion Management'),
       );
     }
   }

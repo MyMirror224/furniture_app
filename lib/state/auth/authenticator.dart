@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:furniture_app/state/auth/auth_result.dart';
 import 'package:furniture_app/state/auth/constants.dart';
@@ -7,9 +8,9 @@ import 'package:furniture_app/typedef/user_id.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Authenticator {
-  const Authenticator();
+  Authenticator();
   bool get isAlreadyLoggedIn => userId != null;
-
+  bool isAdmin2 = true;
   User? get currentUser => FirebaseAuth.instance.currentUser;
 
   UserId? get userId => FirebaseAuth.instance.currentUser?.uid;
@@ -56,7 +57,9 @@ class Authenticator {
       if (currentUser?.emailVerified == false) {
         return AuthResult.notVerified;
       }
-      if (checkAdmin(email) == true) {
+      final isAdmin = await checkAdmin(email);
+      isAdmin2 = isAdmin; // đợi phản hồi từ server
+      if (isAdmin) {
         return AuthResult.isAdmin;
       }
       return AuthResult.sussess;
@@ -66,20 +69,18 @@ class Authenticator {
   }
 
   Future<bool> checkAdmin(String email) async {
-    QuerySnapshot querySnapshot = FirebaseFirestore.instance
-        .collection('users')
-        .where('email', isEqualTo: email)
-        .get() as QuerySnapshot;
-    // DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-    //     .collection('users')
-    //     .where('email', isEqualTo: email)
-    //     .doc('user_type')
-    //     .get();
-    //nếu tài khoản có email trên thuộc type admin thì trả về true
-    if (querySnapshot.docs[0].get('type') == 'admin') {
-      return true;
-    } else
-      return false;
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      String userType = querySnapshot.docs[0].get('user_type');
+      if (userType == 'admin') return true;
+    } catch (error) {
+      debugPrint('Lỗi khi truy xuất dữ liệu người dùng: $error');
+    }
+    return false;
   }
 
   Future<AuthResult> registerWithEmailPassword({
