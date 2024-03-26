@@ -1,80 +1,59 @@
-import 'dart:collection';
 
-import 'package:flutter/foundation.dart';
+
+
 import 'package:furniture_app/constant/firebase_field_name.dart';
 import 'package:furniture_app/typedef/user_id.dart';
 
-@immutable
-class UserInfoModel extends MapView<String, dynamic>{
-  final UserId userId;
-  final String displayName;
-  final String email;
-  final String? password;
-  final List<dynamic> address;
-  final String userType;
-  final String? userImage;
-  final String? phoneNumber;
+
+class UserInfoModel  {
+  
+  String? name;
+  String? email;
+  String? avatar;
+  String? uid;
+  String? user_type;
+  String? address;
+  String? phone_number;
+  String? password;
+
   UserInfoModel({
-    required this.userId,
-    required this.displayName,
-    required this.email,
-    required this.password,
-    required this.address,
-    required this.userType,
-    required this.userImage,
-    required this.phoneNumber,
-  }) : super(
-          {
-            FirebaseFieldName.userId: userId,
-            FirebaseFieldName.displayName: displayName,
-            FirebaseFieldName.email: email,
-            FirebaseFieldName.password : password,
-            FirebaseFieldName.address : address.toList() ,
-            FirebaseFieldName.userType : userType,
-            FirebaseFieldName.userImage: userImage,
-            FirebaseFieldName.phoneNumber: phoneNumber,
-          },
-        );
-    
-    UserInfoModel.fromJson(
-    Map<String, dynamic> json, {
-    required UserId userId,
-  }) : this(
-          userId: userId,
-          displayName: json[FirebaseFieldName.displayName] ?? '',
-          email: json[FirebaseFieldName.email],
-          password: json[FirebaseFieldName.password] ?? "" ,
-          address:json[FirebaseFieldName.address] ,
-          userType:json[FirebaseFieldName.userType] ,
-          userImage: json[FirebaseFieldName.userImage] ?? '',
-          phoneNumber: json[FirebaseFieldName.phoneNumber] ?? '',
-        );
+    this.name,
+    this.email,
+    this.avatar,
+    this.user_type,
+    this.address,
+    this.phone_number,
+    this.uid,
+    this.password,
+  });
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is UserInfoModel &&
-          runtimeType == other.runtimeType &&
-          userId == other.userId &&
-          displayName == other.displayName &&
-          email == other.email &&
-          password == other.password &&
-          address == other.address &&
-          userType == other.userType &&
-          userImage == userImage &&
-          phoneNumber == other.phoneNumber;
+  factory UserInfoModel.fromJson(Map<String, dynamic> json) {
+    return UserInfoModel(
+      name: json['name'],
+      avatar: json["avatar"],
+      uid: json["uid"],
+      email : json["email"],
+      user_type: json["user_type"] ,
+      address: json["address"] ,
+      phone_number: json["phone_number"] ,
+      password:   json["password"] ?? "",
+    );
+  }
+  
+  Map<String, dynamic> toJson() => {
+        "uid": uid,
+        "email": email,
+        "name": name,
+        "avatar": avatar,
+        "user_type": user_type,
+        "address": address,
+        "phone_number": phone_number,
+        "password": password,
+      };
+   
+  
+  }      
+      
 
-  @override
-  int get hashCode => Object.hashAll(
-        [
-          userId,
-          displayName,
-          email,
-          password,
-          address,
-          userType,
-          userImage,
-          phoneNumber,
-        ],
-      );
-}
+  
+

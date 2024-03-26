@@ -1,13 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
-import 'package:furniture_app/constant/firebase_field_collection.dart';
-import 'package:furniture_app/constant/firebase_field_name.dart';
+
+
+
 import 'package:furniture_app/state/auth/auth_result.dart';
 
 import 'package:furniture_app/state/auth/constants.dart';
+import 'package:furniture_app/state/user_info/backend/user_info_storage.dart';
+import 'package:furniture_app/state/user_info/models/user.dart';
 
 import 'package:furniture_app/typedef/user_id.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -22,6 +25,7 @@ class Authenticator {
   }
 
   bool get isAlreadyLoggedIn => userId != null;
+  bool get isVerify => currentUser?.emailVerified ?? false ; 
 
   User? get currentUser => FirebaseAuth.instance.currentUser;
 
@@ -29,8 +33,8 @@ class Authenticator {
 
   String get email => FirebaseAuth.instance.currentUser?.email ?? '';
 
-  String get displayName =>
-      FirebaseAuth.instance.currentUser?.displayName ?? '';
+  String? get displayName =>
+      FirebaseAuth.instance.currentUser?.displayName ;
 
   Future<AuthResult> sendPasswordReset({
     required String toEmail,
@@ -69,9 +73,7 @@ class Authenticator {
       if (currentUser?.emailVerified == false) {
         return AuthResult.notVerified;
       }
-      if (await checkAdmin()) {
-        return AuthResult.admin;
-      }
+     
       return AuthResult.sussess;
     } on FirebaseAuthException catch (e) {
       if (e.code.toString() == 'user-not-found') {
@@ -87,40 +89,43 @@ class Authenticator {
     }
   }
 
-  Future<bool> checkAdmin() async {
-    bool check = false;
-    try {
-      final userInfo = await FirebaseFirestore.instance
-          .collection(
-            FirebaseCollectionName.users,
-          )
-          .where(
-            FirebaseFieldName.userId,
-            isEqualTo: userId,
-          )
-          .limit(1)
-          .get();
-      String value =
-          userInfo.docs.first.get(FirebaseFieldName.userType).toString();
-
-      value == 'admin' ? check = true : check = false;
-    } catch (e) {
-      return false;
+  Future<void> createUserInDatabase(
+    {
+      required String? password,
+      required String name,
     }
+  ) async {
+    
 
-    return check;
+    await UserAPI.createUserInDatabase(
+      params: RegisterRequestEntity(
+        uid: userId.toString(),
+        name: name,
+        email: email,
+        avatar: null,
+        password: password, 
+      ),
+    );
   }
 
   Future<AuthResult> registerWithEmailPassword({
     required String email,
     required String password,
+    required String name,
   }) async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      const Duration(seconds: 2);
+      try {
+        await createUserInDatabase(password: password , name: name);
+      } catch (_) {  
+      }
+      
       return AuthResult.resgistered;
+      
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         updateErorrMessage('Weak Password');
@@ -164,6 +169,7 @@ class Authenticator {
       await FirebaseAuth.instance.signInWithCredential(
         oauthCredentials,
       );
+      
       return AuthResult.sussess;
     } on FirebaseAuthException catch (e) {
       final email = e.email;
@@ -177,6 +183,7 @@ class Authenticator {
           await loginWithGoogle();
           FirebaseAuth.instance.currentUser?.linkWithCredential(credential);
         }
+        
         return AuthResult.sussess;
       }
       return AuthResult.failure;
@@ -203,6 +210,9 @@ class Authenticator {
       await FirebaseAuth.instance.signInWithCredential(
         oauthCredentials,
       );
+      const Duration(seconds: 4);
+      
+      
       return AuthResult.sussess;
     } catch (e) {
       return AuthResult.failure;

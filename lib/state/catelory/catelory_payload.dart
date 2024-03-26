@@ -11,8 +11,8 @@ class CateloryPayload extends MapView<String, String?> {
     required this.cateloryImage,
   }): super(
     {
-      FirebaseFieldName.cateloryName: cateloryName,
-      FirebaseFieldName.cateloryImage: cateloryImage ,
+      DataBaseName.cateloryName: cateloryName,
+      DataBaseName.cateloryImage: cateloryImage ,
     }
   );
 }

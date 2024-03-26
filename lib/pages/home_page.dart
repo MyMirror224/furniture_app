@@ -1,8 +1,13 @@
 // ignore_for_file: use_key_in_widget_constructors
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/gripview_product.dart';
 import 'package:furniture_app/components/slide_home_view.dart';
+import 'package:furniture_app/global.dart';
+import 'package:furniture_app/pages/login_page.dart';
+import 'package:furniture_app/state/auth/user_id_provider.dart';
+import 'package:furniture_app/state/user_info/user_info_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -10,12 +15,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 // ignore: must_be_immutable
 class HomePage extends ConsumerWidget {
   final TextEditingController searchController = TextEditingController();
-
   int index = 2;
   HomePage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String longText = "Nhat Minh Tran";
+    final userId = ref.watch(userIdProvider);
+    final user = ref.watch(userInfoModelProvider(userId.toString()));
+    final avatar = "uploads/user1.jpg";
+    print('day la $avatar');
+    String longText = user.hasValue ? user.value!.name.toString() : "User";
+    final imageUrl = 'https://www.metoffice.gov.uk/binaries/content/gallery/metofficegovuk/hero-images/advice/maps-satellite-images/satellite-image-of-globe.jpg';
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -36,14 +45,24 @@ class HomePage extends ConsumerWidget {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          SizedBox(
-                            width: 40,
-                            height: 40,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.asset(
-                                'assets/images/user.jpg',
-                                fit: BoxFit.cover,
+                          CachedNetworkImage(
+                            imageUrl: imageUrl,
+                            placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                            
+                            errorWidget: (context, url, error) => const Icon(
+                              Icons.error,
+                              size: 100,
+                              color: Colors.red,
+                            ),
+                            imageBuilder: (context, imageProvider) => Container(
+                              width: 250,
+                              height: 250,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                           ),
@@ -53,7 +72,7 @@ class HomePage extends ConsumerWidget {
                                 ? "Hi, "
                                     "...${longText.substring(9, longText.length)}"
                                 : "Hi, $longText",
-                            // //with vn language
+                            // with vn language
                             // longText.length > 15
                             // ? "Hi, "
                             //     "...${longText.substring(4, longText.length)}"

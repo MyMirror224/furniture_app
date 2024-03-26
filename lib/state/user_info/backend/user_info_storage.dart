@@ -1,117 +1,43 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:furniture_app/constant/firebase_field_collection.dart';
-import 'package:furniture_app/constant/firebase_field_name.dart';
-import 'package:furniture_app/state/user_info/models/user_info_payload.dart';
-import 'package:furniture_app/typedef/user_id.dart';
 
-@immutable
-class UserInfoStorage {
-  const UserInfoStorage();
-  Future<String> getUserType(UserId userId) async {
-    try {
-      final userInfo = await FirebaseFirestore.instance
-          .collection(
-            FirebaseCollectionName.users,
+import 'dart:convert';
 
-          ).where(
-            FirebaseFieldName.userId,
-          ).limit(1).get();
-        return userInfo.docs.first.get(FirebaseFieldName.userType).toString();
-    } catch (_) {
-      return "customer";
-    }
-  }
+import 'package:furniture_app/service/http_util.dart';
 
-  Future<bool> createUserInfo({
-    required UserId userId,
-    required String displayName,
-    required String email,
-    required String? password,
+import 'package:furniture_app/state/user_info/backend/base_respone.dart';
+import 'package:furniture_app/state/user_info/models/user.dart';
+import 'package:furniture_app/state/user_info/models/user_info_model.dart';
+
+
+
+class UserAPI {
+    static Future<UserRegisterResponseEntity> createUserInDatabase({
+    RegisterRequestEntity? params,
   }) async {
-    try {
-      // first check if we have this user's info from before
-      final userInfo = await FirebaseFirestore.instance
-          .collection(
-            FirebaseCollectionName.users,
-          )
-          .where(
-            FirebaseFieldName.userId,
-            isEqualTo: userId,
-          )
-          .limit(1)
-          .get();
-      
-      if (userInfo.docs.isNotEmpty) {
-        return false;
-      }
-      final payload = UserInfoPayload(
-        userId: userId,
-        displayName: displayName,
-        email: email ,
-        password: password?? "",
-        address:  const [""],
-        userType: "customer",
-        userImage: "",
-        phoneNumber: "",
-      );
-      await FirebaseFirestore.instance
-          .collection(
-            FirebaseCollectionName.users,
-          )
-          .add(payload);
-      return true;
-    } catch (_) {
-      return false;
-    }
+   
+    var response = await HttpUtil().post(
+      'api/users/create',
+      queryParameters: params?.toJson(),
+    );
+   
+    return UserRegisterResponseEntity.fromJson(response); 
   }
-  Future<bool> updateUserInfo(
-     UserId userId,
-     String displayName,
-     String email,
-     String? password,
-     List<dynamic> address,
-     String userType,
-     String? userImage,
-     String? phoneNumber,
-  ) async {
-    try {
-      // first check if we have this user's info from before
-      final userInfo = await FirebaseFirestore.instance
-          .collection(
-            FirebaseCollectionName.users,
-          )
-          .where(
-            FirebaseFieldName.userId,
-            isEqualTo: userId,
-          )
-          .limit(1)
-          .get();
-      
-      if (userInfo.docs.isEmpty) {
-        return false;
-      }
-      final payload = UserInfoPayload(
-        userId: userId,
-        displayName: displayName,
-        email: email ,
-        password: password,
-        address: address,
-        userType: userType,
-        userImage: userImage,
-        phoneNumber: phoneNumber,
-      );
 
-      await FirebaseFirestore.instance
-          .collection(
-            FirebaseCollectionName.users,
-          )
-          .doc(userInfo.docs.first.id)
-          .update(payload);
-      return true;
-      
-    } catch (_) {
-      return false;
-    }
+   static Future<UserInfoResponseEntity> getProfile(String userId) async {
+    var response = await HttpUtil().post(
+      'api/users/profile',
+      queryParameters: {'uid': userId},
+    ); 
+    return UserInfoResponseEntity.fromJson(response);
   }
+  static Future<UserInfoResponseEntity> updateProfile({
+    UserInfoModel? params,
+  }) async {
+    var response = await HttpUtil().post(
+      'api/users/update_profile',
+      queryParameters: params?.toJson(),
+    );
+    return UserInfoResponseEntity.fromJson(response);
+  }
+
+
 }

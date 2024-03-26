@@ -1,19 +1,23 @@
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/dialog/dialog_auth.dart';
 import 'package:furniture_app/components/dialog/dialog_model.dart';
 
 import 'package:furniture_app/components/loading/loading_screen.dart';
 
-import 'package:furniture_app/firebase_options.dart';
-import 'package:furniture_app/pages/navigator_bar.dart';
+
+import 'package:furniture_app/global.dart';
 import 'package:furniture_app/pages/mainview.dart';
+import 'package:furniture_app/pages/navigator_bar.dart';
+
+
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:furniture_app/state/auth/error_message_provider.dart';
 
-import 'package:furniture_app/state/auth/is_admin_provider.dart';
+
 import 'package:furniture_app/state/auth/is_failure.dart';
 import 'package:furniture_app/state/provider/is_loading_provider.dart';
+
 
 import 'package:furniture_app/themes/app_theme.dart';
 
@@ -25,10 +29,8 @@ import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Global.init();
+
   runApp(const ProviderScope(
     child: App(),
   ));
@@ -53,7 +55,7 @@ class DarkModeSwitch extends HookConsumerWidget {
   }
 }
 
-class App extends HookConsumerWidget {
+class App extends ConsumerWidget {
   const App({
     Key? key,
   }) : super(key: key);
@@ -93,7 +95,7 @@ class App extends HookConsumerWidget {
           var isFailure = ref.watch(isFailureProvider);
           final isNotVerify = ref.watch(isNotVerifyEmailProvider);
           final isLoggedIn = ref.watch(isLoggedInProvider);
-          final isAdmin = ref.watch(isAdminProvider);
+          
           WidgetsBinding.instance.addPostFrameCallback((_) async {
             if (isFailure) {
               final dialogBool =
@@ -105,10 +107,9 @@ class App extends HookConsumerWidget {
               }
             }
           });
-
-          if (isAdmin) {
-            return const MainView();
-          }
+            
+        //return MainView();
+          
 
           if (isLoggedIn) {
             return HomeScreen();

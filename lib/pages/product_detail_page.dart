@@ -29,22 +29,7 @@ class ProductDetailPage extends ConsumerWidget {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  height: 40,
-                  width: 40,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                    color: Color(0xFF183D3D),
-                  ),
-                  child: IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(
-                      Icons.arrow_back_ios_sharp,
-                      color: Colors.white,
-                      size: 15,
-                    ),
-                  ),
-                ),
+                const ButtonBackIos(),
                 Container(
                   height: 40,
                   width: 40,
@@ -326,6 +311,32 @@ class ProductDetailPage extends ConsumerWidget {
       ),
     );
   }).toList();
+}
+
+class ButtonBackIos extends StatelessWidget {
+  const ButtonBackIos({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40,
+      width: 40,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(30)),
+        color: Color(0xFF183D3D),
+      ),
+      child: IconButton(
+        onPressed: () => Navigator.pop(context),
+        icon: const Icon(
+          Icons.arrow_back_ios_sharp,
+          color: Colors.white,
+          size: 15,
+        ),
+      ),
+    );
+  }
 }
 
 class ExpandableTextWidget extends ConsumerWidget {

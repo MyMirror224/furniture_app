@@ -67,6 +67,8 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   awesome_snackbar_content: ^0.1.3
   flutter_image_slideshow: ^0.1.6
+  dio: ^5.4.1
+  http: ^1.1.0
 
 
 

@@ -3,12 +3,16 @@ import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class InformationFields extends ConsumerWidget {
-  final String text;
+  late final String text;
   final String? type;
-  const InformationFields({super.key, this.type, required this.text});
+  final TextEditingController? controller;
+  
+  // ignore: prefer_const_constructors_in_immutables
+  InformationFields({super.key,required this.type, required this.text ,  this.controller });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     final appThemeState = ref.watch(appThemeStateNotifier);
     if (type == 'field') {
       return Container(
@@ -23,6 +27,8 @@ class InformationFields extends ConsumerWidget {
         margin: const EdgeInsets.only(
             left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
         child: TextFormField(
+          onChanged: (value) => controller?.text = value,
+          controller: controller,
           decoration: InputDecoration(
             hintText: text,
             hintStyle: const TextStyle(
@@ -47,7 +53,8 @@ class InformationFields extends ConsumerWidget {
         child: Text(
           text,
           style: const TextStyle(
-            fontSize: 15,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
           ),
         ),
       );

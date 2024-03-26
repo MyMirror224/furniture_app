@@ -15,8 +15,8 @@ class CateloryModel extends MapView<String, String?> {
     required this.cateloryImage,
   }): super(
     {
-      FirebaseFieldName.cateloryName: cateloryName ,
-      FirebaseFieldName.cateloryImage: cateloryImage,
+      DataBaseName.cateloryName: cateloryName ,
+      DataBaseName.cateloryImage: cateloryImage,
     }
   );
 
@@ -25,8 +25,8 @@ class CateloryModel extends MapView<String, String?> {
     required CateloryId cateloryId,
   }) : this(
    
-    cateloryName: json[FirebaseFieldName.cateloryName] ?? '',
-    cateloryImage: json[FirebaseFieldName.cateloryImage] ?? '',
+    cateloryName: json[DataBaseName.cateloryName] ?? '',
+    cateloryImage: json[DataBaseName.cateloryImage] ?? '',
   );
     
 

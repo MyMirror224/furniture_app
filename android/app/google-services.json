@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "11058742887-crr7cmcjebhgbou2m4rl4dmfsvh03e84.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.furniture_app",
+            "certificate_hash": "ceabb1cdf3bfb936d9388c4d37bfa8c537ebd4b6"
+          }
+        },
+        {
           "client_id": "11058742887-d0f88l7hi1go5mulmdom2287gk6533q9.apps.googleusercontent.com",
           "client_type": 3
         }
