@@ -1,4 +1,9 @@
+
+import 'dart:io';
+
+import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
+import 'package:furniture_app/components/constants/appconstant.dart';
 import 'package:furniture_app/components/information_user_field.dart';
 import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/global.dart';
@@ -24,7 +29,9 @@ class UserInformation extends ConsumerWidget {
     final userId = ref.watch(userIdProvider);
     final user = ref.watch(userInfoModelProvider(userId.toString()));
     String userName = user.hasValue ? user.value!.name.toString() : "User";
-    String avatar = user.hasValue ? user.value!.avatar.toString() : 'user1.jpg';
+    String avatar =
+        user.hasValue ? user.value!.avatar.toString() : 'uploads/user1.jpg';
+    String avatarPath = AppConstants.IPV4 + avatar;
     String phone_number =
         user.hasValue ? user.value!.phone_number.toString() : '';
     String address = user.hasValue ? user.value!.address.toString() : '';
@@ -63,21 +70,14 @@ class UserInformation extends ConsumerWidget {
                         width: 120,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(100),
-                          child: Image.asset(
-                            'assets/images/user.jpg',
-                            fit: BoxFit.cover,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(avatarPath),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
                           ),
-
-                          // child: Container(
-                          //   decoration: const BoxDecoration(
-                          //     color: Colors.grey,
-                          //   ),
-                          //   child: Icon(
-                          //     Icons.person,
-                          //     size: size.height * 0.1,
-                          //     color: Colors.black,
-                          //   ),
-                          // ),
                         ),
                       ),
                       Positioned(
@@ -95,10 +95,18 @@ class UserInformation extends ConsumerWidget {
                               onPressed: () async {
                                 final imageFile = await ImagePickerHelper
                                     .pickImageFromGallery();
+
                                 if (imageFile == null) {
                                   return;
                                 } else {
-                                  //ref.read(updateInfoProvider.notifier).updateAvatar(imageFile.path);
+
+                                  await ref
+                                      .read(updateInfoProvider.notifier)
+                                      .updateAvatar(
+                                          empFace: imageFile,
+                                          uid: userId.toString(),);
+                                  return ref.refresh(
+                                      userInfoModelProvider(userId.toString()));
                                 }
                               },
                               icon: const Icon(

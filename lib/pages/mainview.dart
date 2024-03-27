@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:furniture_app/state/catelory/backend/catelory_storage.dart';
 
 import 'package:furniture_app/state/user_info/backend/user_info_storage.dart';
 import 'package:furniture_app/state/user_info/models/user.dart';
@@ -15,8 +16,8 @@ class MainView extends ConsumerWidget {
         body: Center(
             child: TextButton(
       onPressed: () async {
-        final result = await UserAPI.getProfile('mrzQOCFfhPc608TmAGZb2zMrM3u2');
-        print(result.data?.email);
+        final result = await CategoriesAPI.getCatelory();
+        
       } ,
       child: const Text("Sign out"),
     )));

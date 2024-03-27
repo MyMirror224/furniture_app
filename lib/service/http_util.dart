@@ -61,12 +61,7 @@ class HttpUtil {
     String cacheKey = '',
     bool cacheDisk = false,
   }) async {
-    Options requestOptions = options ?? Options();
-    requestOptions.headers = requestOptions.headers ?? {};
   
-
- 
-    
 
     var response = await dio.get(
       path,

@@ -40,7 +40,7 @@ class ChangePassword extends ConsumerWidget {
            InformationFields(type: "field", text: 'New Password', controller: newPassword),
            InformationFields(type: "name", text: 'Confirm Password'),
            InformationFields(type: "field", text: 'Confirm Password', controller: confirmPassword),
-           Gap(20),
+           const Gap(20),
           buttonLogin('Change Password', Colors.grey, 200, 50, onpressed: () async {
             if(oldPassword.text == password){
               if(newPassword.text == confirmPassword.text && passwordRegex.hasMatch(newPassword.text)){
