@@ -1,13 +1,13 @@
 import 'package:furniture_app/global.dart';
+import 'package:furniture_app/model/user_info_model.dart';
 import 'package:furniture_app/state/auth/auth_result.dart';
 import 'package:furniture_app/state/auth/auth_state.dart';
 import 'package:furniture_app/state/auth/authenticator.dart';
 import 'package:furniture_app/state/user_info/backend/user_info_storage.dart';
-import 'package:furniture_app/state/user_info/models/user.dart';
-import 'package:furniture_app/state/user_info/models/user_info_model.dart';
 
 
-import 'package:furniture_app/typedef/user_id.dart';
+
+
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -42,15 +42,16 @@ Future<void> toLogin() async {
     final userId = _authenticator.userId;
     try {
       await _authenticator.createUserInDatabase(password: null, name: _authenticator.displayName.toString());
+      
       final response = await UserAPI.getProfile(_authenticator.userId.toString());
       await Global.storageService.setProfile(_authenticator.userId.toString(), response.data as UserInfoModel);
     } catch (e) {
-      state = AuthState(
-      isLoading: false,
-      authResult: result,
-      userId: userId,
-      errorMessage: '',
-    );
+        state = AuthState(
+        isLoading: false,
+        authResult: AuthResult.failure,
+        userId: userId,
+        errorMessage: 'Server error',
+      );
     }
     state = AuthState(
       isLoading: false,

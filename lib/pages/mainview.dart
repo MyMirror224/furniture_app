@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_app/state/catelory/backend/catelory_storage.dart';
+import 'package:furniture_app/state/catelory/catelory_storage.dart';
 
 import 'package:furniture_app/state/user_info/backend/user_info_storage.dart';
-import 'package:furniture_app/state/user_info/models/user.dart';
+
 
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';

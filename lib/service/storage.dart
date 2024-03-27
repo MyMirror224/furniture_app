@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:furniture_app/components/constants/appconstant.dart';
-import 'package:furniture_app/state/user_info/backend/user_info_storage.dart';
-import 'package:furniture_app/state/user_info/models/user.dart';
-import 'package:furniture_app/state/user_info/models/user_info_model.dart';
+
+
+import 'package:furniture_app/model/user_info_model.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {

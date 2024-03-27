@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:furniture_app/components/constants/appconstant.dart';
+
+import 'package:furniture_app/constant/appconstant.dart';
 
 class HttpUtil {
   late Dio dio;

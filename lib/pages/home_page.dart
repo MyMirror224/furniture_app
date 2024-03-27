@@ -1,13 +1,12 @@
-// ignore_for_file: use_key_in_widget_constructors
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:furniture_app/components/constants/appconstant.dart';
+
 import 'package:furniture_app/components/gripview_product.dart';
 import 'package:furniture_app/components/slide_home_view.dart';
-import 'package:furniture_app/global.dart';
-import 'package:furniture_app/pages/login_page.dart';
-import 'package:furniture_app/state/auth/user_id_provider.dart';
+import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/provider/user_id_provider.dart';
+
+
 import 'package:furniture_app/state/user_info/user_info_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,9 +21,9 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userId = ref.watch(userIdProvider);
     final user = ref.watch(userInfoModelProvider(userId.toString()));
-    final avatar = user.hasValue ? user.value!.avatar.toString() : 'uploads/user1.jpg';
+    final avatar = user.hasValue ? user.value!.avatar.toString() : 'avatars/user1.jpg';
     String longText = user.hasValue ? user.value!.name.toString() : "User";
-    final imageUrl =  AppConstants.IPV4 + avatar;
+    final imageUrl =  AppConstants.SERVER_API_URL+ avatar;
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,

@@ -1,17 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:furniture_app/state/user_info/models/user_info_model.dart';
+
+
+
+import 'package:furniture_app/model/user_info_model.dart';
 
 class RegisterRequestEntity {
   String? name;
   String? email;
-  String? avatar;
   String? uid;
   String? password;
 
   RegisterRequestEntity({
     this.name,
     this.email,
-    this.avatar,
     this.uid,
     this.password,
   });
@@ -19,7 +19,6 @@ class RegisterRequestEntity {
   Map<String, dynamic> toJson() => {
         "name": name,
         "email": email,
-        "avatar": avatar,
         "uid": uid,
         "password": password,
       };
@@ -105,7 +104,7 @@ class UserProfile {
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
       name: json["name"],
-      avatar: json["avatar"] ??"",
+      avatar: json["avatar"] ??"avatar/user1.jpg",
       uid: json["uid"],
       email : json["email"],
       user_type: json["user_type"] ?? "",
@@ -127,42 +126,5 @@ class UserProfile {
       };
 }
 
-class UserData {
-  final String? token;
-  final String? name;
-  final String? avatar;
-  final String? description;
-  final int? online;
 
-  UserData({
-    this.token,
-    this.name,
-    this.avatar,
-    this.description,
-    this.online,
-  });
 
-  factory UserData.fromFirestore(
-    DocumentSnapshot<Map<String, dynamic>> snapshot,
-    SnapshotOptions? options,
-  ) {
-    final data = snapshot.data();
-    return UserData(
-      token: data?['token'],
-      name: data?['name'],
-      avatar: data?['avatar'],
-      description: data?['description'],
-      online: data?['online'],
-    );
-  }
-
-  Map<String, dynamic> toFirestore() {
-    return {
-      if (token != null) "token": token,
-      if (name != null) "name": name,
-      if (avatar != null) "avatar": avatar,
-      if (description != null) "description": description,
-      if (online != null) "online": online,
-    };
-  }
-}

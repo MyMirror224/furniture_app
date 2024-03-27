@@ -1,9 +1,6 @@
 
 
 
-import 'package:furniture_app/constant/firebase_field_name.dart';
-import 'package:furniture_app/typedef/user_id.dart';
-
 
 class UserInfoModel  {
   

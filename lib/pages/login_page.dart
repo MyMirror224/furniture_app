@@ -8,7 +8,7 @@ import 'package:furniture_app/pages/forgot_password/forgot_password.dart';
 import 'package:furniture_app/pages/signup_page.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 
-import 'package:furniture_app/state/user_info/models/user_info_model.dart';
+
 import 'package:furniture_app/state/user_info/user_info_provider.dart';
 
 import 'package:gap/gap.dart';

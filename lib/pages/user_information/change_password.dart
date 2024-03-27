@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:furniture_app/components/information_user_field.dart';
 import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/pages/product_detail_page.dart';
-import 'package:furniture_app/state/auth/user_id_provider.dart';
+import 'package:furniture_app/provider/user_id_provider.dart';
+
 import 'package:furniture_app/state/user_info/controller_update_info.dart';
 import 'package:furniture_app/state/user_info/user_info_provider.dart';
 import 'package:gap/gap.dart';

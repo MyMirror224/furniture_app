@@ -1,8 +1,7 @@
-import 'dart:collection';
+
 
 import 'package:flutter/foundation.dart';
-import 'package:furniture_app/constant/firebase_field_name.dart';
-import 'package:furniture_app/typedef/catelory.dart';
+
 
 @immutable
 class CateloryModel  {

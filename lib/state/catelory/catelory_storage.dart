@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:furniture_app/service/http_util.dart';
-import 'package:furniture_app/state/catelory/catelory_model.dart';
+import 'package:furniture_app/model/catelory_model.dart';
 
 class CategoriesAPI {
   static Future<CateloryModel?> getCatelory() async {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/personal_button.dart';
-import 'package:furniture_app/global.dart';
-import 'package:furniture_app/pages/product_detail_page.dart';
+
 import 'package:furniture_app/pages/user_information/user_information.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
-import 'package:furniture_app/state/auth/user_id_provider.dart';
+import 'package:furniture_app/provider/user_id_provider.dart';
+
 import 'package:furniture_app/state/user_info/user_info_provider.dart';
 import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:gap/gap.dart';
@@ -20,7 +20,7 @@ class PersonalPage extends ConsumerWidget {
     final userId = ref.watch(userIdProvider);
     final user = ref.watch(userInfoModelProvider(userId.toString()));
     String userName = user.hasValue ? user.value!.name.toString() : "User";
-    String avatar = user.hasValue ? user.value!.avatar.toString() : '';
+    String avatar = user.hasValue ? user.value!.avatar.toString() : 'avatars/user1.jpg';
     final appThemeState = ref.watch(appThemeStateNotifier);
     // ignore: unused_local_variable
    
@@ -34,26 +34,22 @@ class PersonalPage extends ConsumerWidget {
           children: [
             
             const Gap(20),
-            Center(
-              child: SizedBox(
-                height: 120,
-                width: 120,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: Image.asset(
-                    'assets/images/user.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                  // child: Container(
-                  // color: Colors.grey,
-                  // child: Icon(
-                  //   Icons.person,
-                  //   size: size.height * 0.1,
-                  //   color: Colors.black,
-                  // ),
-                ),
-              ),
-            ),
+             Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30.0),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                 avatar,
+                                 
+                                ),
+                                fit: BoxFit.fill,
+                              )
+                            ),
+                            
+
+                          ),
 
             const Gap(10),
              Center(

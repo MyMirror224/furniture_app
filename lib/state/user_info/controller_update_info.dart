@@ -2,13 +2,16 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:furniture_app/components/constants/appconstant.dart';
+
+import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/global.dart';
+import 'package:furniture_app/model/user_info_model.dart';
 import 'package:furniture_app/pages/login_page.dart';
-import 'package:furniture_app/state/auth/user_id_provider.dart';
+import 'package:furniture_app/provider/user_id_provider.dart';
+
 import 'package:furniture_app/state/user_info/backend/user_info_storage.dart';
 
-import 'package:furniture_app/state/user_info/models/user_info_model.dart';
+
 import 'package:furniture_app/state/user_info/user_info_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -30,25 +33,25 @@ return file;
 }
   Future<void> updateAvatar(
       {required File empFace, String? uid}) async {
-    const url = AppConstants.SERVER_API_URL + '/api/users/update_avatar';
-    
-   
+    const url = '${AppConstants.SERVER_API_URL}api/users/update_avatar';
       var formData = FormData.fromMap({
         'avatar': empFace,
         'uid': uid
         
       });
-      print('send file');
+
       final response = await Dio().post(
         url,
         data: formData,
+        
       );
-      print(response);
-      print("abc");
-        final data = await UserAPI.getProfile(userIdProvider.toString());
+  
+      if(response.statusCode == 200) {
+         final data = await UserAPI.getProfile(userIdProvider.toString());
         await Global.storageService
             .setProfile(userIdProvider.toString(), data.data as UserInfoModel);
-    
+      }
+
   }
 
   Future<void> updateInfo(String uid, String? name, String? avatar,

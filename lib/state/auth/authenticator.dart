@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:furniture_app/model/user_respone.dart';
 
 
 
@@ -10,7 +11,6 @@ import 'package:furniture_app/state/auth/auth_result.dart';
 
 import 'package:furniture_app/state/auth/constants.dart';
 import 'package:furniture_app/state/user_info/backend/user_info_storage.dart';
-import 'package:furniture_app/state/user_info/models/user.dart';
 
 import 'package:furniture_app/typedef/user_id.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -102,7 +102,6 @@ class Authenticator {
         uid: userId.toString(),
         name: name,
         email: email,
-        avatar: null,
         password: password, 
       ),
     );
@@ -210,9 +209,7 @@ class Authenticator {
       await FirebaseAuth.instance.signInWithCredential(
         oauthCredentials,
       );
-      const Duration(seconds: 4);
-      
-      
+
       return AuthResult.sussess;
     } catch (e) {
       return AuthResult.failure;

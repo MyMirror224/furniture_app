@@ -7,24 +7,24 @@ import 'package:furniture_app/components/loading/loading_screen.dart';
 
 
 import 'package:furniture_app/global.dart';
-import 'package:furniture_app/pages/mainview.dart';
+
 import 'package:furniture_app/pages/navigator_bar.dart';
 
 
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
-import 'package:furniture_app/state/auth/error_message_provider.dart';
 
-
-import 'package:furniture_app/state/auth/is_failure.dart';
-import 'package:furniture_app/state/provider/is_loading_provider.dart';
+import 'package:furniture_app/provider/error_message_provider.dart';
+import 'package:furniture_app/provider/is_failure.dart';
+import 'package:furniture_app/provider/is_loading_provider.dart';
+import 'package:furniture_app/provider/is_logged_in_provider.dart';
+import 'package:furniture_app/provider/is_not_verify_provider.dart';
 
 
 import 'package:furniture_app/themes/app_theme.dart';
 
 import 'package:furniture_app/pages/login_page.dart';
 import 'package:furniture_app/pages/verify_email_view.dart';
-import 'package:furniture_app/state/auth/is_logged_in_provider.dart';
-import 'package:furniture_app/state/auth/is_not_verify_provider.dart';
+
 import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
