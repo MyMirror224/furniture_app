@@ -27,6 +27,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -62,6 +66,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '11058742887',
     projectId: 'furniture-app-endgame',
     storageBucket: 'furniture-app-endgame.appspot.com',
+    androidClientId: '11058742887-0be14utbrut6i79lmu5epjp3c6uqhfp0.apps.googleusercontent.com',
+    iosClientId: '11058742887-enal6lfkmckidfs3alrj27of7ap0fbln.apps.googleusercontent.com',
     iosBundleId: 'com.example.furnitureApp',
   );
 
@@ -71,6 +77,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '11058742887',
     projectId: 'furniture-app-endgame',
     storageBucket: 'furniture-app-endgame.appspot.com',
+    androidClientId: '11058742887-0be14utbrut6i79lmu5epjp3c6uqhfp0.apps.googleusercontent.com',
+    iosClientId: '11058742887-8jo5b55h94ju16enkhjdshu3dm24stj2.apps.googleusercontent.com',
     iosBundleId: 'com.example.furnitureApp.RunnerTests',
   );
 }

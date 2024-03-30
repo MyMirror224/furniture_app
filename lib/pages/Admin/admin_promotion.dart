@@ -80,7 +80,7 @@ class PromotionScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    const InformationFields(type: "name", text: 'Start Date'),
+                    InformationFields(type: "name", text: 'Start Date'),
                     Container(
                       decoration: BoxDecoration(
                         color: appThemeState.isDarkModeEnabled
@@ -115,7 +115,7 @@ class PromotionScreen extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    const InformationFields(type: "name", text: 'End Date'),
+                    InformationFields(type: "name", text: 'End Date'),
                     Container(
                       decoration: BoxDecoration(
                         color: appThemeState.isDarkModeEnabled

@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final productProvider = ChangeNotifierProvider((ref) => ProductProvider());
+//final productProvider = ChangeNotifierProvider((ref) => ProductProvider());
 
 class ProductProvider extends ChangeNotifier {
   TextEditingController searchController = TextEditingController();

@@ -4,7 +4,7 @@ import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/pages/login_page.dart';
 import 'package:furniture_app/pages/verify_email_view.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
-import 'package:furniture_app/themes/theme_provider.dart';
+
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,12 +13,13 @@ class SignUp extends HookConsumerWidget {
   SignUp({super.key});
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController nameController =TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
-    final appThemeState = ref.watch(appThemeStateNotifier);
+
     final RegExp emailRegex = RegExp(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
     final RegExp passwordRegex = RegExp(
@@ -86,6 +87,51 @@ class SignUp extends HookConsumerWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: 30,
                       color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 350.0,
+                    child: TextFormField(
+                      controller: nameController,
+                      keyboardType: TextInputType.name,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "please enter your name";
+                        } 
+                        return null;
+                      },
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: const InputDecoration(
+                        labelText: "Name",
+                        labelStyle: TextStyle(color: Colors.black),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: Colors.black),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                              color: Colors
+                                  .red), // Màu sắc của đường biên khi có lỗi
+                        ),
+                        prefixIcon: Icon(
+                          Icons.person,
+                          color: Colors.black,
+                          size: 30.0,
+                        ),
+                        suffixIcon:
+                            Padding(padding: EdgeInsets.only(left: 30.0)),
+                      ),
                     ),
                   ),
                   const Gap(10),
@@ -259,7 +305,7 @@ class SignUp extends HookConsumerWidget {
                       ref
                           .read(authStateProvider.notifier)
                           .registerWithEmailandPassword(
-                              emailController.text, passwordController.text);
+                              emailController.text, passwordController.text , nameController.text);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -305,8 +351,10 @@ class SignUp extends HookConsumerWidget {
                         style: TextStyle(color: Colors.grey, fontSize: 15),
                       ),
                       GestureDetector(
-                        onTap: () => Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Login())),
+                        onTap: () {
+                          Navigator.pop(context);
+                        
+                        } ,
                         child: const Text(
                           " Login now",
                           style: TextStyle(

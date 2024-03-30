@@ -1,32 +1,27 @@
-import 'package:flutter/foundation.dart';
+import 'package:furniture_app/global.dart';
+import 'package:furniture_app/model/user_info_model.dart';
 import 'package:furniture_app/state/auth/auth_result.dart';
 import 'package:furniture_app/state/auth/auth_state.dart';
 import 'package:furniture_app/state/auth/authenticator.dart';
 import 'package:furniture_app/state/user_info/backend/user_info_storage.dart';
-import 'package:furniture_app/typedef/user_id.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AuthStateNotifier extends StateNotifier<AuthState> {
   final _authenticator = Authenticator();
-  final _userInfoStorage = const UserInfoStorage();
 
   AuthStateNotifier() : super(const AuthState.unknown()) {
-    if (_authenticator.isAdmin2) {
-      state = AuthState(
-        isLoading: false,
-        authResult: AuthResult.isAdmin,
-        userId: _authenticator.userId,
-      );
-    }
-
-    if (_authenticator.isAlreadyLoggedIn &&
-        _authenticator.currentUser!.emailVerified) {
+    if (_authenticator.isAlreadyLoggedIn && _authenticator.isVerify) {
       state = AuthState(
         isLoading: false,
         authResult: AuthResult.sussess,
         userId: _authenticator.userId,
+        errorMessage: '',
       );
     }
+  }
+  Future<void> toLogin() async {
+    state = state.copiedWithIsLoading(true);
+    state = const AuthState.unknown();
   }
 
   Future<void> logOut() async {
@@ -35,63 +30,61 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = const AuthState.unknown();
   }
 
-  Future<void> logInAnonymously() async {
-    state = state.copiedWithIsLoading(true);
-    final result = await _authenticator.signInAnonymously();
-    final userId = _authenticator.userId;
-    if (result == AuthResult.sussess && userId != null) {
-      state = AuthState(
-        isLoading: false,
-        authResult: result,
-        userId: userId,
-      );
-    }
-  }
-
   Future<void> loginWithGoogle() async {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.loginWithGoogle();
     final userId = _authenticator.userId;
-    if (result == AuthResult.sussess && userId != null) {
-      await createUserInfoWithGGandFB(userId: userId);
+    try {
+      await _authenticator.createUserInDatabase(
+          password: null, name: _authenticator.displayName.toString());
+
+      final response =
+          await UserAPI.getProfile(_authenticator.userId.toString());
+      await Global.storageService.setProfile(
+          _authenticator.userId.toString(), response.data as UserInfoModel);
+    } catch (e) {
+      state = AuthState(
+        isLoading: false,
+        authResult: AuthResult.failure,
+        userId: userId,
+        errorMessage: 'Server error',
+      );
     }
     state = AuthState(
       isLoading: false,
       authResult: result,
-      userId: _authenticator.userId,
+      userId: userId,
+      errorMessage: '',
     );
   }
 
   Future<void> loginWithFacebook() async {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.loginWithFacebook();
-    final userId = _authenticator.userId;
-    if (result == AuthResult.sussess && userId != null) {
-      await createUserInfoWithGGandFB(userId: userId);
-    }
+    await _authenticator.createUserInDatabase(
+        password: null, name: _authenticator.displayName.toString());
+
+    final response = await UserAPI.getProfile(_authenticator.userId.toString());
+    await Global.storageService.setProfile(
+        _authenticator.userId.toString(), response.data as UserInfoModel);
+
     state = AuthState(
       isLoading: false,
       authResult: result,
       userId: _authenticator.userId,
+      errorMessage: '',
     );
   }
 
-  Future<void> createUserInfoWithGGandFB({
-    required UserId userId,
-  }) =>
-      _userInfoStorage.createUserInfo(
-        userId: userId,
-        displayName: _authenticator.displayName,
-        email: _authenticator.email,
-        password: '',
-      );
   Future<void> sendEmailVerification() async {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.sendEmailVerification();
+
     state = AuthState(
       isLoading: false,
       authResult: result,
       userId: _authenticator.userId,
+      errorMessage: '',
     );
   }
 
@@ -99,53 +92,54 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.logInWithEmailPassword(
         email: email, password: password);
-    debugPrint('result: $result');
     if (result == AuthResult.notVerified) {
       state = AuthState(
         isLoading: false,
         authResult: result,
         userId: _authenticator.userId,
+        errorMessage: '',
       );
       return sendEmailVerification();
-    } else if (result == AuthResult.sussess) {
+    }
+
+    if (result == AuthResult.sussess) {
+      final response =
+          await UserAPI.getProfile(_authenticator.userId.toString());
+      await Global.storageService.setProfile(
+          _authenticator.userId.toString(), response.data as UserInfoModel);
+
       state = AuthState(
         isLoading: false,
         authResult: result,
         userId: _authenticator.userId,
-      );
-    } else if (result == AuthResult.isAdmin) {
-      state = AuthState(
-        isLoading: false,
-        authResult: result,
-        userId: _authenticator.userId,
+        errorMessage: '',
       );
     }
+
     state = AuthState(
       isLoading: false,
       authResult: result,
       userId: _authenticator.userId,
+      errorMessage: _authenticator.errorMessage,
     );
   }
 
   Future<void> registerWithEmailandPassword(
-      String email, String password) async {
+      String email, String password, String name) async {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.registerWithEmailPassword(
       email: email,
       password: password,
+      name: name,
     );
     if (result == AuthResult.resgistered) {
-      _userInfoStorage.createUserInfo(
-          userId: _authenticator.userId ?? '',
-          displayName: _authenticator.displayName,
-          email: email,
-          password: password);
       return sendEmailVerification();
     }
     state = AuthState(
       isLoading: false,
       authResult: result,
       userId: _authenticator.userId,
+      errorMessage: _authenticator.errorMessage,
     );
   }
 
@@ -156,6 +150,13 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       isLoading: false,
       authResult: result,
       userId: _authenticator.userId,
+      errorMessage: '',
+    );
+  }
+
+  Future<void> resetResult() async {
+    state = state.copiedWithIsResult(
+      AuthResult.aborted,
     );
   }
 }

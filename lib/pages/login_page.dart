@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-// Import the dart:ui package for Radius.circular.
-// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:furniture_app/components/login_signup/button_login.dart';
+import 'package:furniture_app/global.dart';
 import 'package:furniture_app/pages/forgot_password/forgot_password.dart';
 import 'package:furniture_app/pages/signup_page.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
-import 'package:furniture_app/state/auth/is_logged_in_provider.dart';
+
+
+import 'package:furniture_app/state/user_info/user_info_provider.dart';
+
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -16,13 +20,17 @@ class Login extends ConsumerWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
+  
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    
+    
     final loginNotifier = ref.watch(obscurePasswordProvider);
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
-    final isLoggedIn = ref.watch(isLoggedInProvider);
+    final RegExp emailRegex = RegExp(
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -68,12 +76,16 @@ class Login extends ConsumerWidget {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your email';
                         }
+                        if (!emailRegex.hasMatch(value)) {
+                          return 'Please enter a valid email';
+                        }
                         return null;
                       },
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.black,
                       ),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller: emailController,
                       decoration: const InputDecoration(
                         labelText: "Email Address",
@@ -181,12 +193,17 @@ class Login extends ConsumerWidget {
                   const Gap(15),
                   buttonLogin(
                       "Login", Colors.grey, (deviceWidth * 0.3).toInt(), 50,
-                      onpressed: () {
+                      onpressed: () async {
+                        
                     if (_formKey.currentState!.validate()) {
-                      ref
+                      
+                      await ref
                           .read(authStateProvider.notifier)
                           .loginWithEmailandPassword(
                               emailController.text, passwordController.text);
+                      final userId = ref.watch(authStateProvider).userId;
+                      return ref
+                          .refresh(userInfoModelProvider(userId.toString()));
                     }
                   }),
                   const Gap(15),
@@ -229,12 +246,13 @@ class Login extends ConsumerWidget {
                       ),
                       GestureDetector(
                           onTap: () => {
-                                Navigator.pop(context),
+                                
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => SignUp(),
-                                    )),
+                                    )
+                                    ),
                               },
                           child: const Text(" Sign Up",
                               style: TextStyle(
@@ -265,3 +283,4 @@ class ObscurePasswordNotier extends ChangeNotifier {
     notifyListeners();
   }
 }
+

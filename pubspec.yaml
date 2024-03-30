@@ -66,6 +66,7 @@ dependencies:
   flutter_image_slideshow: ^0.1.6
   dio: ^5.4.1
   animated_text_kit: ^4.2.2
+  riverpod_generator: ^2.4.0
 
 
 

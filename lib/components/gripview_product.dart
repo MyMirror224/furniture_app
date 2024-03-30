@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:furniture_app/pages/home_page.dart';
+import 'package:furniture_app/model/product_model.dart';
 import 'package:furniture_app/pages/product_detail_page.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class GripViewProduct extends ConsumerWidget {
-  final List<ItemProduct> products;
+  final List<ProductModel?> products;
   final int? length;
 
   const GripViewProduct({
@@ -39,7 +39,8 @@ class GripViewProduct extends ConsumerWidget {
           ),
           childrenDelegate: SliverChildBuilderDelegate(
             (context, index) => GestureDetector(
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailPage())),
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ProductDetailPage())),
               child: ItemCard(products[index]),
             ),
             childCount: length,
@@ -49,7 +50,7 @@ class GripViewProduct extends ConsumerWidget {
 }
 
 class ItemCard extends HookConsumerWidget {
-  final ItemProduct product;
+  final ProductModel? product;
 
   const ItemCard(this.product, {super.key});
 
@@ -59,7 +60,7 @@ class ItemCard extends HookConsumerWidget {
         child: Column(children: [
       Expanded(
         child: Image.asset(
-          product.image,
+          product!.image!.first,
           fit: BoxFit.cover,
         ),
       ),
@@ -68,7 +69,7 @@ class ItemCard extends HookConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            product.name,
+            product!.productName!,
             style: GoogleFonts.roboto(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -83,7 +84,7 @@ class ItemCard extends HookConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text(
-            '${product.price}\$',
+            '${product!.price}\$',
           ),
           Container(
             height: 30,
