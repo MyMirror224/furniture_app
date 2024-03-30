@@ -52,6 +52,24 @@ class HttpUtil {
 
     return response.data;
   }
+  Future postForm(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
+    Options requestOptions = options ?? Options();
+    requestOptions.headers = requestOptions.headers ?? {};
+    
+    var response = await dio.post(
+      path,
+      data: FormData.fromMap(data),
+      queryParameters: queryParameters,
+      options: requestOptions,
+      
+    );
+    return response.data;
+  }
   Future get(
     String path, {
     Map<String, dynamic>? queryParameters,
@@ -73,6 +91,7 @@ class HttpUtil {
     return response.data;
   }
 }
+
 
 
 class ErrorEntity implements Exception {
