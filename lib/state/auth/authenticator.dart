@@ -1,14 +1,31 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:furniture_app/model/user_respone.dart';
+
+
+
+
 import 'package:furniture_app/state/auth/auth_result.dart';
+
 import 'package:furniture_app/state/auth/constants.dart';
+import 'package:furniture_app/state/user_info/backend/user_info_storage.dart';
+
 import 'package:furniture_app/typedef/user_id.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Authenticator {
-  const Authenticator();
+  Authenticator();
+  String get errorMessage => _errorMessage;
+  String _errorMessage = '';
+
+  void updateErorrMessage(String value) {
+    _errorMessage = value;
+  }
+
   bool get isAlreadyLoggedIn => userId != null;
+  bool get isVerify => currentUser?.emailVerified ?? false ; 
 
   User? get currentUser => FirebaseAuth.instance.currentUser;
 
@@ -16,8 +33,8 @@ class Authenticator {
 
   String get email => FirebaseAuth.instance.currentUser?.email ?? '';
 
-  String get displayName =>
-      FirebaseAuth.instance.currentUser?.displayName ?? '';
+  String? get displayName =>
+      FirebaseAuth.instance.currentUser?.displayName ;
 
   Future<AuthResult> sendPasswordReset({
     required String toEmail,
@@ -56,43 +73,71 @@ class Authenticator {
       if (currentUser?.emailVerified == false) {
         return AuthResult.notVerified;
       }
-      if (checkAdmin(email) == true) {
-        return AuthResult.isAdmin;
-      }
+     
       return AuthResult.sussess;
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
+      if (e.code.toString() == 'user-not-found') {
+        updateErorrMessage('User Not Found');
+      } else if (e.code == 'wrong-password') {
+        updateErorrMessage('Wrong Password');
+      } else if (e.code == 'invalid-email') {
+        updateErorrMessage('Invalid Email');
+      } else {
+        updateErorrMessage('Login Failed.Please try again');
+      }
       return AuthResult.failure;
     }
   }
 
-  Future<bool> checkAdmin(String email) async {
-    QuerySnapshot querySnapshot = FirebaseFirestore.instance
-        .collection('users')
-        .where('email', isEqualTo: email)
-        .get() as QuerySnapshot;
-    // DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-    //     .collection('users')
-    //     .where('email', isEqualTo: email)
-    //     .doc('user_type')
-    //     .get();
-    //nếu tài khoản có email trên thuộc type admin thì trả về true
-    if (querySnapshot.docs[0].get('type') == 'admin') {
-      return true;
-    } else
-      return false;
+  Future<void> createUserInDatabase(
+    {
+      required String? password,
+      required String name,
+    }
+  ) async {
+    
+
+    await UserAPI.createUserInDatabase(
+      params: RegisterRequestEntity(
+        uid: userId.toString(),
+        name: name,
+        email: email,
+        password: password, 
+      ),
+    );
   }
 
   Future<AuthResult> registerWithEmailPassword({
     required String email,
     required String password,
+    required String name,
   }) async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      const Duration(seconds: 2);
+      try {
+        await createUserInDatabase(password: password , name: name);
+      } catch (_) {  
+      }
+      
       return AuthResult.resgistered;
-    } catch (e) {
+      
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        updateErorrMessage('Weak Password');
+      } else if (e.code == 'email-already-in-use') {
+        updateErorrMessage('Email Already In Use');
+      } else if (e.code == 'invalid-email') {
+        updateErorrMessage('Invalid Email');
+      } else if (e.code == 'operation-not-allowed') {
+        updateErorrMessage('Operation Not Allowed');
+      } else {
+        updateErorrMessage('Register Failed.Please try again');
+      }
+      
       return AuthResult.failure;
     }
   }
@@ -123,6 +168,7 @@ class Authenticator {
       await FirebaseAuth.instance.signInWithCredential(
         oauthCredentials,
       );
+      
       return AuthResult.sussess;
     } on FirebaseAuthException catch (e) {
       final email = e.email;
@@ -136,6 +182,7 @@ class Authenticator {
           await loginWithGoogle();
           FirebaseAuth.instance.currentUser?.linkWithCredential(credential);
         }
+        
         return AuthResult.sussess;
       }
       return AuthResult.failure;
@@ -162,9 +209,12 @@ class Authenticator {
       await FirebaseAuth.instance.signInWithCredential(
         oauthCredentials,
       );
+
       return AuthResult.sussess;
     } catch (e) {
       return AuthResult.failure;
     }
   }
+
+  
 }
