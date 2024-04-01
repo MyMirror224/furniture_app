@@ -1,21 +1,12 @@
-
-
-
-
 import 'package:flutter/material.dart';
 
 import 'package:furniture_app/components/information_user_field.dart';
 import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/constant/appconstant.dart';
-
 import 'package:furniture_app/helper/image_picker_helper.dart';
-
-
 import 'package:furniture_app/pages/product_detail_page.dart';
 import 'package:furniture_app/pages/user_information/change_password.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
-
-
 import 'package:furniture_app/state/user_info/controller_update_info.dart';
 import 'package:furniture_app/state/user_info/user_info_provider.dart';
 import 'package:furniture_app/themes/theme_provider.dart';
@@ -31,9 +22,10 @@ class UserInformation extends ConsumerWidget {
     final userId = ref.watch(userIdProvider);
     final user = ref.watch(userInfoModelProvider(userId.toString()));
     String userName = user.hasValue ? user.value!.name.toString() : "User";
-    String avatar =
-        user.hasValue ? user.value!.avatar.toString() : 'avatars/user1.jpg';
-    String avatarPath = AppConstants.SERVER_API_URL + avatar;
+    String avatar = user.hasValue
+        ? user.value!.avatar.toString()
+        : 'storage/avatars/default.png';
+    String avatarPath = '${AppConstants.SERVER_API_URL}$avatar';
     String phoneNumber =
         user.hasValue ? user.value!.phone_number.toString() : '';
     String address = user.hasValue ? user.value!.address.toString() : '';
@@ -101,12 +93,12 @@ class UserInformation extends ConsumerWidget {
                                 if (imageFile == null) {
                                   return;
                                 } else {
-
                                   await ref
                                       .read(updateInfoProvider.notifier)
                                       .updateAvatar(
-                                          empFace: imageFile,
-                                          uid: userId.toString(),);
+                                        empFace: imageFile,
+                                        uid: userId.toString(),
+                                      );
                                   return ref.refresh(
                                       userInfoModelProvider(userId.toString()));
                                 }

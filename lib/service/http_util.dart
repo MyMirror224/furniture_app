@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-
 import 'package:furniture_app/constant/appconstant.dart';
 
 class HttpUtil {
@@ -32,6 +31,19 @@ class HttpUtil {
       onError(eInfo);
     }));
   } //finish internal()
+  Future postForm(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
+    var response = await dio.post(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+    );
+    return response.data;
+  }
 
   Future post(
     String path, {
@@ -42,34 +54,15 @@ class HttpUtil {
     Options requestOptions = options ?? Options();
     requestOptions.headers = requestOptions.headers ?? {};
 
-    var response = await dio.post(
-      path,
-      data: data,
-      queryParameters: queryParameters,
-      options: requestOptions,
-      cancelToken: CancelToken()
-    );
+    var response = await dio.post(path,
+        data: data,
+        queryParameters: queryParameters,
+        options: requestOptions,
+        cancelToken: CancelToken());
 
     return response.data;
   }
-  Future postForm(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-  }) async {
-    Options requestOptions = options ?? Options();
-    requestOptions.headers = requestOptions.headers ?? {};
-    
-    var response = await dio.post(
-      path,
-      data: FormData.fromMap(data),
-      queryParameters: queryParameters,
-      options: requestOptions,
-      
-    );
-    return response.data;
-  }
+
   Future get(
     String path, {
     Map<String, dynamic>? queryParameters,
@@ -80,8 +73,6 @@ class HttpUtil {
     String cacheKey = '',
     bool cacheDisk = false,
   }) async {
-  
-
     var response = await dio.get(
       path,
       queryParameters: queryParameters,
@@ -91,8 +82,6 @@ class HttpUtil {
     return response.data;
   }
 }
-
-
 
 class ErrorEntity implements Exception {
   int code = -1;

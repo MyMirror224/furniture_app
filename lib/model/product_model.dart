@@ -1,20 +1,22 @@
 class ProductModel {
-  final String id;
-  final String productName;
-  final List<String> image;
-  final String price;
-  final String description;
-  final String cateloryId;
-  final String promotionId;
-  final int rating;
-  final int quantity;
-  final int solded;
-  final bool isShow;
+  final int? id;
+  final String? productName;
+  final List<String>? images;
+  final double? price;
+  final String? description;
+  final String? cateloryId;
+  final int? promotionId;
+  final double? rating;
+  final int? quantity;
+  final int? solded;
+  final bool? isShow;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
-  ProductModel({  
+  ProductModel({
     required this.id,
     required this.productName,
-    required this.image,
+    required this.images,
     required this.price,
     required this.description,
     required this.cateloryId,
@@ -23,29 +25,33 @@ class ProductModel {
     required this.quantity,
     required this.solded,
     required this.isShow,
+    this.createdAt,
+    this.updatedAt,
   });
-  
+
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
       id: json['id'],
       productName: json['product_name'],
-      image: json['product_image'],
+      images: json['product_image'],
       price: json['price'],
       description: json['description'],
-      cateloryId: json['catelory_id'],
+      cateloryId: json['catelory_id'].toString(),
       promotionId: json['promotion_id'],
       rating: json['rating_count'],
       quantity: json['quantity'],
       solded: json['sold'],
       isShow: json['is_show'],
+      createdAt: DateTime.parse(json['created_at']),
+      updatedAt: DateTime.parse(json['updated_at']),
     );
   }
-   
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'product_name': productName,
-      'product_image': image,
+      'product_image': images,
       'price': price,
       'description': description,
       'catelory_id': cateloryId,
@@ -54,7 +60,8 @@ class ProductModel {
       'quantity': quantity,
       'sold': solded,
       'is_show': isShow,
-
+      'created_at': createdAt,
+      'updated_at': updatedAt,
     };
   }
-  }
+}

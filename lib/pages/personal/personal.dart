@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/personal_button.dart';
-
+import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/pages/user_information/user_information.dart';
-import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
-
+import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:furniture_app/state/user_info/user_info_provider.dart';
 import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:gap/gap.dart';
@@ -20,10 +19,13 @@ class PersonalPage extends ConsumerWidget {
     final userId = ref.watch(userIdProvider);
     final user = ref.watch(userInfoModelProvider(userId.toString()));
     String userName = user.hasValue ? user.value!.name.toString() : "User";
-    String avatar = user.hasValue ? user.value!.avatar.toString() : 'avatars/user1.jpg';
+    String avatar = user.hasValue
+        ? user.value!.avatar.toString()
+        : 'storage/avatars/default.png';
+    String avatarPath = '${AppConstants.SERVER_API_URL}$avatar';
     final appThemeState = ref.watch(appThemeStateNotifier);
     // ignore: unused_local_variable
-   
+
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
@@ -32,27 +34,23 @@ class PersonalPage extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            
             const Gap(20),
-             Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30.0),
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                 avatar,
-                                 
-                                ),
-                                fit: BoxFit.fill,
-                              )
-                            ),
-                            
-
-                          ),
+            Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle, // Changed to a circular shape
+                image: DecorationImage(
+                  image: NetworkImage(
+                    avatarPath,
+                  ),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
 
             const Gap(10),
-             Center(
+            Center(
               child: Text(
                 userName,
                 style: const TextStyle(
