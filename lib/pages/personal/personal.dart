@@ -109,18 +109,12 @@ class PersonalPage extends ConsumerWidget {
               onTap: () {},
               icon: FontAwesomeIcons.wallet,
             ),
-            const Gap(10),
+            Gap(10),
             PersonalButton(
-              text: "Shoping Address",
+              text: "My Orders",
               onTap: () {},
-              icon: FontAwesomeIcons.addressCard,
+              icon: FontAwesomeIcons.listCheck,
             ),
-            // const Gap(10),
-            // PersonalButton(
-            //   text: "Discount",
-            //   onTap: () {},
-            //   icon: Icons.discount,
-            // ),
             const Gap(10),
             PersonalButton(
               text: "Language",

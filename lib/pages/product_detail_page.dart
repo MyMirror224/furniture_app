@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:furniture_app/components/review_list.dart';
+import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/model/product_model.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-List<String> imagePaths = [
-  'assets/images/background1.jpg',
-  'assets/images/background1.jpg',
-  'assets/images/background1.jpg',
-];
-
-// ignore: must_be_immutable
 class ProductDetailPage extends ConsumerWidget {
-  ProductDetailPage({super.key});
+  final ProductModel product;
+  const ProductDetailPage(this.product, {super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TextEditingController textController = ref.watch(countProvider)._countText;
+    final width = MediaQuery.of(context).size.width;
+    final rating = product.rating;
+    final quantity = product.quantity;
+    final TextEditingController? textController =
+        ref.watch(countProvider)._countText;
     final countController = ref.watch(countProvider).count;
+    final price = ref.watch(countProvider).totalprice ?? product.price;
+    double promotion = double.parse(product.promotion.toString());
+    final pricePromote = ref.watch(countProvider).totalPriceasPromotion ??
+        product.price! - product.price! * promotion / 100;
+    final title =
+        product.productName!.substring(product.productName!.indexOf(' '));
     bool isContainerInvisible = countController != 1;
-
+    bool isPromote = pricePromote != price;
+    final List<Widget> imageWidgets = ImageWidgets.getImageWidgets(product);
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -29,7 +37,7 @@ class ProductDetailPage extends ConsumerWidget {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const ButtonBackIos(),
+                ButtonBackIos(),
                 Container(
                   height: 40,
                   width: 40,
@@ -63,24 +71,10 @@ class ProductDetailPage extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('4.5',
-                            style: GoogleFonts.roboto(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        Icon(
-                          Icons.star,
-                          color: Colors.amber[400],
-                        ),
-                      ],
-                    ),
                     const Gap(15),
                     SizedBox(
                       child: Text(
-                        "Pearl Beading Fur Textured",
+                        title,
                         style: GoogleFonts.roboto(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -91,87 +85,180 @@ class ProductDetailPage extends ConsumerWidget {
                       ),
                     ),
                     const Gap(10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(rating.toString(),
+                            style: GoogleFonts.roboto(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        Icon(
+                          Icons.star,
+                          color: Colors.amber[400],
+                          size: 26,
+                        ),
+                      ],
+                    ),
                     const Gap(10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text("Solded: $quantity",
+                            style: GoogleFonts.roboto(
+                              fontSize: 16,
+                            )),
+                      ],
+                    ),
+                    const Gap(10),
+                    Text("Description:",
+                        style: GoogleFonts.roboto(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        )),
                   ],
                 ),
               ),
             ),
             pinned: true,
             expandedHeight: 300,
-            flexibleSpace: 
-                      ImageSlideshow(
-                          indicatorBottomPadding :30 ,
-                          height: 240,
-                          initialPage: 0,
-                          autoPlayInterval: 3000,
-                          isLoop:
-                              true, // Optional: Set autoplay interval // Optional: Customize indicator position
-                          onPageChanged: (index) =>
-                              print('Page changed to: $index'),
-                          children: imageWidgets),
-                
+            flexibleSpace: ImageSlideshow(
+                indicatorBottomPadding: 30,
+                height: 240,
+                initialPage: 0,
+                autoPlayInterval: 3000,
+                isLoop:
+                    true, // Optional: Set autoplay interval // Optional: Customize indicator position
+                onPageChanged: (index) => print('Page changed to: $index'),
+                children: imageWidgets),
           ),
           SliverToBoxAdapter(
             child: Column(children: [
+              const Gap(20),
               Container(
                 margin: const EdgeInsets.only(left: 20, right: 20),
-                child: const ExpandableTextWidget(
-                    text:
-                        '''A chair is a piece of furniture designed for seating one person, providing support and comfort. Typically consisting of a seat, backrest, and often armrests, chairs come in various styles, materials, and sizes to suit different purposes and aesthetic preferences. They are essential in both residential and commercial spaces, serving as functional items for sitting or lounging, as well as decorative elements that contribute to the overall design of a room.
-                      
-                      Chairs can be crafted from a variety of materials, including wood, metal, plastic, or upholstered with fabric or leather. The design and construction of a chair can range from simple and utilitarian to elaborate and ornate, reflecting cultural influences and design trends. Different types of chairs serve specific purposes, such as dining chairs for meals, office chairs for work, lounge chairs for relaxation, and accent chairs for decorative flair.
-                      
-                      The ergonomic considerations of a chair, including seat height, back support, and armrest placement, are crucial factors in determining its comfort and functionality. Additionally, chairs may incorporate features like swiveling mechanisms, reclining options, or rocking capabilities to enhance their versatility and user experience.
-                      
-                      Whether a classic wooden dining chair, a sleek modern office chair, or a plush upholstered armchair, the chair is a ubiquitous and indispensable element of interior design that combines both form and function. 
-                      The ergonomic considerations of a chair, including seat height, back support, and armrest placement, are crucial factors in determining its comfort and functionality. Additionally, chairs may incorporate features like swiveling mechanisms, reclining options, or rocking capabilities to enhance their versatility and user experience. '''),
+                child: ExpandableTextWidget(
+                  text: product.description!,
+                ),
               ),
             ]),
           ),
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Align(
-              alignment: Alignment.bottomLeft,
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                height: 100,
-                child: Row(
-                  children: [
-                    Text(
-                      'Color ',
-                      style: GoogleFonts.roboto(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+          SliverToBoxAdapter(
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Gap(20),
+              Container(
+                  margin: const EdgeInsets.only(left: 20, right: 20),
+                  child: TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'See all Reviews',
+                        style: GoogleFonts.roboto(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ))),
+              Gap(10),
+            ]),
+          ),
+
+//           SliverPadding(
+
+//             padding: const EdgeInsets.only(left: 20, right: 20),
+//             sliver: SliverList(
+//               delegate: SliverChildBuilderDelegate((context, index) =>
+// ProductReviewList(
+//                 reviews: [
+//                   Review(
+//                     userName: 'John Doe',
+//                     userImageUrl:
+//                         'http://172.21.0.204:8000/avatar.jpg/storage/avatars/default.png',
+//                     rating: 4,
+//                     reviewText: 'Great product! Highly recommended.',
+//                   ),
+//                 ],
+//               ),
+//               ),
+//             )
+//           ),
+        ],
+      ),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: const EdgeInsets.only(
+              top: 20,
+              bottom: 20,
+              left: 20,
+              right: 20,
+            ),
+            decoration: const BoxDecoration(
+                color: Color(0xff93b1a7),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                )),
+            child: Column(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                      padding: const EdgeInsets.only(
+                        top: 20,
+                        bottom: 20,
+                        left: 10,
+                        right: 10,
                       ),
-                    ),
-                    Flexible(
-                        child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 9,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: CircleAvatar(
-                              radius: 15,
-                              backgroundColor:
-                                  1 == index ? Colors.black : Colors.white,
-                              child: const CircleAvatar(
-                                radius: 13,
-                                backgroundColor: Colors.red,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: const Color(0xff93b1a7),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            ("\$$price"),
+                            style: GoogleFonts.roboto(
+                              fontSize: isPromote ? 16.0 : 20.0,
+                              fontWeight:
+                                  isPromote ? FontWeight.w400 : FontWeight.bold,
+                              decoration: isPromote
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                              color: isPromote ? Colors.grey[600] : Colors.red,
+                            ),
+                          ),
+                          const Gap(10),
+                          Opacity(
+                            opacity: isPromote ? 1.0 : 0.0,
+                            child: Text(
+                              ("\$$pricePromote"),
+                              style: GoogleFonts.roboto(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
                               ),
                             ),
                           ),
-                        );
-                      },
-                    )),
-                    const Gap(30),
+                        ],
+                      )),
+                  const Gap(30),
+                  Row(children: [
                     GestureDetector(
-                      onTap: isContainerInvisible ? () {
-                        ref.read(countProvider.notifier).removeCount();
-                        ref.read(countProvider.notifier).updateCountText();
-                      } : null,
+                      onTap: isContainerInvisible
+                          ? () {
+                              ref.read(countProvider.notifier).removeCount();
+                              ref
+                                  .read(countProvider.notifier)
+                                  .updateCountText();
+                              ref
+                                  .read(countProvider.notifier)
+                                  .totalPrice(product.price!);
+                              ref
+                                  .read(countProvider.notifier)
+                                  .totalPricehavePromotion(0.2);
+                            }
+                          : null,
                       child: Opacity(
                         opacity: isContainerInvisible ? 1 : 0.5,
                         child: Container(
@@ -192,7 +279,7 @@ class ProductDetailPage extends ConsumerWidget {
                     ),
                     const Gap(10),
                     SizedBox(
-                      width: 35,  
+                      width: 35,
                       child: TextField(
                         decoration: const InputDecoration(
                           border: InputBorder.none, // Remove underline
@@ -200,6 +287,15 @@ class ProductDetailPage extends ConsumerWidget {
                         textAlign: TextAlign.center,
                         keyboardType: TextInputType.number,
                         controller: textController,
+                        onChanged: (value) {
+                          ref.read(countProvider.notifier).updateCount();
+                          ref
+                              .read(countProvider.notifier)
+                              .totalPrice(product.price!);
+                          ref
+                              .read(countProvider.notifier)
+                              .totalPricehavePromotion(promotion);
+                        },
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
                         ],
@@ -217,109 +313,128 @@ class ProductDetailPage extends ConsumerWidget {
                         onTap: () {
                           ref.read(countProvider.notifier).increment();
                           ref.read(countProvider.notifier).updateCountText();
+                          ref
+                              .read(countProvider.notifier)
+                              .totalPrice(product.price!);
+                          ref
+                              .read(countProvider.notifier)
+                              .totalPricehavePromotion(promotion);
                         },
-                        child: Icon(
+                        child: const Icon(
                           Icons.add,
                           size: 20,
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ])
+                ],
               ),
-            ),
-          )
-        ],
-      ),
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: EdgeInsets.only(
-              top: 20,
-              bottom: 20,
-              left: 20,
-              right: 20,
-            ),
-            decoration: BoxDecoration(
-                color: Color(0xff183D3D),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                )),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: EdgeInsets.only(
-                    top: 20,
-                    bottom: 20,
-                    left: 10,
-                    right: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Color(0xff183D3D),
-                  ),
-                  child: Text(
-                    ("\$0.08 "),
-                    style: GoogleFonts.roboto(
-                      color: Colors.white,
+              const Gap(10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: width * 0.4,
+                    padding: const EdgeInsets.only(
+                      top: 20,
+                      bottom: 20,
+                      left: 10,
+                      right: 10,
                     ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: const Color(0xff193d3d),
+                    ),
+                    child: InkWell(
+                        onTap: () {},
+                        highlightColor: Colors.blue.withOpacity(0.2),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Buy Now',
+                                  style:
+                                      GoogleFonts.roboto(color: Colors.white)),
+                              const Gap(10),
+                              const Icon(
+                                Icons.shopping_bag,
+                                color: Colors.white,
+                              )
+                            ])),
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(
-                    top: 20,
-                    bottom: 20,
-                    left: 10,
-                    right: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.amberAccent,
-                  ),
-                  child: InkWell(
-                      onTap: () {},
-                      highlightColor: Colors.blue.withOpacity(0.2),
-                      child: Row(children: [
-                        Text('Add to Card'),
-                        Gap(10),
-                        Icon(
-                          Icons.shopping_bag,
-                          color: Colors.white,
-                        )
-                      ])),
-                )
-              ],
-            ),
+                  Container(
+                    width: width * 0.4,
+                    padding: const EdgeInsets.only(
+                      top: 20,
+                      bottom: 20,
+                      left: 10,
+                      right: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: const Color(0xff193d3d),
+                    ),
+                    child: InkWell(
+                        onTap: () {},
+                        highlightColor: Colors.blue.withOpacity(0.2),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Add to Card',
+                                style: GoogleFonts.roboto(color: Colors.white),
+                              ),
+                              const Gap(10),
+                              const Icon(
+                                Icons.shopping_cart,
+                                color: Colors.white,
+                              )
+                            ])),
+                  )
+                ],
+              ),
+            ]),
           ),
         ],
       ),
     );
   }
-
-  List<Widget> imageWidgets = imagePaths.map((path) {
-    return Container(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
-      ),
-      child: Image.asset(
-        path,
-        fit: BoxFit.cover,
-      ),
-    );
-  }).toList();
 }
 
-class ButtonBackIos extends StatelessWidget {
-  const ButtonBackIos({
-    super.key,
-  });
+class ImageWidgets {
+  static List<Widget> getImageWidgets(ProductModel? product) {
+    if (product == null || product.image == null) {
+      return [];
+    }
+
+    return product.image!.map((path) {
+      path = "${AppConstants.SERVER_API_URL}storage/$path";
+      return Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+          ),
+        ),
+        child: Image(
+          image: NetworkImage(
+            path,
+          ),
+          fit: BoxFit.fill,
+        ),
+      );
+    }).toList();
+  }
+}
+
+
+
+class ButtonBackIos extends ConsumerWidget {
+  final Future<void>? notify;
+
+  const ButtonBackIos({super.key, this.notify});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       height: 40,
       width: 40,
@@ -328,7 +443,10 @@ class ButtonBackIos extends StatelessWidget {
         color: Color(0xFF183D3D),
       ),
       child: IconButton(
-        onPressed: () => Navigator.pop(context),
+        onPressed: () async{
+          await notify;
+          Navigator.pop(context);
+        },
         icon: const Icon(
           Icons.arrow_back_ios_sharp,
           color: Colors.white,
@@ -363,7 +481,7 @@ class ExpandableTextWidget extends ConsumerWidget {
       secondHalf.isEmpty
           ? Text(
               text,
-              style: GoogleFonts.roboto(fontSize: 12),
+              style: GoogleFonts.roboto(fontSize: 14),
             )
           : Column(
               children: [
@@ -410,6 +528,7 @@ class TextDescriptionNotifier extends ChangeNotifier {
     notifyListeners();
   }
 }
+
 final countProvider = ChangeNotifierProvider(
   (ref) => CountProduct(),
 );
@@ -417,24 +536,48 @@ final countProvider = ChangeNotifierProvider(
 class CountProduct extends ChangeNotifier {
   int _count = 1;
   int get count => _count;
-  final TextEditingController _countText = TextEditingController(text: '1');
-  TextEditingController get countText => _countText;
+  final TextEditingController? _countText = TextEditingController(text: '1');
+  TextEditingController get countText => _countText!;
   void updateCountText() {
-    _countText.text = _count.toString();
+    _countText?.text = _count.toString();
     notifyListeners();
   }
-  
-  double  total = 0;
-  double  get totalprice => total;
+
+  void updateCount() {
+    try {
+      if (_countText?.text == '') {
+        _count = 1;
+      } else {
+        _count = int.parse(_countText!.text);
+      }
+    } catch (e) {
+      _count = 1;
+    }
+    notifyListeners();
+  }
+
+  double? _total;
+  double? get totalprice => _total;
+  double? _totalasPromotion;
+  double? get totalPriceasPromotion => _totalasPromotion;
   void increment() {
     _count++;
     notifyListeners();
   }
+
   void removeCount() {
     _count--;
     notifyListeners();
   }
-  void totalPrice( double price){
-    total = _count * price;
+
+  void totalPrice(double price) {
+    _total = _count * price;
+    notifyListeners();
+  }
+
+  void totalPricehavePromotion(double promotion) {
+    final x = _total! * promotion / 100;
+    _totalasPromotion = (_total! - x);
+    notifyListeners();
   }
 }

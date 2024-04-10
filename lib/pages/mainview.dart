@@ -22,7 +22,7 @@ class _MainViewState extends ConsumerState<MainView> {
   @override
   Widget build(BuildContext context) {
     final products = ref.watch(productProvider).products;
-    print(products.firstOrNull?.productName);
+    print(products.firstOrNull?.quantity);
     return Scaffold(
       appBar: AppBar(
         title: Text('Furniture App'),

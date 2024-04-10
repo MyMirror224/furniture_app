@@ -1,6 +1,10 @@
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:furniture_app/pages/category_page.dart';
+import 'package:furniture_app/pages/chat_page.dart';
+import 'package:furniture_app/pages/giff_box_page.dart';
 import 'package:furniture_app/pages/home_page.dart';
 import 'package:furniture_app/pages/personal/personal.dart';
 
@@ -33,10 +37,10 @@ class HomeScreen extends ConsumerWidget {
           co.setIndex(selectIndex);
         },
         items: const [
-          Icon(Icons.favorite, size: 30, color: Colors.white),
           Icon(Icons.category, size: 30, color: Colors.white),
+          Icon(Icons.card_giftcard, size: 30, color: Colors.white),
           Icon(Icons.home, size: 30, color: Colors.white),
-          Icon(Icons.shopping_cart, size: 30, color: Colors.white),
+          Icon(Icons.chat, size: 30, color: Colors.white),
           Icon(Icons.person, size: 30, color: Colors.white),
         ],
       ),
@@ -85,9 +89,9 @@ class InforProvider extends ChangeNotifier {
 
 
 List<Widget>  listPage =[
+   CategoryPage(),
+   GiftBoxPage(),
    HomePage(),
-   HomePage(),
-   HomePage(),
-   HomePage(),
+   ChatPage(),
    const PersonalPage(),
 ];

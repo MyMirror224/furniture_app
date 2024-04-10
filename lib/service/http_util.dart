@@ -13,9 +13,12 @@ class HttpUtil {
   HttpUtil._internal() {
     BaseOptions options = BaseOptions(
         baseUrl: AppConstants.SERVER_API_URL,
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
-        headers: {},
+        connectTimeout: Duration(seconds: 4),
+        receiveTimeout: Duration(seconds: 4),
+        headers: {
+         
+        },
+        
         contentType: "application/json: charset=utf-8",
         responseType: ResponseType.json);
     dio = Dio(options);

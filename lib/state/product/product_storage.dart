@@ -8,12 +8,42 @@ class ProductAPI {
         'api/products/all',
       );
 
-      var productJson = response['products'] as List;
-      var products = productJson.map((e) => ProductModel.fromJson(e)).toList();
+      var productJson = response['products'];
+
+      final List<ProductModel> products = List<ProductModel>.from(
+          productJson.map((x) => ProductModel.fromJson(x)));
+
       return products;
     } catch (e) {
       print(e);
       throw Exception('Failed to load product');
     }
   }
+  static Future<List<ProductModel>> getProductwithIdCategory(String? id, String? name, double? rating, double? minPrice, double? maxPrice, String? type) async {
+    try {
+      final response = await HttpUtil().post(
+        'api/products/categoryId',
+        queryParameters:  {
+          'id': id,
+          'name': name,
+          'rating_count': rating,
+          'minPrice': minPrice,
+          'maxPrice': maxPrice,
+          'type' : type 
+        }
+      );
+
+      var productJson = response['products'];
+
+      final List<ProductModel> products = List<ProductModel>.from(
+          productJson.map((x) => ProductModel.fromJson(x)));
+
+      return products;
+    } catch (e) {
+      print(e);
+      throw Exception('Failed to load product');
+    }
+  }
+  
+
 }
