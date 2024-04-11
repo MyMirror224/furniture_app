@@ -3,7 +3,7 @@ import 'package:furniture_app/service/http_util.dart';
 
 class ProductApi {
   static Future<ProductEntity> getProducts() async {
-    var response = await HttpUthtil().post(
+    var response = await HttpUtil().post(
       'api/products',
     );
     return ProductEntity.fromJson(response);

@@ -22,7 +22,7 @@ class ProductAPI {
   static Future<List<ProductModel>> getProductwithIdCategory(String? id, String? name, double? rating, double? minPrice, double? maxPrice, String? type) async {
     try {
       final response = await HttpUtil().post(
-        'api/products/categoryId',
+        'api/products/search',
         queryParameters:  {
           'id': id,
           'name': name,
