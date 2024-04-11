@@ -5,6 +5,12 @@ import 'package:furniture_app/state/product/product_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ProductNotifier extends ChangeNotifier {
+  double get height => _height;
+  double _height = 300;
+  void setHeight(double height){
+    _height = height;
+    notifyListeners();
+  }
   List<ProductModel?> _products = [];
   List<ProductModel?> _productsCate = [];
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/gripview_product.dart';
-import 'package:furniture_app/model/product_model.dart';
+
 import 'package:furniture_app/pages/product_detail_page.dart';
 import 'package:furniture_app/pages/search%20page/searchPage.dart';
 import 'package:furniture_app/pages/search%20page/searchingItem.dart';
@@ -20,30 +20,36 @@ class ProductListPage extends ConsumerStatefulWidget {
 
 class _ProductListPageState extends ConsumerState<ProductListPage> {
   String? _selectedFilter;
+  String? _selectedPrice;
+  double? rating;
+  String? name;
+  String? type;
+  String? _selectedRating;
+  String? _selectedType;
   double _minPrice = 0;
-  double _maxPrice = double.infinity;
+  double? _maxPrice ;
+  
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     Future.delayed(const Duration(seconds: 2), () {
-      ref.read(productProvider).filterCategory(widget.index, null, null, null, null, null);
+      ref
+          .read(productProvider)
+          .filterCategory(widget.index, null, null, null, null, null);
     });
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
     final searchProvi = ref.watch(searchProvider);
     final productList = ref.watch(productProvider).productCate;
-    
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            toolbarHeight: 300,
+            toolbarHeight: ref.watch(productProvider).height,
             pinned: true,
-            expandedHeight: 100,
             automaticallyImplyLeading: false,
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,9 +57,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                     ButtonBackIos(
-                      notify: ref.read(productProvider.notifier).fetchProduct(),
-                    ),
+                    ButtonBackIos(),
                     Container(
                       height: 40,
                       width: 40,
@@ -108,16 +112,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                   searchProvi.canClean();
                               },
                               onSubmitted: (v) async {
-                                //saving the searching value
-                                // Navigator.push(
-                                //   context,
-                                //   PageTransition(
-                                //       type: PageTransitionType.rightToLeftWithFade,
-                                //       child: CollectionPage(
-                                //           futureProductsSearching(v)),
-                                //       childCurrent: context.widget),
-                                // );
-                                // //achieve the result of
+                                
                                 searchProvi.saveSearchingHistory(v);
                               },
                             ),
@@ -126,18 +121,6 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                             children: [
                               InkWell(
                                 onTap: () async {
-                                  //saving the searching value
-                                  // Navigator.push(
-                                  //     context,
-                                  //     PageTransition(
-                                  //         type: PageTransitionType
-                                  //             .rightToLeftWithFade,
-                                  //         child: CollectionPage(
-                                  //             futureProductsSearching(
-                                  //                 _controllerTextField.text)),
-                                  //         childCurrent: context.widget)
-                                  //         );
-
                                   //achieve the result of
                                   searchProvi.saveSearchingHistory(
                                       searchProvi.controllerTextField.text);
@@ -174,7 +157,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                         builder: (BuildContext context,
                             AsyncSnapshot<List<String>?> snapshot) {
                           if (snapshot.hasData) {
-                            
+                            ref.read(productProvider.notifier).setHeight(400);
                             return Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -182,7 +165,6 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-
                                       const Text("Lịch sử tìm kiếm"),
                                       InkWell(
                                         onTap: () {
@@ -203,15 +185,18 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                     spacing: 5,
                                     runSpacing: 5,
                                     children: [
-                                      
                                       for (var i = snapshot.data!.length - 1;
-                                          i>=0 && snapshot.data!.length - i <= 3;
+                                          i >= 0 &&
+                                              snapshot.data!.length - i <= 3;
                                           i--)
                                         searchingItem(snapshot.data![i])
                                     ],
                                   ),
                                 ]);
                           } else {
+                            
+                              ref.read(productProvider.notifier).setHeight(300);
+                            
                             return Container();
                           }
                         }),
@@ -224,61 +209,118 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                   spacing: 8,
                   children: [
                     ChoiceChip(
-                      label: Text('Giá tăng dần'),
-                      selected: _selectedFilter == 'Giá tăng dần',
+                      label: Text('Price low to high'),
+                      selected: _selectedType == 'Price low to high',
                       onSelected: (bool selected) {
                         setState(() {
-                          _selectedFilter = selected ? 'Giá tăng dần' : null;
+                          _selectedType = selected ? 'Price low to high' : null;
+                          if(_selectedType != null){
+                            type= 'asc';
+                            ref.read(productProvider.notifier).filterCategory(
+                                  widget.index,
+                                  searchProvi.controllerTextField.toString(),
+                                  rating,
+                                  _minPrice,
+                                  _maxPrice,
+                                  type);
+                          }
                           // Lọc danh sách sản phẩm theo giá tăng dần
                           //productList.sort((a, b) => a.price.compareTo(b.price));
                         });
                       },
                     ),
                     ChoiceChip(
-                      label: Text('Giá giảm dần'),
-                      selected: _selectedFilter == 'Giá giảm dần',
+                      label: Text('Price high to low'),
+                      selected: _selectedType == 'Price high to low',
                       onSelected: (bool selected) {
                         setState(() {
-                          _selectedFilter = selected ? 'Giá giảm dần' : null;
+                          _selectedType =
+                              selected ? 'Price high to low' : null;
                           // Lọc danh sách sản phẩm theo giá giảm dần
-                          //products.sort((a, b) => b.price.compareTo(a.price));
+                          if(_selectedType != null){
+                            type= 'dec';
+                            ref.read(productProvider.notifier).filterCategory(
+                                  widget.index,
+                                  searchProvi.controllerTextField.toString(),
+                                  rating,
+                                  _minPrice,
+                                  _maxPrice,
+                                  type);
+                          }//products.sort((a, b) => b.price.compareTo(a.price));
                         });
                       },
                     ),
                     ChoiceChip(
-                      label: Text('5*'),
-                      selected: _selectedFilter == '5*',
+                      label: Text('>= 5*'),
+                      selected: _selectedRating == '>= 5*',
+                      onSelected: (bool selected) {
+                        setState(
+                          () {
+                            _selectedRating = selected ? '>= 5*' : null;
+                            if (_selectedRating != null) {
+                              rating = 5;
+                              ref.read(productProvider.notifier).filterCategory(
+                                  widget.index,
+                                  searchProvi.controllerTextField.toString(),
+                                  rating,
+                                  _minPrice,
+                                  _maxPrice,
+                                  type);
+                            } else {
+                              rating = null;
+                            }
+                          },
+                        );
+                      },
+                    ),
+                    ChoiceChip(
+                      label: Text('>= 4*'),
+                      selected: _selectedRating == '>= 4*',
                       onSelected: (bool selected) {
                         setState(() {
-                          _selectedFilter = selected ? '5*' : null;
-                          // Lọc danh sách sản phẩm có đánh giá 5 sao
-                          //products.removeWhere((product) => product.rating < 5);
+                          _selectedRating = selected ? '>= 4*' : null;
+                          if (_selectedRating != null) {
+                            rating = 4;
+                            ref.read(productProvider.notifier).filterCategory(
+                                widget.index, searchProvi.controllerTextField.toString(), rating, _minPrice, _maxPrice, type);
+                          } else {
+                            rating = null;
+                          }
                         });
                       },
                     ),
                     ChoiceChip(
-                      label: Text('3* trở lên'),
-                      selected: _selectedFilter == '3* trở lên',
+                      label: Text('>= 3*'),
+                      selected: _selectedRating == '>= 3*',
                       onSelected: (bool selected) {
                         setState(() {
-                          _selectedFilter = selected ? '3* trở lên' : null;
-                         
-                          
+                          _selectedRating = selected ? '>= 3*' : null;
+                          if (_selectedRating != null) {
+                            rating = 3;
+                            ref.read(productProvider.notifier).filterCategory(
+                                widget.index, searchProvi.controllerTextField.toString(), rating, _minPrice, _maxPrice, type);
+                          } else {
+                            rating = null;
+                          }
                         });
                       },
                     ),
                     Row(
                       children: [
                         ChoiceChip(
-                          label: Text('Số tiền'),
-                          selected: _selectedFilter == 'Số tiền',
+                          label: Text('Price'),
+                          selected: _selectedPrice == 'Price',
                           onSelected: (bool selected) {
                             setState(() {
-                              _selectedFilter = selected ? 'Số tiền' : null;
+                              _selectedPrice = selected ? 'Price' : null;
+                              if (_selectedPrice == null) {
+                                _maxPrice= null;
+                                _minPrice= 0;
+                              }
                             });
                           },
                         ),
-                        if (_selectedFilter == 'Số tiền')
+                        if (_selectedPrice == 'Price')
                           Expanded(
                             child: Row(
                               children: [
@@ -286,32 +328,49 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                 Expanded(
                                   child: TextField(
                                     decoration: InputDecoration(
-                                      labelText: 'Giá tối thiểu',
+                                      labelText: 'Minimum price',
                                     ),
                                     keyboardType: TextInputType.number,
                                     onChanged: (value) {
                                       _minPrice = double.tryParse(value) ?? 0;
-                                      // Lọc danh sách sản phẩm theo khoảng giá
-                                      //products.removeWhere((product) => product.price < _minPrice || product.price > _maxPrice);
                                     },
                                   ),
                                 ),
                                 SizedBox(width: 8),
                                 Expanded(
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                      labelText: 'Giá tối đa',
-                                    ),
-                                    keyboardType: TextInputType.number,
-                                    onChanged: (value) {
-                                      _maxPrice = double.tryParse(value) ??
-                                          double.infinity;
-                                      // Lọc danh sách sản phẩm theo khoảng giá
-                                      //products.removeWhere((product) => product.price < _minPrice || product.price > _maxPrice);
+                                    child: TextField(
+                                  decoration: InputDecoration(
+                                    labelText: 'Maximum price',
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  onChanged: (value) {
+                                    _maxPrice = double.tryParse(value);
+                                  },
+                                )),
+                                Gap(10),
+                                Expanded(
+                                  child: ChoiceChip(
+                                    label: Text('Apply'),
+                                    selected: _selectedFilter == 'Áp Dụng',
+                                    onSelected: (bool selected) {
+                                      setState(() {
+                                        _selectedFilter =
+                                            selected ? 'Apply' : null;
+                                        if (_selectedFilter != null) {
+                                          ref
+                                              .read(productProvider.notifier)
+                                              .filterCategory(
+                                                  widget.index,
+                                                  searchProvi.controllerTextField.toString(),
+                                                  rating,
+                                                  _minPrice,
+                                                  _maxPrice,
+                                                  type);
+                                        }
+                                      });
                                     },
                                   ),
                                 ),
-                                Gap(10)
                               ],
                             ),
                           ),
