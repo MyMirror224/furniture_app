@@ -9,11 +9,11 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class GripViewProduct extends ConsumerWidget {
-  final Stream<ProductModel?> productsStream;
+class GripViewSearch extends ConsumerWidget {
+  final List<ProductModel?> productsStream;
   final int? length;
 
-  const GripViewProduct({
+  const GripViewSearch({
     Key? key,
     required this.productsStream,
     this.length = 4,
@@ -24,39 +24,35 @@ class GripViewProduct extends ConsumerWidget {
     //final productsStream = Stream.fromIterable(products);
     return SizedBox(
       height: 600,
-      child:  StreamBuilder<ProductModel?>(
-        stream: productsStream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return GridView.custom(
-              gridDelegate: SliverWovenGridDelegate.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 0,
-                crossAxisSpacing: 0,
-                pattern: [
-                  const WovenGridTile(
-                    0.85,
-                    crossAxisRatio: 0.95,
-                  ),
-                  const WovenGridTile(
-                    5 / 7,
-                    crossAxisRatio: 0.9,
-                    alignment: AlignmentDirectional.centerEnd,
-                  ),
-                ],
+      child: GridView.custom(
+        gridDelegate: SliverWovenGridDelegate.count(
+          crossAxisCount: 2,
+          mainAxisSpacing: 0,
+          crossAxisSpacing: 0,
+          pattern: [
+            const WovenGridTile(
+              0.85,
+              crossAxisRatio: 0.95,
+            ),
+            const WovenGridTile(
+              5 / 7,
+              crossAxisRatio: 0.9,
+              alignment: AlignmentDirectional.centerEnd,
+            ),
+          ],
+        ),
+        childrenDelegate: SliverChildBuilderDelegate(
+          (context, index) => GestureDetector(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProductDetailPage(
+                  productsStream[index]!,
+                ),
               ),
-              childrenDelegate: SliverChildBuilderDelegate(
-                (context, index) => GestureDetector(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProductDetailPage(
-                         snapshot.data!,
-                      ),
-                    ),
-                  ),
-                  child: FutureBuilder<Widget>(
-              future: buildItemCard(snapshot.data!),
+            ),
+            child: FutureBuilder<Widget>(
+              future: buildItemCard(productsStream[index]),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return snapshot.data!;
@@ -74,22 +70,10 @@ class GripViewProduct extends ConsumerWidget {
           ),
           childCount: length,
         ),
-      );
-    
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
       ),
     );
   }
-  
+
   Future<Widget> buildItemCard(ProductModel? product) async {
     if (product == null) {
       return const SizedBox.shrink();
@@ -97,7 +81,6 @@ class GripViewProduct extends ConsumerWidget {
 
     return ItemCard(product);
   }
-  
 }
 
 class ItemCard extends HookConsumerWidget {
@@ -107,9 +90,11 @@ class ItemCard extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final image = "${AppConstants.SERVER_API_URL}storage/${product!.image!.first}"; //AppConstants.SERVER_API_URL + product!.image!.first.toString();
+    final image =
+        "${AppConstants.SERVER_API_URL}storage/${product!.image!.first}"; //AppConstants.SERVER_API_URL + product!.image!.first.toString();
     //print(image);
-    final title = product!.productName!.substring(product!.productName!.indexOf(' '));
+    final title =
+        product!.productName!.substring(product!.productName!.indexOf(' '));
     return Card(
         child: Column(children: [
       Expanded(

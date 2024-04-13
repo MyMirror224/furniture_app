@@ -27,7 +27,6 @@ class ProductModel {
     required this.solded,
     required this.isShow,
     required this.color,
-
     this.createdAt,
     this.updatedAt,
   });
@@ -40,7 +39,7 @@ class ProductModel {
       price: double.tryParse(json['price'].toString()) ?? 0.0,
       description: json['description'],
       cateloryId: json['catelory_id'].toString(),
-      promotion: json['discount'],
+      promotion: json['promotion_id'],
       rating: double.tryParse(json['rating_count'].toString()) ?? 5.0,
       quantity: json['quantity'],
       solded: json['sold'],
@@ -52,22 +51,22 @@ class ProductModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'product_name': productName,
-      'price': price,
-      'description': description,
-      'catelory_id': cateloryId,
-      'discount': promotion,
-      'rating_count': rating,
-      'quantity': quantity,
-      'sold': solded,
-      'color': color,
-      'is_show': isShow,
-      'created_at': createdAt,
-      'updated_at': updatedAt,
-      'product_image': image,
-    };
-  }
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     'id': id,
+  //     'product_name': productName,
+  //     'price': price,
+  //     'description': description,
+  //     'catelory_id': cateloryId,
+  //     'promotion_id': promotion,
+  //     'rating_count': rating,
+  //     'quantity': quantity,
+  //     'sold': solded,
+  //     'color': color,
+  //     'is_show': isShow,
+  //     'created_at': createdAt,
+  //     'updated_at': updatedAt,
+  //     'product_image': image,
+  //   };
+  // }
 }

@@ -19,29 +19,38 @@ class ProductAPI {
       throw Exception('Failed to load product');
     }
   }
-  static Future<List<ProductModel>> getProductwithIdCategory(String? id, String? name, double? rating, double? minPrice, double? maxPrice, String? type) async {
+  static Future<List<ProductModel>> getProductwithIdCategory(int? id, String? name, double? rating, double? minPrice, double? maxPrice, String? type) async {
     try {
+      print('toi day 3');
+      print(id);
+      print(name);
+      print(rating);
+      print(minPrice);
+      print(maxPrice);
+      print(type);
       final response = await HttpUtil().post(
         'api/products/search',
         queryParameters:  {
-          'id': id,
-          'name': name,
+          'category_id': id,
+          'product_name': name,
           'rating_count': rating,
-          'minPrice': minPrice,
-          'maxPrice': maxPrice,
+          'price_min': minPrice,
+          'price_max': maxPrice,
           'type' : type 
         }
       );
-
-      var productJson = response['products'];
-
+      
+      var productJson = response['products'] ;
+      
       final List<ProductModel> products = List<ProductModel>.from(
           productJson.map((x) => ProductModel.fromJson(x)));
 
       return products;
     } catch (e) {
-      print(e);
-      throw Exception('Failed to load product');
+      print('123456');
+      return  [];
+     
+      
     }
   }
   

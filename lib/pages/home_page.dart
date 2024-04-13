@@ -171,8 +171,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                             MaterialPageRoute(
                               builder: (context) => ProductListPage(
                                   catelogiesProvider[index]!
-                                      .cateloryId
-                                      .toString()),
+                                      .cateloryId!
+                                      ),
                             ),
                           );
                         },
@@ -212,12 +212,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                   )
                 ],
               ),
-              
+
               GripViewProduct(
-                products: itemProducts,
+                productsStream: Stream.fromIterable(itemProducts),
                 length: 8,
               ),
-
             ],
           ),
         ),

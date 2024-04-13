@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:furniture_app/extension/sort_product.dart';
 import 'package:furniture_app/model/product_model.dart';
@@ -13,7 +15,9 @@ class ProductNotifier extends ChangeNotifier {
   }
   List<ProductModel?> _products = [];
   List<ProductModel?> _productsCate = [];
+  final _productCateController = StreamController<List<ProductModel>>.broadcast();
 
+  Stream<List<ProductModel>> get productCateStream => _productCateController.stream;
 
   int get productLength => _products.length;
 
@@ -31,13 +35,19 @@ class ProductNotifier extends ChangeNotifier {
       print(e);
     }
   }
-
-  Future<void> filterCategory(String? categoryId, String? name, double? rating, double? minPrice, double? maxPrice, String? type) async {
+  void setProductCate(List<ProductModel> products) {
+    _productCateController.sink.add(products);
+    notifyListeners();
+  }
+  Future<void> filterCategory(int? categoryId, String? name, double? rating, double? minPrice, double? maxPrice, String? type) async {
     try {
       // Gọi API để lấy danh sách danh mục
+     
       final response = await ProductAPI.getProductwithIdCategory(categoryId, name, rating, minPrice, maxPrice, type);
       _productsCate = response;
+      _productCateController.sink.add(response);
       notifyListeners();
+
     } catch (e) {
       print(e);
     }

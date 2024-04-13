@@ -20,7 +20,8 @@ class ProductDetailPage extends ConsumerWidget {
         ref.watch(countProvider)._countText;
     final countController = ref.watch(countProvider).count;
     final price = ref.watch(countProvider).totalprice ?? product.price;
-    double promotion = double.parse(product.promotion.toString());
+    print(product.promotion);
+    double promotion = product.promotion?.toDouble() ??  0.0; 
     final pricePromote = ref.watch(countProvider).totalPriceasPromotion ??
         product.price! - product.price! * promotion / 100;
     final title =
@@ -256,7 +257,7 @@ class ProductDetailPage extends ConsumerWidget {
                                   .totalPrice(product.price!);
                               ref
                                   .read(countProvider.notifier)
-                                  .totalPricehavePromotion(0.2);
+                                  .totalPricehavePromotion(promotion);
                             }
                           : null,
                       child: Opacity(

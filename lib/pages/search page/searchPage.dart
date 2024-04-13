@@ -86,7 +86,7 @@ class SearchPage extends ConsumerWidget {
                             child: searchProvi._canClear
                                 ? InkWell(
                                     onTap: () {
-                                      searchProvi._controllerTextField.clear();
+                                      searchProvi._controllerTextField!.clear();
                                       searchProvi.clean();
                                     },
                                     child: const Icon(Icons.close),
@@ -121,7 +121,7 @@ class SearchPage extends ConsumerWidget {
 
                               //achieve the result of
                               searchProvi.saveSearchingHistory(
-                                  searchProvi._controllerTextField.text);
+                                  searchProvi._controllerTextField!.text);
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
@@ -220,6 +220,10 @@ class SearchNotifier extends ChangeNotifier {
   bool get canClear => _canClear;
   FocusNode get focusNode => _focusNode;
   final FocusNode _focusNode = FocusNode();
+  void setSearch(String value) {
+    _controllerTextField.text = value;
+    notifyListeners();
+  }
   void changeHeight() {
     if (_height == 300) {
       _height = 400;
