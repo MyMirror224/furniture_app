@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class CategoryModel {
-  final String? cateloryId;
+  final int? cateloryId;
   final String? cateloryName;
   final String? cateloryImage;
   final DateTime? createdAt;
@@ -20,7 +20,7 @@ class CategoryModel {
     return CategoryModel(
       cateloryName: json['name'],
       cateloryId:
-          json['id'].toString(), // nhớ nha MINH NHẬT nhớ đổi về kiểu STRING
+          json['id'], // nhớ nha MINH NHẬT nhớ đổi về kiểu STRING
       cateloryImage: json['image'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),

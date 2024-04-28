@@ -1,33 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:furniture_app/components/review_list.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/model/product_model.dart';
+import 'package:furniture_app/pages/address_page.dart';
+import 'package:furniture_app/pages/cart_page.dart';
+import 'package:furniture_app/provider/user_id_provider.dart';
+import 'package:furniture_app/state/cart/cart_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ProductDetailPage extends ConsumerWidget {
+
+class ProductDetailPage extends ConsumerStatefulWidget {
   final ProductModel product;
-  const ProductDetailPage(this.product, {super.key});
+  const ProductDetailPage(this.product, {Key? key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _ProductDetailPageState();
+}
+
+class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
+  @override
+  void didChangeDependencies() {
+    Future.delayed( Duration(seconds: 1), () {
+      print("Day la " );
+      print( widget.product.promotion);
+     ref.read(countProvider.notifier).totalPrice(widget.product.price!.toDouble()) ;
+     ref.read(countProvider.notifier).totalPricehavePromotion(widget.product.promotion!.toDouble());
+     ref.read(countProvider.notifier).setCount();
+    });
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final rating = product.rating;
-    final quantity = product.quantity;
+    final userId = ref.watch(userIdProvider);
+    final rating = widget.product.rating;
+    final quantity = widget.product.quantity;
     final TextEditingController? textController =
         ref.watch(countProvider)._countText;
     final countController = ref.watch(countProvider).count;
-    final price = ref.watch(countProvider).totalprice ?? product.price;
-    double promotion = double.parse(product.promotion.toString());
+    final price = ref.watch(countProvider).totalprice ?? widget.product.price;
+    print(widget.product.promotion);
+    double promotion = widget.product.promotion?.toDouble() ?? 0.0;
     final pricePromote = ref.watch(countProvider).totalPriceasPromotion ??
-        product.price! - product.price! * promotion / 100;
+        widget.product.price! - widget.product.price! * promotion / 100;
+  
     final title =
-        product.productName!.substring(product.productName!.indexOf(' '));
+        widget.product.productName!.substring(widget.product.productName!.indexOf(' '));
     bool isContainerInvisible = countController != 1;
     bool isPromote = pricePromote != price;
-    final List<Widget> imageWidgets = ImageWidgets.getImageWidgets(product);
+    final List<Widget> imageWidgets = ImageWidgets.getImageWidgets(widget.product);
+
+    
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -46,7 +75,13 @@ class ProductDetailPage extends ConsumerWidget {
                     color: Color(0xFF183D3D),
                   ),
                   child: IconButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CartPage(userId!.toString()),
+                          ));
+                    },
                     icon: const Icon(
                       Icons.shopping_cart,
                       color: Colors.white,
@@ -138,7 +173,7 @@ class ProductDetailPage extends ConsumerWidget {
               Container(
                 margin: const EdgeInsets.only(left: 20, right: 20),
                 child: ExpandableTextWidget(
-                  text: product.description!,
+                  text: widget.product.description!,
                 ),
               ),
             ]),
@@ -204,44 +239,45 @@ class ProductDetailPage extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                      padding: const EdgeInsets.only(
-                        top: 20,
-                        bottom: 20,
-                        left: 10,
-                        right: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: const Color(0xff93b1a7),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            ("\$$price"),
+                    padding: const EdgeInsets.only(
+                      top: 20,
+                      bottom: 20,
+                      left: 10,
+                      right: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: const Color(0xff93b1a7),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          ("\$$price"),
+                          style: GoogleFonts.roboto(
+                            fontSize: isPromote ? 16.0 : 20.0,
+                            fontWeight:
+                                isPromote ? FontWeight.w400 : FontWeight.bold,
+                            decoration: isPromote
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                            color: isPromote ? Colors.grey[600] : Colors.red,
+                          ),
+                        ),
+                        const Gap(10),
+                        Opacity(
+                          opacity: isPromote ? 1.0 : 0.0,
+                          child: Text(
+                            ("\$$pricePromote"),
                             style: GoogleFonts.roboto(
-                              fontSize: isPromote ? 16.0 : 20.0,
-                              fontWeight:
-                                  isPromote ? FontWeight.w400 : FontWeight.bold,
-                              decoration: isPromote
-                                  ? TextDecoration.lineThrough
-                                  : TextDecoration.none,
-                              color: isPromote ? Colors.grey[600] : Colors.red,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
                             ),
                           ),
-                          const Gap(10),
-                          Opacity(
-                            opacity: isPromote ? 1.0 : 0.0,
-                            child: Text(
-                              ("\$$pricePromote"),
-                              style: GoogleFonts.roboto(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red,
-                              ),
-                            ),
-                          ),
-                        ],
-                      )),
+                        ),
+                      ],
+                    ),
+                  ),
                   const Gap(30),
                   Row(children: [
                     GestureDetector(
@@ -253,10 +289,10 @@ class ProductDetailPage extends ConsumerWidget {
                                   .updateCountText();
                               ref
                                   .read(countProvider.notifier)
-                                  .totalPrice(product.price!);
+                                  .totalPrice(widget.product.price!);
                               ref
                                   .read(countProvider.notifier)
-                                  .totalPricehavePromotion(0.2);
+                                  .totalPricehavePromotion(promotion);
                             }
                           : null,
                       child: Opacity(
@@ -291,7 +327,7 @@ class ProductDetailPage extends ConsumerWidget {
                           ref.read(countProvider.notifier).updateCount();
                           ref
                               .read(countProvider.notifier)
-                              .totalPrice(product.price!);
+                              .totalPrice(widget.product.price!);
                           ref
                               .read(countProvider.notifier)
                               .totalPricehavePromotion(promotion);
@@ -315,7 +351,7 @@ class ProductDetailPage extends ConsumerWidget {
                           ref.read(countProvider.notifier).updateCountText();
                           ref
                               .read(countProvider.notifier)
-                              .totalPrice(product.price!);
+                              .totalPrice(widget.product.price!);
                           ref
                               .read(countProvider.notifier)
                               .totalPricehavePromotion(promotion);
@@ -346,7 +382,16 @@ class ProductDetailPage extends ConsumerWidget {
                       color: const Color(0xff193d3d),
                     ),
                     child: InkWell(
-                        onTap: () {},
+                        onTap: () async {
+                          await ref.read(cartProvider.notifier).buyNowItem(widget.product,
+                              textController!.text, promotion, pricePromote);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>  AddressPage(),
+                            )
+                          );
+                        },
                         highlightColor: Colors.blue.withOpacity(0.2),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -374,7 +419,22 @@ class ProductDetailPage extends ConsumerWidget {
                       color: const Color(0xff193d3d),
                     ),
                     child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          ref.read(cartProvider.notifier).addtoCart(
+                                userId.toString(),
+                                ref.watch(countProvider).count,
+                                widget.product.id!,
+                              );
+                          Fluttertoast.showToast(
+                            msg: "Added to cart",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: const Color(0xff193d3d),
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
+                        },
                         highlightColor: Colors.blue.withOpacity(0.2),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -426,12 +486,9 @@ class ImageWidgets {
   }
 }
 
-
-
 class ButtonBackIos extends ConsumerWidget {
-  final Future<void>? notify;
 
-  const ButtonBackIos({super.key, this.notify});
+  const ButtonBackIos({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -443,8 +500,8 @@ class ButtonBackIos extends ConsumerWidget {
         color: Color(0xFF183D3D),
       ),
       child: IconButton(
-        onPressed: () async{
-          await notify;
+        onPressed: () {
+          
           Navigator.pop(context);
         },
         icon: const Icon(
@@ -555,7 +612,11 @@ class CountProduct extends ChangeNotifier {
     }
     notifyListeners();
   }
-
+void setCount() {
+    
+  _count = 1;
+    notifyListeners();
+  }
   double? _total;
   double? get totalprice => _total;
   double? _totalasPromotion;

@@ -4,7 +4,7 @@ class ProductModel {
   final List<String>? image;
   final double? price;
   final String? description;
-  final String? cateloryId;
+  final String? categoryId;
   final int? promotion;
   final double? rating;
   final int? quantity;
@@ -20,14 +20,13 @@ class ProductModel {
     required this.image,
     required this.price,
     required this.description,
-    required this.cateloryId,
+    required this.categoryId,
     required this.promotion,
     required this.rating,
     required this.quantity,
     required this.solded,
     required this.isShow,
     required this.color,
-
     this.createdAt,
     this.updatedAt,
   });
@@ -39,8 +38,8 @@ class ProductModel {
       productName: json['product_name'],
       price: double.tryParse(json['price'].toString()) ?? 0.0,
       description: json['description'],
-      cateloryId: json['catelory_id'].toString(),
-      promotion: json['discount'],
+      categoryId: json['category_id'].toString(),
+      promotion: json['promotion_id'],
       rating: double.tryParse(json['rating_count'].toString()) ?? 5.0,
       quantity: json['quantity'],
       solded: json['sold'],
@@ -52,22 +51,22 @@ class ProductModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'product_name': productName,
-      'price': price,
-      'description': description,
-      'catelory_id': cateloryId,
-      'discount': promotion,
-      'rating_count': rating,
-      'quantity': quantity,
-      'sold': solded,
-      'color': color,
-      'is_show': isShow,
-      'created_at': createdAt,
-      'updated_at': updatedAt,
-      'product_image': image,
-    };
-  }
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     'id': id,
+  //     'product_name': productName,
+  //     'price': price,
+  //     'description': description,
+  //     'catelory_id': cateloryId,
+  //     'promotion_id': promotion,
+  //     'rating_count': rating,
+  //     'quantity': quantity,
+  //     'sold': solded,
+  //     'color': color,
+  //     'is_show': isShow,
+  //     'created_at': createdAt,
+  //     'updated_at': updatedAt,
+  //     'product_image': image,
+  //   };
+  // }
 }
