@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:furniture_app/components/grip_view_search.dart';
 import 'package:furniture_app/components/gripview_product.dart';
 import 'package:furniture_app/model/product_model.dart';
+import 'package:furniture_app/pages/cart_page.dart';
 
 import 'package:furniture_app/pages/product_detail_page.dart';
 import 'package:furniture_app/pages/search%20page/searchPage.dart';
 import 'package:furniture_app/pages/search%20page/searchingItem.dart';
+import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/services/shared%20preferences/sharedPreferences.dart';
 import 'package:furniture_app/state/product/product_provider.dart';
 import 'package:gap/gap.dart';
@@ -35,9 +37,13 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 2), () {
-      ref
-          .read(productProvider)
-          .filterCategory(widget.index, null, null, null, null, null);
+      if (widget.index == 0) {
+        ref.read(productProvider).fetchProductPopular();
+      } else {
+        ref
+            .read(productProvider)
+            .filterCategory(widget.index, null, null, null, null, null);
+      }
     });
     super.initState();
   }
@@ -45,7 +51,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
   @override
   Widget build(BuildContext context) {
     final searchProvi = ref.watch(searchProvider);
-
+    final userId = ref.watch(userIdProvider);
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -68,7 +74,14 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                         color: Color(0xFF183D3D),
                       ),
                       child: IconButton(
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    CartPage(userId!.toString()),
+                              ));
+                        },
                         icon: const Icon(
                           Icons.shopping_cart,
                           color: Colors.white,
@@ -128,8 +141,11 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                         searchProvi.controllerTextField.text);
                                     ref
                                         .read(productProvider.notifier)
+                                        .setHeight(400);
+                                    ref
+                                        .read(productProvider.notifier)
                                         .filterCategory(
-                                            widget.index, 
+                                            widget.index,
                                             searchProvi
                                                 .controllerTextField.text,
                                             rating,
@@ -170,7 +186,6 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                         builder: (BuildContext context,
                             AsyncSnapshot<List<String>?> snapshot) {
                           if (snapshot.hasData) {
-                            //ref.read(productProvider.notifier).setHeight(400);
                             return Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -181,6 +196,9 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                       const Text("Lịch sử tìm kiếm"),
                                       InkWell(
                                         onTap: () {
+                                          ref
+                                              .read(productProvider.notifier)
+                                              .setHeight(300);
                                           SharedPreferencesObject()
                                               .clearSearchingHistory();
                                           searchProvi.changeTemp();

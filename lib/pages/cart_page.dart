@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:furniture_app/components/CartItemSampLes.dart';
 import 'package:furniture_app/components/HomeAppBar.dart';
 import 'package:furniture_app/model/cart_model.dart';
-import 'package:furniture_app/pages/Adress.dart';
+import 'package:furniture_app/pages/address_page.dart';
+import 'package:furniture_app/provider/user_id_provider.dart';
+import 'package:furniture_app/state/cart/cart_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 //import 'package:furniture_app/widgets/cartbottomnarbar.dart';
 //import 'package:image/image.dart';
 
 class CartPage extends ConsumerStatefulWidget {
-  final List<CartModel?> cartItemsStream;
-  const CartPage(this.cartItemsStream, {Key? key}) : super(key: key);
+  final String userIdProvider;
+  const CartPage(this.userIdProvider,  {Key? key}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _CartPageState();
@@ -18,7 +20,20 @@ class CartPage extends ConsumerStatefulWidget {
 
 class _CartPageState extends ConsumerState<CartPage> {
   @override
+  void didChangeDependencies() {
+    Future.delayed( Duration(seconds: 2), () {
+      
+      ref.read(cartProvider).fetchCart(widget.userIdProvider);
+     
+    });
+    super.didChangeDependencies();
+  }
+  @override
   Widget build(BuildContext context) {
+    final products = ref.watch(cartProvider).carts;
+    final total = ref.watch(cartProvider).carts.products?.total;
+    final totalBefore = ref.watch(cartProvider).totalBefore;
+    final discount = ref.watch(cartProvider).discount;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -116,7 +131,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        "Add",
+                        "Address",
                         style: TextStyle(
                           fontSize: 10,
                           color: const Color(0xff193d3d).withOpacity(0.5),
@@ -182,7 +197,7 @@ class _CartPageState extends ConsumerState<CartPage> {
               Container(
                 padding: const EdgeInsets.only(left: 15, top: 10),
                 child: const Text(
-                  "broduct 3",
+                  "My Cart",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -191,7 +206,12 @@ class _CartPageState extends ConsumerState<CartPage> {
                   textAlign: TextAlign.left,
                 ),
               ),
-              const CartItemSampLess(),
+               SizedBox(
+                  height:  490,
+                 child: CartItemSampLess(
+                  items: products.products?.items ?? [],
+                             ),
+               ),
               // Container(
               //   padding: const EdgeInsets.only(top: 10),
               //   child: Row(
@@ -243,7 +263,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                 child: const Text(
                   "Order details",
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
@@ -262,46 +282,38 @@ class _CartPageState extends ConsumerState<CartPage> {
                   ),
                   borderRadius: BorderRadius.circular(7),
                 ),
-                child: const Row(
+                child:  Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Tolal before",
+                          "Total before",
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
                         SizedBox(height: 5),
                         Text(
-                          "discount",
+                          "Discount",
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
                         SizedBox(height: 5),
                         Text(
-                          "shopping",
+                          "Shopping",
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
                         SizedBox(height: 5),
                         Text(
-                          "Tax",
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.black,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          "total price",
+                          "Total price",
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.black,
@@ -314,41 +326,33 @@ class _CartPageState extends ConsumerState<CartPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "\$5990",
-                          style: TextStyle(
-                            fontSize: 10,
+                          "\$$totalBefore",
+                          style: const TextStyle(
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
                         SizedBox(height: 5),
                         Text(
-                          "\$500",
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.black,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          "free",
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.black,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          "\$100",
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.black,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          "\$9900",
+                          "\$$discount",
                           style: TextStyle(
                             fontSize: 14,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        const Text(
+                          "Free",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                          ),
+                        ), 
+                        const SizedBox(height: 5),
+                        Text(
+                          '\$$total',
+                          style: const TextStyle(
+                            fontSize: 16,
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
@@ -381,12 +385,12 @@ class _CartPageState extends ConsumerState<CartPage> {
         padding: EdgeInsets.only(bottom: 10, left: 20, right: 20),
         child: ElevatedButton(
           onPressed: () {
-            
+            ref.read(cartProvider.notifier).saveCartItem();
             Navigator.push(
               context,
               PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) =>
-                    address08(),
+                    AddressPage(),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
                   return SlideTransition(

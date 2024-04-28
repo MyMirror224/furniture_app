@@ -1,39 +1,32 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:furniture_app/constant/appconstant.dart';
 
-class CartItemSampLess extends StatefulWidget {
-  const CartItemSampLess({Key? key}) : super(key: key);
+import 'package:furniture_app/model/cart_model.dart';
+import 'package:furniture_app/provider/user_id_provider.dart';
+import 'package:furniture_app/state/cart/cart_provider.dart';
+import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+class CartItemSampLess extends HookConsumerWidget {
+  final List<CartItems> items;
+  const CartItemSampLess({Key? key, required this.items}) : super(key: key);
   @override
-  _CartItemSampLessState createState() => _CartItemSampLessState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userId = ref.watch(userIdProvider);
+    return ListView.builder(
+        itemCount: items.length,
 
-class _CartItemSampLessState extends State<CartItemSampLess> {
-  bool isChecked = false;
-
-  int itemCount = 1;
-
-  void incrementItemCount() {
-    setState(() {
-      itemCount = itemCount < 99 ? itemCount + 1 : itemCount;
-    });
-  }
-
-  void decrementItemCount() {
-    setState(() {
-      itemCount = itemCount > 1 ? itemCount - 1 : itemCount;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        for (int i = 1; i < 4; i++)
-          Container(
+        itemBuilder: (context, index) {
+          final item = items[index];
+          bool isPromote = item.discountPrice != item.price;
+          if(items.isEmpty){
+            return const Center(child: Text('No Item in cart'));
+          }
+          return Container(
             height: 100,
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             padding: const EdgeInsets.only(top: 10, bottom: 10),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -44,160 +37,200 @@ class _CartItemSampLessState extends State<CartItemSampLess> {
               ),
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Checkbox(
-                  value: isChecked,
-                  activeColor: const Color(0xff193d3d),
-                  onChanged: (bool? value) {
-                    // Cập nhật giá trị của biến isChecked khi checkbox thay đổi trạng thái
-                    setState(() {
-                      isChecked = value ?? false;
-                    });
-                  },
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(children: [
+                      Checkbox(
+                        value: item.isSelected,
+                        activeColor: const Color(0xff193d3d),
+                        onChanged: (bool? value) {
+                          ref.read(cartProvider).changSelect(index, value!);
+                        },
+                      ),
+                      Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30.0),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                "${AppConstants.SERVER_API_URL}storage/" +
+                                    item.image.toString(),
+                              ),
+                              fit: BoxFit.fill,
+                            )),
+                      ),
+                    ])
+                  ],
                 ),
-                Container(
-                  height: 50,
-                  width: 50,
-                  margin: const EdgeInsets.only(right: 10),
-                  child: Image.asset("assets/images/1.png"),
-                ),
-                Container(
-                  width: 120, // Giới hạn chiều rộng của Padding thành 70 width
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Gap(20),
+                Column(
+                  
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width /3.2,
+                      child: Text(
+                        item.name.toString().substring(item.name!.indexOf(' ')),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.black,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                    ),
+                    Gap(20),
+                     Row(
                       children: [
                         Text(
-                          "Relaxing bench and table",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black,
+                          ("\$${item.price}"),
+                          style: GoogleFonts.roboto(
+                            fontSize: isPromote ? 12.0 : 14.0,
+                            fontWeight:
+                                isPromote ? FontWeight.w400 : FontWeight.bold,
+                            decoration: isPromote
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                            color: isPromote ? Colors.grey[600] : Colors.red,
                           ),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
                         ),
-                        Text(
-                          "\$1799",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                        const Gap(10),
+                        Opacity(
+                          opacity: isPromote ? 1.0 : 0.0,
+                          child: Text(
+                            ("\$${item.discountPrice}"),
+                            style: GoogleFonts.roboto(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  ),
+
+                  ],
                 ),
-                //Spacer(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Icon(
+                Gap(20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        ref.read(cartProvider.notifier).delete(userId.toString(), item.id!);
+                      },
+                      child: const Icon(
                         Icons.close,
                         color: Color(0xff193d3d), // Thay đổi màu sắc của Icon
                         size: 16, // Thay đổi kích thước của Icon
                       ),
-                      // Align(
-                      //   alignment: Alignment.topRight,
-                      //   child: IconButton(
-                      //     iconSize: 18, // Thay đổi kích thước của Icon
-                      //     icon: Icon(
-                      //       Icons.close,
-                      //       color: Color.fromARGB(
-                      //           255, 150, 150, 150), // Thay đổi màu sắc của Icon
-                      //     ),
-                      //     onPressed: () {
-                      //       // Xử lý sự kiện khi nhấn nút X
-                      //     },
-                      //   ),
-                      // ),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: const Color(0xff193d3d),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(20),
+                    ),
+                    // Align(
+                    //   alignment: Alignment.topRight,
+                    //   child: IconButton(
+                    //     iconSize: 18, // Thay đổi kích thước của Icon
+                    //     icon: Icon(
+                    //       Icons.close,
+                    //       color: Color.fromARGB(
+                    //           255, 150, 150, 150), // Thay đổi màu sắc của Icon
+                    //     ),
+                    //     onPressed: () {
+                    //       // Xử lý sự kiện khi nhấn nút X
+                    //     },
+                    //   ),
+                    // ),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: const Color(0xff193d3d),
+                          width: 1,
                         ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: GestureDetector(
-                                onTap: decrementItemCount,
-                                child: Container(
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xff193d3d),
-                                    borderRadius: BorderRadius.circular(5),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 1,
-                                        blurRadius: 5,
-                                      )
-                                    ],
-                                  ),
-                                  child: const Icon(
-                                    CupertinoIcons.minus,
-                                    color: Colors.white,
-                                    size: 8,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 8),
-                              child: Text(
-                                itemCount.toString().padLeft(2, '0'),
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff193d3d),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: GestureDetector(
-                                onTap: incrementItemCount,
-                                child: Container(
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xff193d3d),
-                                    borderRadius: BorderRadius.circular(5),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 1,
-                                        blurRadius: 5,
-                                      )
-                                    ],
-                                  ),
-                                  child: const Icon(
-                                    CupertinoIcons.plus,
-                                    color: Colors.white,
-                                    size: 8,
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                    ],
-                  ),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: GestureDetector(
+                              onTap: () {
+                                ref.read(cartProvider.notifier).changQuantity(index, -1 , userId.toString());
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xff193d3d),
+                                  borderRadius: BorderRadius.circular(5),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 1,
+                                      blurRadius: 5,
+                                    )
+                                  ],
+                                ),
+                                child: const Icon(
+                                  CupertinoIcons.minus,
+                                  color: Colors.white,
+                                  size: 8,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(
+                              item.quantity.toString(),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xff193d3d),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: GestureDetector(
+                              onTap: () {
+                                ref.read(cartProvider.notifier).changQuantity(index, 1, userId.toString());
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xff193d3d),
+                                  borderRadius: BorderRadius.circular(5),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 1,
+                                      blurRadius: 5,
+                                    )
+                                  ],
+                                ),
+                                child: const Icon(
+                                  CupertinoIcons.plus,
+                                  color: Colors.white,
+                                  size: 8,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 )
               ],
             ),
-          )
-      ],
-    );
+          );
+        });
   }
 }

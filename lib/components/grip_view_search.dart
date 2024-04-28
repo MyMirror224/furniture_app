@@ -92,7 +92,7 @@ class ItemCard extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final image =
         "${AppConstants.SERVER_API_URL}storage/${product!.image!.first}"; //AppConstants.SERVER_API_URL + product!.image!.first.toString();
-    //print(image);
+    print(product);
     final title =
         product!.productName!.substring(product!.productName!.indexOf(' '));
     return Card(

@@ -4,6 +4,7 @@ import 'package:furniture_app/components/dialog/dialog_model.dart';
 import 'package:furniture_app/components/loading/loading_screen.dart';
 import 'package:furniture_app/global.dart';
 import 'package:furniture_app/pages/login_page.dart';
+import 'package:furniture_app/pages/mainview.dart';
 import 'package:furniture_app/pages/navigator_bar.dart';
 import 'package:furniture_app/pages/product_list_page.dart';
 import 'package:furniture_app/pages/verify_email_view.dart';
@@ -96,7 +97,7 @@ class App extends ConsumerWidget {
             }
           });
 
-          //return ProductListPage('');
+          //return MainView();
 
           if (isLoggedIn) {
             return HomeScreen();

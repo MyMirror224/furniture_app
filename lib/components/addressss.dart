@@ -19,7 +19,7 @@ class adressss extends StatelessWidget{
           ),
           
           ),
-          Padding(padding: EdgeInsets.only(left: 1),child:Text("Adress",
+          Padding(padding: EdgeInsets.only(left: 1),child:Text("Address",
           style: TextStyle(
             fontSize: 23,
             fontWeight: FontWeight.bold,

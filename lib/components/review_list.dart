@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:furniture_app/state/review/review_provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ProductReviewList extends StatelessWidget {
-  final List<Review> reviews;
+class ProductReviewList extends ConsumerWidget {
 
-  const ProductReviewList({Key? key, required this.reviews}) : super(key: key);
+  const ProductReviewList({Key? key, }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final reviews = ref.watch(productReviewsProvider);
     return Expanded(
       child: ListView.builder(
-        itemCount: reviews.length,
+        itemCount: reviews.reviewList.length,
         itemBuilder: (context, index) {
-          final review = reviews[index];
+          final review = reviews.reviewList[index];
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Card(
@@ -64,16 +66,3 @@ class ProductReviewList extends StatelessWidget {
   }
 }
 
-class Review {
-  final String userName;
-  final String userImageUrl;
-  final int rating;
-  final String reviewText;
-
-  Review({
-    required this.userName,
-    required this.userImageUrl,
-    required this.rating,
-    required this.reviewText,
-  });
-}

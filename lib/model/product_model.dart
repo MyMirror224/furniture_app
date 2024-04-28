@@ -4,7 +4,7 @@ class ProductModel {
   final List<String>? image;
   final double? price;
   final String? description;
-  final String? cateloryId;
+  final String? categoryId;
   final int? promotion;
   final double? rating;
   final int? quantity;
@@ -20,7 +20,7 @@ class ProductModel {
     required this.image,
     required this.price,
     required this.description,
-    required this.cateloryId,
+    required this.categoryId,
     required this.promotion,
     required this.rating,
     required this.quantity,
@@ -38,7 +38,7 @@ class ProductModel {
       productName: json['product_name'],
       price: double.tryParse(json['price'].toString()) ?? 0.0,
       description: json['description'],
-      cateloryId: json['catelory_id'].toString(),
+      categoryId: json['category_id'].toString(),
       promotion: json['promotion_id'],
       rating: double.tryParse(json['rating_count'].toString()) ?? 5.0,
       quantity: json['quantity'],

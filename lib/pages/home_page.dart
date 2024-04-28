@@ -4,6 +4,7 @@ import 'package:furniture_app/components/gripview_product.dart';
 import 'package:furniture_app/components/slide_home_view.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/model/product_model.dart';
+import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/pages/product_list_page.dart';
 import 'package:furniture_app/pages/search%20page/searchPage.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
@@ -27,9 +28,11 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   void didChangeDependencies() {
-    Future.delayed(const Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 3), () {
+      ref.read(productProvider).fetchCategories();
       ref.read(categoryProvider).fetchCategories();
       ref.read(productProvider).fetchProduct();
+      
     });
     super.didChangeDependencies();
   }
@@ -108,7 +111,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                           const Gap(5),
                           IconButtonCircle(
                             icon: Icons.shopping_cart,
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        CartPage(userId!.toString()),
+                                  ));
+                            },
                           ),
                           const Gap(5),
                         ],
@@ -170,9 +180,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ProductListPage(
-                                  catelogiesProvider[index]!
-                                      .cateloryId!
-                                      ),
+                                  catelogiesProvider[index]!.cateloryId!),
                             ),
                           );
                         },
@@ -200,7 +208,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                 children: [
                   const TitleOfPage(name: "Popular"),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ProductListPage(0),
+                        ),
+                      );
+                    },
                     child: Text(
                       'See All...',
                       style: GoogleFonts.roboto(

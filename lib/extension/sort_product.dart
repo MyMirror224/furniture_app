@@ -7,7 +7,7 @@ extension ProductExtension on List<ProductModel?> {
   }
 
   List<ProductModel?> filterByCategory(String categoryId) {
-    return where((product) => product!.cateloryId == categoryId).toList();
+    return where((product) => product!.categoryId == categoryId).toList();
   }
 
   List<ProductModel?> filterByRating(double minRating) {

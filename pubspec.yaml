@@ -70,6 +70,8 @@ dependencies:
   animated_text_kit: ^4.2.2
   riverpod_generator: ^2.3.11
   fluttertoast: ^8.2.4
+  webview_flutter: ^4.5.0
+  crypto: ^3.0.3
 
 
 

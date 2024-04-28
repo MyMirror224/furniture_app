@@ -3,15 +3,15 @@ import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/pages/Invoice_history_page.dart';
 import 'package:furniture_app/pages/navigator_bar.dart';
 
-class OderRrsults extends StatefulWidget {
+class OrderResults extends StatefulWidget {
   final bool isSuccess; // Biến isSuccess xác định thành công hay thất bại
 
-  OderRrsults({required this.isSuccess});
+  OrderResults({required this.isSuccess});
   @override
-  ketquanoder createState() => ketquanoder();
+  _OrderResults createState() =>  _OrderResults();
 }
 
-class ketquanoder extends State<OderRrsults> {
+class  _OrderResults extends State<OrderResults> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

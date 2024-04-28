@@ -21,13 +21,7 @@ class ProductAPI {
   }
   static Future<List<ProductModel>> getProductwithIdCategory(int? id, String? name, double? rating, double? minPrice, double? maxPrice, String? type) async {
     try {
-      print('toi day 3');
-      print(id);
-      print(name);
-      print(rating);
-      print(minPrice);
-      print(maxPrice);
-      print(type);
+      
       final response = await HttpUtil().post(
         'api/products/search',
         queryParameters:  {
@@ -47,7 +41,7 @@ class ProductAPI {
 
       return products;
     } catch (e) {
-      print('123456');
+      
       return  [];
      
       
