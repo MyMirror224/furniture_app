@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_app/constant/appconstant.dart';
-
 import 'package:furniture_app/model/cart_model.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/cart/cart_provider.dart';
@@ -15,17 +14,17 @@ class CartItemSampLess extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userId = ref.watch(userIdProvider);
+    Size size = MediaQuery.of(context).size;
     return ListView.builder(
         itemCount: items.length,
-
         itemBuilder: (context, index) {
           final item = items[index];
           bool isPromote = item.discountPrice != item.price;
-          if(items.isEmpty){
+          if (items.isEmpty) {
             return const Center(child: Text('No Item in cart'));
           }
           return Container(
-            height: 100,
+            height: size.height * 0.15,
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             padding: const EdgeInsets.only(top: 10, bottom: 10),
             decoration: BoxDecoration(
@@ -69,13 +68,11 @@ class CartItemSampLess extends HookConsumerWidget {
                 ),
                 Gap(20),
                 Column(
-                  
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    
                     SizedBox(
-                      width: MediaQuery.of(context).size.width /3.2,
+                      width: MediaQuery.of(context).size.width / 3.5,
                       child: Text(
                         item.name.toString().substring(item.name!.indexOf(' ')),
                         style: TextStyle(
@@ -87,8 +84,8 @@ class CartItemSampLess extends HookConsumerWidget {
                         maxLines: 2,
                       ),
                     ),
-                    Gap(20),
-                     Row(
+                    const Gap(20),
+                    Row(
                       children: [
                         Text(
                           ("\$${item.price}"),
@@ -116,17 +113,18 @@ class CartItemSampLess extends HookConsumerWidget {
                         ),
                       ],
                     ),
-
                   ],
                 ),
-                Gap(20),
+                //Gap(10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
                       onTap: () {
-                        ref.read(cartProvider.notifier).delete(userId.toString(), item.id!);
+                        ref
+                            .read(cartProvider.notifier)
+                            .delete(userId.toString(), item.id!);
                       },
                       child: const Icon(
                         Icons.close,
@@ -162,7 +160,8 @@ class CartItemSampLess extends HookConsumerWidget {
                             padding: const EdgeInsets.only(left: 10),
                             child: GestureDetector(
                               onTap: () {
-                                ref.read(cartProvider.notifier).changQuantity(index, -1 , userId.toString());
+                                ref.read(cartProvider.notifier).changQuantity(
+                                    index, -1, userId.toString());
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(4),
@@ -200,7 +199,9 @@ class CartItemSampLess extends HookConsumerWidget {
                             padding: const EdgeInsets.only(right: 10),
                             child: GestureDetector(
                               onTap: () {
-                                ref.read(cartProvider.notifier).changQuantity(index, 1, userId.toString());
+                                ref
+                                    .read(cartProvider.notifier)
+                                    .changQuantity(index, 1, userId.toString());
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(4),

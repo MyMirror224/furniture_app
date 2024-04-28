@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/grip_view_search.dart';
-import 'package:furniture_app/components/gripview_product.dart';
 import 'package:furniture_app/model/product_model.dart';
 import 'package:furniture_app/pages/cart_page.dart';
-
 import 'package:furniture_app/pages/product_detail_page.dart';
 import 'package:furniture_app/pages/search%20page/searchPage.dart';
 import 'package:furniture_app/pages/search%20page/searchingItem.dart';
@@ -15,7 +13,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ProductListPage extends ConsumerStatefulWidget {
   final int index;
-  const ProductListPage(this.index, {Key? key}) : super(key: key);
+  final String? nameSearch;
+  const ProductListPage(this.index, this.nameSearch, {Key? key})
+      : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -36,15 +36,22 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
 
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 2), () {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.index == 0) {
         ref.read(productProvider).fetchProductPopular();
       } else {
-        ref
-            .read(productProvider)
-            .filterCategory(widget.index, null, null, null, null, null);
+        ref.read(productProvider).filterCategory(
+            widget.index, widget.nameSearch, null, null, null, null);
       }
+      if (widget.nameSearch == null)
+        ref.read(productProvider).fetchProductPopular();
+      else {
+        ref.read(productProvider).filterCategory(
+            widget.index, widget.nameSearch, null, null, null, null);
+      }
+      ;
     });
+
     super.initState();
   }
 
@@ -52,11 +59,19 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
   Widget build(BuildContext context) {
     final searchProvi = ref.watch(searchProvider);
     final userId = ref.watch(userIdProvider);
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            toolbarHeight: ref.watch(productProvider).height,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
+            backgroundColor: Color.fromARGB(255, 52, 125, 105),
+            toolbarHeight: size.height * 0.4,
             pinned: true,
             automaticallyImplyLeading: false,
             title: Column(
@@ -97,16 +112,17 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: Color(0xffb3cac2),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
                         children: [
-                          Gap(10),
+                          Gap(size.width * 0.05),
                           Expanded(
                             child: TextField(
                               // autofocus: true,
                               focusNode: searchProvi.focusNode,
-                              controller: searchProvi.controllerTextField,
+                              controller: TextEditingController(
+                                  text: widget.nameSearch ?? null),
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 contentPadding: EdgeInsets.zero,
@@ -119,12 +135,14 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                 //request to get autocomplete searching value
                                 //check to can click to clear or not
                                 bool canClearTemp;
-                                if (v.length > 0)
+                                if (v.isNotEmpty) {
                                   canClearTemp = true;
-                                else
+                                } else {
                                   canClearTemp = false;
-                                if (searchProvi.canClear != canClearTemp)
+                                }
+                                if (searchProvi.canClear != canClearTemp) {
                                   searchProvi.canClean();
+                                }
                               },
                               onSubmitted: (v) async {
                                 searchProvi.saveSearchingHistory(v);
@@ -155,17 +173,24 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                   }
                                 },
                                 child: Container(
+                                  height: size.height * 0.05,
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 10),
                                   decoration: BoxDecoration(
-                                      color: Color(0xff193d3d),
-                                      borderRadius: BorderRadius.circular(8)),
-                                  child: Text(
-                                    // "search".tr(),
-                                    "Search",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
+                                    color: Color(0xff193d3d),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: const Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        // "search".tr(),
+                                        "Search",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               )
@@ -213,8 +238,8 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                     ],
                                   ),
                                   Wrap(
-                                    spacing: 5,
-                                    runSpacing: 5,
+                                    spacing: 3,
+                                    runSpacing: 1,
                                     children: [
                                       for (var i = snapshot.data!.length - 1;
                                           i >= 0 &&
@@ -226,7 +251,6 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                 ]);
                           } else {
                             //ref.read(productProvider.notifier).setHeight(300);
-
                             return Container();
                           }
                         }),
@@ -286,73 +310,89 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                         });
                       },
                     ),
-                    ChoiceChip(
-                      selectedColor: Color(0xFF93B1A6),
-                      label: Text('5*'),
-                      selected: _selectedRating == '5*',
-                      onSelected: (bool selected) {
-                        setState(
-                          () {
-                            _selectedRating = selected ? '5*' : null;
-                            if (_selectedRating != null) {
-                              rating = 5;
-                            } else {
-                              rating = null;
-                            }
-                            ref.read(productProvider.notifier).filterCategory(
-                                widget.index,
-                                searchProvi.controllerTextField.text,
-                                rating,
-                                _minPrice,
-                                _maxPrice,
-                                type);
-                          },
-                        );
-                      },
-                    ),
-                    ChoiceChip(
-                      selectedColor: Color(0xFF93B1A6),
-                      label: Text('>= 4*'),
-                      selected: _selectedRating == '>= 4*',
-                      onSelected: (bool selected) {
-                        setState(() {
-                          _selectedRating = selected ? '>= 4*' : null;
-                          if (_selectedRating != null) {
-                            rating = 4;
-                          } else {
-                            rating = null;
-                          }
-                          ref.read(productProvider.notifier).filterCategory(
-                              widget.index,
-                              searchProvi.controllerTextField.text,
-                              rating,
-                              _minPrice,
-                              _maxPrice,
-                              type);
-                        });
-                      },
-                    ),
-                    ChoiceChip(
-                      selectedColor: Color(0xFF93B1A6),
-                      label: Text('>= 3*'),
-                      selected: _selectedRating == '>= 3*',
-                      onSelected: (bool selected) {
-                        setState(() {
-                          _selectedRating = selected ? '>= 3*' : null;
-                          if (_selectedRating != null) {
-                            rating = 3;
-                          } else {
-                            rating = null;
-                          }
-                          ref.read(productProvider.notifier).filterCategory(
-                              widget.index,
-                              searchProvi.controllerTextField.text,
-                              rating,
-                              _minPrice,
-                              _maxPrice,
-                              type);
-                        });
-                      },
+                    Row(
+                      children: [
+                        Wrap(
+                          spacing: 8,
+                          children: [
+                            ChoiceChip(
+                              selectedColor: Color(0xFF93B1A6),
+                              label: Text('5*'),
+                              selected: _selectedRating == '5*',
+                              onSelected: (bool selected) {
+                                setState(
+                                  () {
+                                    _selectedRating = selected ? '5*' : null;
+                                    if (_selectedRating != null) {
+                                      rating = 5;
+                                    } else {
+                                      rating = null;
+                                    }
+                                    ref
+                                        .read(productProvider.notifier)
+                                        .filterCategory(
+                                            widget.index,
+                                            searchProvi
+                                                .controllerTextField.text,
+                                            rating,
+                                            _minPrice,
+                                            _maxPrice,
+                                            type);
+                                  },
+                                );
+                              },
+                            ),
+                            ChoiceChip(
+                              selectedColor: Color(0xFF93B1A6),
+                              label: Text('>= 4*'),
+                              selected: _selectedRating == '>= 4*',
+                              onSelected: (bool selected) {
+                                setState(() {
+                                  _selectedRating = selected ? '>= 4*' : null;
+                                  if (_selectedRating != null) {
+                                    rating = 4;
+                                  } else {
+                                    rating = null;
+                                  }
+                                  ref
+                                      .read(productProvider.notifier)
+                                      .filterCategory(
+                                          widget.index,
+                                          searchProvi.controllerTextField.text,
+                                          rating,
+                                          _minPrice,
+                                          _maxPrice,
+                                          type);
+                                });
+                              },
+                            ),
+                            ChoiceChip(
+                              selectedColor: Color(0xFF93B1A6),
+                              label: Text('>= 3*'),
+                              selected: _selectedRating == '>= 3*',
+                              onSelected: (bool selected) {
+                                setState(() {
+                                  _selectedRating = selected ? '>= 3*' : null;
+                                  if (_selectedRating != null) {
+                                    rating = 3;
+                                  } else {
+                                    rating = null;
+                                  }
+                                  ref
+                                      .read(productProvider.notifier)
+                                      .filterCategory(
+                                          widget.index,
+                                          searchProvi.controllerTextField.text,
+                                          rating,
+                                          _minPrice,
+                                          _maxPrice,
+                                          type);
+                                });
+                              },
+                            ),
+                          ],
+                        )
+                      ],
                     ),
                     Row(
                       children: [
