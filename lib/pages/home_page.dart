@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/grip_view_search.dart';
-
-
 import 'package:furniture_app/components/slide_home_view.dart';
 import 'package:furniture_app/constant/appconstant.dart';
-import 'package:furniture_app/model/product_model.dart';
 import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/pages/product_list_page.dart';
-import 'package:furniture_app/pages/search%20page/searchPage.dart';
+import 'package:furniture_app/pages/user_information/user_information.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/category/categogies_provider.dart';
 import 'package:furniture_app/state/product/product_provider.dart';
@@ -29,11 +26,10 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   void didChangeDependencies() {
-    Future.delayed(const Duration(seconds: 3), () {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(productProvider).fetchCategories();
       ref.read(categoryProvider).fetchCategories();
       ref.read(productProvider).fetchProduct();
-      
     });
     super.didChangeDependencies();
   }
@@ -69,29 +65,39 @@ class _HomePageState extends ConsumerState<HomePage> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const UserInformation()));
+                            },
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30.0),
                                 image: DecorationImage(
                                   image: NetworkImage(
                                     imageUrl,
                                   ),
                                   fit: BoxFit.fill,
-                                )),
+                                ),
+                              ),
+                            ),
                           ),
                           const Gap(10),
                           Text(
+                            // longText.length > 15
+                            //     ? "Hi, "
+                            //         "...${longText.substring(9, longText.length)}"
+                            //     : "Hi, $longText",
+                            // with vn language
                             longText.length > 15
                                 ? "Hi, "
-                                    "...${longText.substring(9, longText.length)}"
+                                    "...${longText.substring(4, longText.length)}"
                                 : "Hi, $longText",
-                            // with vn language
-                            // longText.length > 15
-                            // ? "Hi, "
-                            //     "...${longText.substring(4, longText.length)}"
-                            // : "Hi, $longText",
                             maxLines: 1,
                             overflow: TextOverflow.fade,
                             style: GoogleFonts.roboto(
@@ -150,12 +156,21 @@ class _HomePageState extends ConsumerState<HomePage> {
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.search),
                       color: Colors.black87,
-                      onPressed: () {},
+                      onPressed: () {
+                        debugPrint(searchController.text);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProductListPage(0, searchController.text),
+                          ),
+                        );
+                      },
                     ),
                     border: InputBorder.none,
                     hintText: 'Search',
                     hintStyle: GoogleFonts.roboto(
-                      fontSize: 18,
+                      fontSize: 22,
                     ),
                   ),
                 ),
@@ -181,7 +196,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ProductListPage(
-                                  catelogiesProvider[index]!.cateloryId!),
+                                  catelogiesProvider[index]!.cateloryId!, null),
                             ),
                           );
                         },
@@ -213,7 +228,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ProductListPage(0),
+                          builder: (context) => const ProductListPage(0, null),
                         ),
                       );
                     },
@@ -228,9 +243,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                   )
                 ],
               ),
-
               GripViewSearch(
-                productsStream:itemProducts,
+                productsStream: itemProducts,
+                length: 8,
               ),
             ],
           ),

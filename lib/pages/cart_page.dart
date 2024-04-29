@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/CartItemSampLes.dart';
 import 'package:furniture_app/components/HomeAppBar.dart';
-import 'package:furniture_app/model/cart_model.dart';
 import 'package:furniture_app/pages/address_page.dart';
-import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/cart/cart_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -12,7 +10,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CartPage extends ConsumerStatefulWidget {
   final String userIdProvider;
-  const CartPage(this.userIdProvider,  {Key? key}) : super(key: key);
+  const CartPage(this.userIdProvider, {Key? key}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _CartPageState();
@@ -21,13 +19,12 @@ class CartPage extends ConsumerStatefulWidget {
 class _CartPageState extends ConsumerState<CartPage> {
   @override
   void didChangeDependencies() {
-    Future.delayed( Duration(seconds: 2), () {
-      
-      ref.read(cartProvider).fetchCart(widget.userIdProvider);
-     
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(cartProvider.notifier).fetchCart(widget.userIdProvider);
     });
     super.didChangeDependencies();
   }
+
   @override
   Widget build(BuildContext context) {
     final products = ref.watch(cartProvider).carts;
@@ -35,6 +32,11 @@ class _CartPageState extends ConsumerState<CartPage> {
     final totalBefore = ref.watch(cartProvider).totalBefore;
     final discount = ref.watch(cartProvider).discount;
     return Scaffold(
+      appBar: AppBar(
+        //remove back button
+        automaticallyImplyLeading: false,
+        toolbarHeight: 0,
+      ),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.only(top: 15),
@@ -206,12 +208,15 @@ class _CartPageState extends ConsumerState<CartPage> {
                   textAlign: TextAlign.left,
                 ),
               ),
-               SizedBox(
-                  height:  490,
-                 child: CartItemSampLess(
-                  items: products.products?.items ?? [],
-                             ),
-               ),
+              SizedBox(
+                height: 490,
+                child: Expanded(
+                  child: CartItemSampLess(
+                    items: products.products?.items ?? [],
+                  ),
+                ),
+              ),
+
               // Container(
               //   padding: const EdgeInsets.only(top: 10),
               //   child: Row(
@@ -282,7 +287,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                   ),
                   borderRadius: BorderRadius.circular(7),
                 ),
-                child:  Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Column(
@@ -347,10 +352,10 @@ class _CartPageState extends ConsumerState<CartPage> {
                             fontSize: 14,
                             color: Colors.black,
                           ),
-                        ), 
+                        ),
                         const SizedBox(height: 5),
                         Text(
-                          '\$$total',
+                          '\$${total ?? 0}',
                           style: const TextStyle(
                             fontSize: 16,
                             color: Colors.black,
@@ -414,4 +419,10 @@ class _CartPageState extends ConsumerState<CartPage> {
       ),
     );
   }
+}
+
+Widget NoItems() {
+  return const Center(
+    child: Text('No items in cart'),
+  );
 }

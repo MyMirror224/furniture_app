@@ -14,6 +14,7 @@ class searchingItem extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchProvi = ref.watch(searchProvider);
+    Size size = MediaQuery.of(context).size;
     return Material(
       borderRadius: BorderRadius.circular(10),
       color: Color.fromARGB(255, 220, 220, 220),
@@ -22,15 +23,14 @@ class searchingItem extends HookConsumerWidget {
           ref.read(searchProvider.notifier).setSearch(value);
         },
         child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
-            padding: const EdgeInsets.all(5),
+            width: size.width * 0.3,
+            padding:
+                const EdgeInsets.only(left: 10, right: 5, top: 5, bottom: 5),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(value),
-                const SizedBox(
-                  width: 5,
-                ),
+                Text(
+                    value.length > 12 ? value.substring(0, 12) + '...' : value),
               ],
             )),
       ),

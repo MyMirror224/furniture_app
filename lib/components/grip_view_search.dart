@@ -16,14 +16,15 @@ class GripViewSearch extends ConsumerWidget {
   const GripViewSearch({
     Key? key,
     required this.productsStream,
-    this.length = 4,
+    required this.length,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-  
+    //final productsStream = Stream.fromIterable(products);
+    Size size = MediaQuery.of(context).size;
     return SizedBox(
-      height: 600,
+      height: size.height * 0.8,
       child: GridView.custom(
         gridDelegate: SliverWovenGridDelegate.count(
           crossAxisCount: 2,
@@ -52,7 +53,9 @@ class GripViewSearch extends ConsumerWidget {
               ),
             ),
             child: FutureBuilder<Widget>(
-              future: buildItemCard(productsStream[index]),
+              future: (index < productsStream.length)
+                  ? buildItemCard(productsStream[index])
+                  : null,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return snapshot.data!;
