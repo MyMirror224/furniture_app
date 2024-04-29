@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/pages/Invoice_history_page.dart';
 import 'package:furniture_app/pages/navigator_bar.dart';
+import 'package:furniture_app/provider/user_id_provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class OrderResults extends StatefulWidget {
+class OrderResults extends HookConsumerWidget {
   final bool isSuccess; // Biến isSuccess xác định thành công hay thất bại
-
   OrderResults({required this.isSuccess});
+ 
   @override
-  _OrderResults createState() =>  _OrderResults();
-}
-
-class  _OrderResults extends State<OrderResults> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context , WidgetRef ref) {
+    final userId = ref.watch(userIdProvider);
     return Scaffold(
       // backgroundColor: Colors.green,oderfail
       body: ListView(
@@ -26,7 +24,7 @@ class  _OrderResults extends State<OrderResults> {
                 topRight: Radius.circular(35),
               ),
             ),
-            child: widget.isSuccess
+            child: isSuccess
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -98,7 +96,7 @@ class  _OrderResults extends State<OrderResults> {
             topLeft: Radius.circular(20.0),
             topRight: Radius.circular(20.0),
           ),
-          child: widget.isSuccess
+          child: isSuccess
               ? Container(
                   padding:
                       EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
@@ -253,7 +251,7 @@ class  _OrderResults extends State<OrderResults> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => historyPage()),
+                                  builder: (context) => HistoryInvoicePage( uid: userId.toString(),)),
                             );
                           },
                           style: ElevatedButton.styleFrom(

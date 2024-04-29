@@ -1,33 +1,41 @@
 class ReviewModel {
-  final String userName;
-  final String userImageUrl;
-  final int rating;
-  final String reviewText;
+  final String productId;
+  final String orderId;
+  final String uid;
+  final String name;
+  final String comment;
+  final double rating;
 
   ReviewModel({
-    required this.userName,
-    required this.userImageUrl,
+    
+    required this.uid,
+    required this.name,
+    required this.productId,
+    required this.orderId,
+    required this.comment,
     required this.rating,
-    required this.reviewText,
   });
 
   factory ReviewModel.fromJson(Map<String, dynamic> json) {
     return ReviewModel(
-      userName: json['user_name'],
-      userImageUrl: json['user_image_url'],
+      uid: json['uid'],
+      name: json['name'],
+      productId: json['product_id'],
+      orderId: json['order_id'],
+      comment: json['comment'],
       rating: json['rating'],
-      reviewText: json['review_text'],
     );
+
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['user_name'] = userName;
-    data['user_image_url'] = userImageUrl;
+    data['uid'] = uid;
+    data['name'] = name;
+    data['product_id'] = productId;
+    data['order_id'] = orderId;
+    data['comment'] = comment;
     data['rating'] = rating;
-    data['review_text'] = reviewText;
     return data;
   }
-  
-  
 }

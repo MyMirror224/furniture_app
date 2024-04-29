@@ -1,90 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/model/order_model.dart';
 import 'package:furniture_app/pages/invoice_details_page.dart';
+import 'package:furniture_app/state/order/order_provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 
 // ignore: camel_case_types
-class listhistorypage extends StatelessWidget {
+class listhistorypage extends HookConsumerWidget {
   final String filter;
-  final String currentFilter; // Thêm kiểu dữ liệu cho currentFilter
+  final int currentFilter;
+   // Thêm kiểu dữ liệu cho currentFilter
 
   const listhistorypage({super.key, required this.filter, required this.currentFilter});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context , WidgetRef ref) {
     // Giả định danh sách các đơn hàng
-    List<Order> orders = [
-      Order(
-        image: 'assets/images/1.png',
-        name: 'Double chair',
-        price: 100,
-        quantity: 2,
-        status: 'Pending',
-        description: 'Green, 1M7 long',
-      ),
-      Order(
-        image: 'assets/images/1.png',
-        name: 'Bed chair',
-        price: 150,
-        quantity: 1,
-        status: 'In Progress',
-        description: 'White, double chair',
-      ),
-      Order(
-        image: 'assets/images/1.png',
-        name: 'Blue sofa set',
-        price: 80,
-        quantity: 3,
-        status: 'Completed',
-        description: 'White, double chair',
-      ),
-            Order(
-        image: 'assets/images/1.png',
-        name: 'Gaming chair',
-        price: 200,
-        quantity: 2,
-        status: 'Pending',
-        description: 'White, double chair',
-      ),
-      Order(
-        image: 'assets/images/1.png',
-        name: 'Classic style tables and chairs',
-        price: 300,
-        quantity: 1,
-        status: 'Pending',
-        description: 'White, double chair',
-      ),
-            Order(
-        image: 'assets/images/1.png',
-        name: 'Bed chair',
-        price: 150,
-        quantity: 1,
-        status: 'In Progress',
-        description: 'White, double chair',
-      ),
-            Order(
-        image: 'assets/images/1.png',
-        name: 'Bed chair',
-        price: 150,
-        quantity: 1,
-        status: 'In Progress',
-        description: 'White, double chair',
-      ),
-            Order(
-        image: 'assets/images/1.png',
-        name: 'Bed chair',
-        price: 150,
-        quantity: 1,
-        status: 'In Progress',
-        description: 'White, double chair',
-      ),
-    ];
+    List<OrderShowUi> orders =  ref.watch(orderProvider).orders;
 
     // Lọc danh sách đơn hàng dựa trên bộ lọc hiện tại
-    List<Order> filteredOrders = orders.where((order) {
+    List<OrderShowUi> filteredOrders = orders.where((order) {
       if (currentFilter == 'All') {
         return true;
       } else {
-        return order.status == currentFilter;
+        return order == currentFilter;
       }
     }).toList();
 
@@ -94,25 +34,33 @@ class listhistorypage extends StatelessWidget {
       itemCount: filteredOrders.length,
       separatorBuilder: (context, index) => const SizedBox(height: 5),
       itemBuilder: (context, index) {
-        Order order = filteredOrders[index];
+        OrderShowUi order = filteredOrders[index];
 
         return Container(
           color: Colors.grey.shade200,
           child: ListTile(
-          leading: SizedBox(
-            width: 80,
-            height: 80,
-            child: Image.asset(order.image),
-          ), // Hình ảnh đơn hàng
+          leading: Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30.0),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                "${AppConstants.SERVER_API_URL}storage/" +
+                                    order.image,
+                              ),
+                              fit: BoxFit.fill,
+                            )),
+                      ), // Hình ảnh đơn hàng
           title: Text(
-            order.name,
+            order.nameProduct!,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ), // Tên đơn hàng
            subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
                             Text(
-                order.description,
+                order.type,
                 style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 121, 94, 94)),
               ),
               Row(
@@ -125,13 +73,13 @@ class listhistorypage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 4),
-              Text(
-                order.status,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Color.fromARGB(255, 84, 154, 211),
-                ),
-              ),
+              // Text(
+              //   order.isdone,
+              //   style: const TextStyle(
+              //     fontSize: 12,
+              //     color: Color.fromARGB(255, 84, 154, 211),
+              //   ),
+              // ),
             ],
           ),    
           trailing: ElevatedButton(
@@ -159,19 +107,3 @@ class listhistorypage extends StatelessWidget {
   
 }
 
-class Order {
-  final String image;
-  final String name;
-  final double price;
-  final int quantity;
-  final String status;
-  final String description;
-  Order({
-    required this.image,
-    required this.name,
-    required this.price,
-    required this.quantity,
-    required this.status,
-    required this.description,
-  });
-}

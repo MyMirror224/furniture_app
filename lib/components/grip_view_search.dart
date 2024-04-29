@@ -21,7 +21,7 @@ class GripViewSearch extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //final productsStream = Stream.fromIterable(products);
+  
     return SizedBox(
       height: 600,
       child: GridView.custom(

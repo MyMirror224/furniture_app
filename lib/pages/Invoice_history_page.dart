@@ -1,39 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/Invoicehistory.dart';
 import 'package:furniture_app/components/listhistory.dart';
-
-
-// ignore: camel_case_types
-class historyPage extends StatefulWidget {
-  const historyPage({Key? key}) : super(key: key);
+import 'package:furniture_app/state/order/order_provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+// ignore: must_be_immutable
+class HistoryInvoicePage extends ConsumerStatefulWidget {
+  final String uid;
+   const HistoryInvoicePage({super.key, required this.uid});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _historyPageState createState() => _historyPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _HistoryOrderPageState();
 }
 
-// ignore: camel_case_types
-class _historyPageState extends State<historyPage>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  String currentFilter =
-      'All'; // Thay đổi kiểu dữ liệu của currentFilter và khởi tạo giá trị
-
+class _HistoryOrderPageState extends ConsumerState<HistoryInvoicePage> with TickerProviderStateMixin {
+ late TabController _tabController;
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
     _tabController = TabController(length: 6, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+    Future.delayed(const Duration(seconds: 3), () {
+      ref.read(orderProvider).fetchOrder(widget.uid);
+    });
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+   int currentFilter = ref.watch(orderProvider).currentFilter;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -57,40 +49,46 @@ class _historyPageState extends State<historyPage>
                 indicatorPadding:
                     const EdgeInsets.only(left: 0, top: 0, bottom: 0),
                 tabs: const [
-                  Tab(text: 'All(8)'),
-                  Tab(text: 'Pending(3)'),
-                  Tab(text: 'In Progress(4)'),
-                  Tab(text: 'Completed(1)'),
-                  Tab(text: 'Cancelled'),
+                  Tab(text: 'All'),
+                  Tab(text: 'Pending'),
+                  Tab(text: 'Delivering'),
+                  Tab(text: 'Goods delivered'),
                   Tab(text: 'Returned'),
+                  Tab(text: 'Cancelled'),
                 ],
                 labelStyle: const TextStyle(fontSize: 16), // Tăng kích thước chữ cho Tab đã chọn
                 unselectedLabelStyle: const TextStyle(fontSize: 14),
                 onTap: (index) {
-                  setState(() {
+                  
                     switch (index) {
                       case 0:
-                        currentFilter = 'All';
+                       
+                        ref.read(orderProvider.notifier).setCurrentFilter(0);
                         break;
                       case 1:
-                        currentFilter = 'Pending';
+                       
+                         ref.read(orderProvider.notifier).setCurrentFilter(1);
                         break;
                       case 2:
-                        currentFilter = 'In Progress';
+                      
+                        ref.read(orderProvider.notifier).setCurrentFilter(2);
                         break;
                       case 3:
-                        currentFilter = 'Completed';
+                        
+                        ref.read(orderProvider.notifier).setCurrentFilter(3);
                         break;
                       case 4:
-                        currentFilter = 'Cancelled';
+                         ref.read(orderProvider.notifier).setCurrentFilter(4);
+                        
                         break;
                       case 5:
-                        currentFilter = 'Returned';
+                        ref.read(orderProvider.notifier).setCurrentFilter(-1);
+                       
                         break;
                       default:
-                        currentFilter = 'All';
+                        ref.read(orderProvider.notifier).setCurrentFilter(0);
                     }
-                  });
+                 
                 },
               ),
               SizedBox(
@@ -103,13 +101,13 @@ class _historyPageState extends State<historyPage>
                     listhistorypage(
                         filter: 'Pending', currentFilter: currentFilter),
                     listhistorypage(
-                        filter: 'In Progress', currentFilter: currentFilter),
+                        filter: 'Delivering', currentFilter: currentFilter),
                     listhistorypage(
-                        filter: 'Completed', currentFilter: currentFilter),
-                    listhistorypage(
-                        filter: 'Cancelled', currentFilter: currentFilter),
+                        filter: 'Goods delivered', currentFilter: currentFilter),
                     listhistorypage(
                         filter: 'Returned', currentFilter: currentFilter),
+                    listhistorypage(
+                        filter: 'Cancelled', currentFilter: currentFilter),
                   ],
                 ),
               ),
@@ -118,5 +116,7 @@ class _historyPageState extends State<historyPage>
         ),
       ),
     );
+
   }
-}
+  }
+// ignore: camel_case_types

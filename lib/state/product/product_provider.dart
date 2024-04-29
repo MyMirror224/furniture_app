@@ -31,6 +31,8 @@ class ProductNotifier extends ChangeNotifier {
 
   int get productLength => _products.length;
 
+  
+  
   List<ProductModel?> get products => _products;
 
   List<ProductModel?> get productCate => _productsCate;

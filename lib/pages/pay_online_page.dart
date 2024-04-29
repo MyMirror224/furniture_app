@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/loading/loading_screen.dart';
+import 'package:furniture_app/pages/home_page.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewScreen extends StatefulWidget {
@@ -39,9 +40,14 @@ class _WebViewScreenState extends State<WebViewScreen> {
           }
         ),
       )
-      ..addJavaScriptChannel('Suscess', onMessageReceived: (JavaScriptMessage message) {
-        if (message.message == 'Suscess') {
-          Navigator.pop(context);
+      ..addJavaScriptChannel('Pay', onMessageReceived: (JavaScriptMessage message) {
+        if (message.message == 'suscess') {
+          
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const HomePage()),
+            (route) => false,
+          );
+          
         }
       })
       ..loadRequest(Uri.parse(widget.url));

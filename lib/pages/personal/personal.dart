@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/personal_button.dart';
 import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/pages/Invoice_history_page.dart';
+import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/pages/user_information/user_information.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
@@ -105,14 +107,27 @@ class PersonalPage extends ConsumerWidget {
               color: Colors.grey,
             ),
             PersonalButton(
-              text: "My Cards",
-              onTap: () {},
+              text: "My Carts",
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CartPage(userId!.toString()),
+                    ));
+              },
               icon: FontAwesomeIcons.wallet,
             ),
             Gap(10),
             PersonalButton(
               text: "My Orders",
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          HistoryInvoicePage(uid: userId.toString()),
+                    ));
+              },
               icon: FontAwesomeIcons.listCheck,
             ),
             const Gap(10),
