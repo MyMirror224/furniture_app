@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_app/components/gripview_product.dart';
+import 'package:furniture_app/components/grip_view_search.dart';
 import 'package:furniture_app/components/slide_home_view.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/pages/cart_page.dart';
@@ -243,9 +243,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                   )
                 ],
               ),
-
-              GripViewProduct(
-                productsStream: Stream.fromIterable(itemProducts),
+              GripViewSearch(
+                productsStream: itemProducts,
                 length: 8,
               ),
             ],

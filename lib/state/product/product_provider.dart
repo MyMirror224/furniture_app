@@ -1,10 +1,9 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:furniture_app/extension/sort_product.dart';
 import 'package:furniture_app/model/category_model.dart';
 import 'package:furniture_app/model/product_model.dart';
-import 'package:furniture_app/state/category/categogies_provider.dart';
 import 'package:furniture_app/state/category/category_storage.dart';
 import 'package:furniture_app/state/product/product_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -35,10 +34,26 @@ class ProductNotifier extends ChangeNotifier {
 
   List<ProductModel?> get productCate => _productsCate;
   List<CategoryModel?> _categories = [];
+
+  List<ProductModel?> get productsforIDCate => _productsforIDCate;
+  List<ProductModel?> _productsforIDCate = [];
+  Future<void> fetchProductForIDCate(String id) async {
+    int? cateID;
+    _categories.forEach((element) {
+      if (element!.cateloryName == id) {
+        cateID = element.cateloryId!;
+      }
+    });
+    final respone = await ProductAPI.getProductwithIdCategory(
+        cateID!, null, null, null, null, null);
+
+    _productsforIDCate = respone;
+    notifyListeners();
+  }
+
   void setProductsForCateloryId() {
     print(_products.length);
     for (var product in _products) {
-      
       int index = getCategoryIndexById(product!.categoryId!);
       print(_categories.length);
       if (!_productsForCateloryId

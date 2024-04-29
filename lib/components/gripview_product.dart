@@ -22,8 +22,9 @@ class GripViewProduct extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //final productsStream = Stream.fromIterable(products);
+    Size size = MediaQuery.of(context).size;
     return SizedBox(
-      height: 600,
+      height: size.height,
       child: StreamBuilder<ProductModel?>(
         stream: productsStream,
         builder: (context, snapshot) {
@@ -183,5 +184,3 @@ class ItemCard extends HookConsumerWidget {
     );
   }
 }
-
-

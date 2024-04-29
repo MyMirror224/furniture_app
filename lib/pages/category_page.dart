@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/model/product_model.dart';
 import 'package:furniture_app/pages/cart_page.dart';
+import 'package:furniture_app/pages/detail_category_page.dart';
 import 'package:furniture_app/pages/product_detail_page.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/category/categogies_provider.dart';
@@ -32,8 +33,7 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
     final catelogiesProvider = ref.watch(categoryProvider).categories;
     final Map<String, List<ProductModel?>> products =
         ref.watch(productProvider).productsForCateloryId;
-    final String Function(int cateId) productsCate =
-        ref.watch(productProvider).getCategoryById;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -98,12 +98,14 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                                     fontWeight: FontWeight.bold,
                                   )),
                               TextButton(
-                                onPressed: () {
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) =>
-                                  //             DetailCategoryPage(cateId)));
+                                onPressed: () async {
+                                  debugPrint("product.key" + product.key);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              DetailCategoryPage(
+                                                  cateName: product.key)));
                                 },
                                 child: const Text(
                                   "View all",
@@ -123,6 +125,7 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                               itemCount: product.value.length,
                               itemBuilder: (context, index) {
                                 final item = product.value[index];
+
                                 print(item);
 
                                 return GestureDetector(
