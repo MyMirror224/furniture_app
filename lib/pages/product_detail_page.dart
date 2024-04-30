@@ -24,7 +24,7 @@ class ProductDetailPage extends ConsumerStatefulWidget {
 class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
   @override
   void didChangeDependencies() {
-    Future.delayed(Duration(seconds: 1), () {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       print("Day la ");
       print(widget.product.promotion);
       ref
@@ -59,7 +59,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
     bool isPromote = pricePromote != price;
     final List<Widget> imageWidgets =
         ImageWidgets.getImageWidgets(widget.product);
-
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -99,11 +99,12 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
               child: Container(
                 width: double.maxFinite,
                 decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    )),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
                 padding: const EdgeInsets.only(
                     top: 10, bottom: 10, left: 20, right: 20),
                 child: Column(
@@ -159,17 +160,24 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
               ),
             ),
             pinned: true,
-            expandedHeight: 300,
-            flexibleSpace: ImageSlideshow(
-                indicatorBottomPadding: 30,
-                height: 240,
+            expandedHeight: size.height * 0.5,
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                color: Colors.red,
+              ),
+              child: ImageSlideshow(
+                height: size.height * 0.35,
                 initialPage: 0,
-                autoPlayInterval: 3000,
-                isLoop:
-                    true, // Optional: Set autoplay interval // Optional: Customize indicator position
-                onPageChanged: (index) => print('Page changed to: $index'),
-                children: imageWidgets),
+                indicatorColor: Colors.blue,
+                indicatorBackgroundColor: Colors.grey,
+                children: imageWidgets,
+                onPageChanged: (value) {
+                  print('Page changed: $value');
+                },
+              ),
+            ),
           ),
+          //description
           SliverToBoxAdapter(
             child: Column(children: [
               const Gap(20),
@@ -232,11 +240,12 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
               right: 20,
             ),
             decoration: const BoxDecoration(
-                color: Color(0xff93b1a7),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                )),
+              color: Color(0xff93b1a7),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
+              ),
+            ),
             child: Column(children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -473,11 +482,19 @@ class ImageWidgets {
     return product.image!.map((path) {
       path = "${AppConstants.SERVER_API_URL}storage/$path";
       return Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: Offset(0, 3),
+            ),
+          ],
         ),
         child: Image(
           image: NetworkImage(
