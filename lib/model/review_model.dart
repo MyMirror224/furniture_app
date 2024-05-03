@@ -1,15 +1,14 @@
+import 'package:furniture_app/model/user_info_model.dart';
+
 class ReviewModel {
-  final String productId;
-  final String orderId;
-  final String uid;
-  final String name;
+  final int productId;
+  final int orderId;
   final String comment;
-  final double rating;
+  final int rating;
+  final UserInfoModel user;
 
   ReviewModel({
-    
-    required this.uid,
-    required this.name,
+    required this.user,
     required this.productId,
     required this.orderId,
     required this.comment,
@@ -18,20 +17,17 @@ class ReviewModel {
 
   factory ReviewModel.fromJson(Map<String, dynamic> json) {
     return ReviewModel(
-      uid: json['uid'],
-      name: json['name'],
+      user: UserInfoModel.fromJson(json['user']),
       productId: json['product_id'],
       orderId: json['order_id'],
-      comment: json['comment'],
+      comment: json['content'],
       rating: json['rating'],
     );
-
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['uid'] = uid;
-    data['name'] = name;
+
     data['product_id'] = productId;
     data['order_id'] = orderId;
     data['comment'] = comment;

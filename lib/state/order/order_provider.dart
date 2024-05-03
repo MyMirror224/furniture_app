@@ -4,10 +4,9 @@ import 'package:furniture_app/state/order/order_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OrderNotifier extends ChangeNotifier {
-  List<OrderShowUi> get orders => _orders;
-  List<OrderShowUi> _orders = [];
-  
-  List<OrderModel> _ordersModel = [];
+  List<OrderModel> get orders => _orders;
+  List<OrderModel> _orders = [];
+
   int get currentFilter => _crurentFilter;
 
   int _crurentFilter = 0;
@@ -19,31 +18,41 @@ class OrderNotifier extends ChangeNotifier {
 
   Future<void> fetchOrder(String uid) async {
     final response = await OrderApi.getModel(uid);
-    _ordersModel = response;
-    for (var order in _ordersModel) {
-      final products = order.products;
-      for (var product in products) {
-        OrderShowUi orderShowUi = OrderShowUi(
-          id: order.id,
-          name: order.name,
-          total_price: order.total_price,
-          address: order.address,
-          phone_number: order.phone_number,
-          note: order.note,
-          type: order.type,
-          status: order.status,
-          is_done: order.is_done,
-          product_id: product.product_id,
-          nameProduct: product.name,
-          image: product.image,
-          price: product.price,
-          quantity: product.quantity,
-          uid: order.uid,
-        );
-        _orders.add(orderShowUi);
-      }
-      notifyListeners();
+    for (var i = response.length - 1; i >= 0; i--) {
+      _orders.add(response[i]);
     }
+    notifyListeners();
+  }
+
+  String get stringbutton => _stringbutton;
+  String message = '';
+  String _stringbutton = '';
+  String get reviews => 'reviews';
+  Future<void> setStringAndButtonShow(String s1, String s2) async {
+    _stringbutton = '';
+    if ('Pending' == s1 && 'direct' == s2) {
+      _stringbutton = 'Cancel Order';
+    } else {
+      if ('Pending' == s1) {
+        _stringbutton = 'Refund Order';
+      }
+      if ('Delivering' == s1) {
+        _stringbutton = 'Tracking Order';
+      }
+    }
+    notifyListeners();
+  }
+
+  Future<void> cancelOrder(int id, String message) async {
+    final response = await OrderApi.cancelOrder(id, message);
+    message = response;
+    notifyListeners();
+  }
+
+  Future<void> refundOrder(int id, String message) async {
+    final response = await OrderApi.refundOrder(id, message);
+    message = response;
+    notifyListeners();
   }
 }
 

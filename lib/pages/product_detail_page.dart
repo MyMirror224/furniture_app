@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:furniture_app/components/review_list.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/model/product_model.dart';
 import 'package:furniture_app/pages/address_page.dart';
 import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/cart/cart_provider.dart';
+import 'package:furniture_app/state/review/review_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -25,8 +27,6 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
   @override
   void didChangeDependencies() {
     Future.delayed(Duration(seconds: 1), () {
-      print("Day la ");
-      print(widget.product.promotion);
       ref
           .read(countProvider.notifier)
           .totalPrice(widget.product.price!.toDouble());
@@ -34,16 +34,18 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
           .read(countProvider.notifier)
           .totalPricehavePromotion(widget.product.promotion!.toDouble());
       ref.read(countProvider.notifier).setCount();
+       ref.read(productReviewsProvider).fetchReview(widget.product.id!);
     });
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    
     final width = MediaQuery.of(context).size.width;
     final userId = ref.watch(userIdProvider);
     final rating = widget.product.rating;
-    final quantity = widget.product.quantity;
+    
     final TextEditingController? textController =
         ref.watch(countProvider)._countText;
     final countController = ref.watch(countProvider).count;
@@ -140,12 +142,25 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                     ),
                     const Gap(10),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Solded: $quantity",
+                        Text("Solded: ${widget.product.solded}",
                             style: GoogleFonts.roboto(
                               fontSize: 16,
                             )),
+                        Row(
+                          children: [
+                            Text("Color: "), 
+                        Container(
+                          height: 20,
+                          width: 20,
+                          decoration: BoxDecoration(
+                            color:  Color(int.parse(widget.product.color!, radix: 16) + 0xFF000000),
+                          )
+                        )
+                          ]
+                        )
+                        
                       ],
                     ),
                     const Gap(10),
@@ -188,7 +203,14 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
               Container(
                   margin: const EdgeInsets.only(left: 20, right: 20),
                   child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const ProductReviewListPage(),
+                            ));
+                      },
                       child: Text(
                         'See all Reviews',
                         style: GoogleFonts.roboto(
@@ -432,7 +454,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                           Fluttertoast.showToast(
                             msg: "Added to cart",
                             toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
+                            gravity: ToastGravity.CENTER,
                             timeInSecForIosWeb: 1,
                             backgroundColor: const Color(0xff193d3d),
                             textColor: Colors.white,
@@ -444,7 +466,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'Add to Card',
+                                'Add to Cart',
                                 style: GoogleFonts.roboto(color: Colors.white),
                               ),
                               const Gap(10),

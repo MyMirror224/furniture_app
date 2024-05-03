@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:furniture_app/components/information_user_field.dart';
 import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/constant/appconstant.dart';
@@ -178,7 +178,7 @@ class UserInformation extends ConsumerWidget {
                     const Expanded(
                       child: Text(
                         "********",
-                        style: TextStyle(color: Colors.white54),
+                       
                       ),
                     ),
                     IconButton(
@@ -199,9 +199,9 @@ class UserInformation extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   buttonLogin(
-                      "Canned", Colors.black, (size.width * 0.3).toInt(), 50,
+                      "Cancel", Colors.black, (size.width * 0.3).toInt(), 50,
                       onpressed: () {
-                    // xoa cac truong da nhap
+                    Navigator.pop(context);
                   }),
                   const Gap(20),
                   buttonLogin(
@@ -218,6 +218,15 @@ class UserInformation extends ConsumerWidget {
                             addressController.text,
                             null,
                           );
+                      Fluttertoast.showToast(
+                        msg: "Save Suscess",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: const Color(0xff193d3d),
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
                       return ref
                           .refresh(userInfoModelProvider(userId.toString()));
                     },

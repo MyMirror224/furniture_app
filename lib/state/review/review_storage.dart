@@ -5,17 +5,24 @@ class ReviewApi {
   static Future<List<ReviewModel>> getReview(int idProduct) async {
     List<ReviewModel> reviewList = [];
     final response = await HttpUtil().post(
-      'api/reviews/all',
-      queryParameters: { 'id_product': idProduct },
+      'api/comments/show',
+      queryParameters: { 'product_id': idProduct },
     );
-    reviewList = List<ReviewModel>.from(response['reviews'].map((x) => ReviewModel.fromJson(x)));
+    reviewList = List<ReviewModel>.from(response['data'].map((x) => ReviewModel.fromJson(x)));
     return reviewList;
   }
-  static Future<String> addReview(ReviewModel review) async {
+  static Future<String> addReview(int idProduct,int order_id, String message, int rating,String uid) async {
     
     final response = await HttpUtil().post(
-      'api/reviews/add',
-      queryParameters: review.toJson()
+      'api/comments/create',
+      queryParameters: 
+      {
+        'product_id': idProduct,
+        'order_id': order_id,
+        'content': message,
+        'rating': rating,
+        'user_id': uid
+      }
     );
     return response['message'];
   }

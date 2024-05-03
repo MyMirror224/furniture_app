@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_app/components/gripview_product.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/model/product_model.dart';
 import 'package:furniture_app/pages/cart_page.dart';
+import 'package:furniture_app/pages/detail_category_page.dart';
 import 'package:furniture_app/pages/product_detail_page.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/category/categogies_provider.dart';
@@ -21,7 +21,7 @@ class CategoryPage extends ConsumerStatefulWidget {
 class _CategoryPageState extends ConsumerState<CategoryPage> {
   @override
   void didChangeDependencies() {
-    Future.delayed(Duration(seconds: 1), () {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(productProvider.notifier).setProductsForCateloryId();
     });
     super.didChangeDependencies();
@@ -46,13 +46,11 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "Categories",
-                      style: GoogleFonts.roboto(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                      )
-                    ),
+                    Text("Categories",
+                        style: GoogleFonts.roboto(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        )),
                     Container(
                       height: 40,
                       width: 40,
@@ -87,15 +85,37 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                   itemBuilder: (context, index) {
                     print(products.entries.length);
                     final product = products.entries.toList()[index];
+
                     return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-          
                         children: [
-                          Text(product.key,
-                              style: GoogleFonts.roboto(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              )),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(product.key,
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                              TextButton(
+                                onPressed: () async {
+                                  debugPrint("product.key" + product.key);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              DetailCategoryPage(
+                                                  cateName: product.key)));
+                                },
+                                child: const Text(
+                                  "View all",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                           Gap(10),
                           SizedBox(
                             height: 200,
@@ -105,8 +125,9 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                               itemCount: product.value.length,
                               itemBuilder: (context, index) {
                                 final item = product.value[index];
+
                                 print(item);
-          
+
                                 return GestureDetector(
                                   onTap: () {
                                     Navigator.push(
@@ -145,12 +166,13 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                                           width: 120,
                                           child: Center(
                                             child: Text(
-                                              item.productName!.substring(item.productName!.indexOf(' ')),
+                                              item.productName!.substring(item
+                                                  .productName!
+                                                  .indexOf(' ')),
                                               style: GoogleFonts.roboto(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black,
-                                                
                                               ),
                                               maxLines: 3,
                                             ),

@@ -1,7 +1,7 @@
 import 'package:furniture_app/model/cart_model.dart';
 
 class OrderModel {
-  final String id;
+  final int id;
   final String uid;
   final String name;
   final List<ProductInOrder> products;
@@ -9,7 +9,7 @@ class OrderModel {
   final String? phone_number;
   final String type;
   final String note;
-  final int status;
+  final String status;
   final double total_price;
   final int is_done;
 
@@ -33,13 +33,14 @@ class OrderModel {
       uid: json['user_id'],
       type: json['type_payment'],
       name: json['name'],
-      total_price: json['total_price'],
-      products: List<ProductInOrder>.from(json['products'].map((x) => ProductInOrder.fromJson(x))),
+      total_price: json['total_price']/1.0,
       address: json['address'],
       phone_number: json['phone'],
       note: json['note'],
-      status: json['status'],
+      status: json['status'] ,
       is_done: json['is_done'],
+      products: List<ProductInOrder>.from(json['products'].map((x) => ProductInOrder.fromJson(x))),
+      
     );
   }
 
@@ -62,15 +63,15 @@ class OrderModel {
 }
 
 class ProductInOrder {
-  final String? product_id;
   final String? name;
+  final int? product_id;
   final double? price;
   final int? quantity;
   final String image;
 
   ProductInOrder(
-      {this.product_id,
-      this.name,
+      {this.name,
+      this.product_id,
       this.price,
       this.quantity,
       required this.image});
@@ -79,14 +80,14 @@ class ProductInOrder {
     return ProductInOrder(
       product_id: json['product_id'],
       name: json['name'],
-      price: json['price'],
+      price: json['price'] /1.0 ,
       quantity: json['quantity'],
       image: json['image'],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'product_id': product_id,
+        'product_id': product_id ,
         'name': name,
         'price': price,
         'quantity': quantity,
@@ -95,24 +96,24 @@ class ProductInOrder {
 }
 
 class OrderShowUi {
-  final String? product_id;
+
   final String? nameProduct;
   final double? price;
   final int? quantity;
   final String image;
-  final String id;
+  final int id;
   final String uid;
   final String name;
   final String? address;
   final String? phone_number;
   final String type;
   final String note;
-  final int status;
+  final String status;
   final double total_price;
   final int is_done;
 
   const OrderShowUi({
-    required this.product_id,
+  
     required this.nameProduct,
     required this.price,
     required this.quantity,

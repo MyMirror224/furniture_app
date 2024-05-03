@@ -14,7 +14,7 @@ class CartItemSampLess extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userId = ref.watch(userIdProvider);
-    Size size = MediaQuery.of(context).size;
+    
     return ListView.builder(
         itemCount: items.length,
         itemBuilder: (context, index) {
@@ -24,7 +24,7 @@ class CartItemSampLess extends HookConsumerWidget {
             return const Center(child: Text('No Item in cart'));
           }
           return Container(
-            height: size.height * 0.15,
+            height: 100,
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             padding: const EdgeInsets.only(top: 10, bottom: 10),
             decoration: BoxDecoration(
@@ -72,7 +72,7 @@ class CartItemSampLess extends HookConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: MediaQuery.of(context).size.width / 3.5,
+                      width: MediaQuery.of(context).size.width / 3.2,
                       child: Text(
                         item.name.toString().substring(item.name!.indexOf(' ')),
                         style: TextStyle(

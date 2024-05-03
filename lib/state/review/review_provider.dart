@@ -5,8 +5,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReviewNotifier extends ChangeNotifier {
   List<ReviewModel> reviewList = [];
-  Future<void> addReview(ReviewModel review)  async {
-    final response = await ReviewApi.addReview(review);
+  String get message => _message;
+
+  String _message = '';
+
+  Future<void> addReview(int idProduct,int order_id, String message, int rating,String uid)  async {
+    final response = await ReviewApi.addReview( idProduct,order_id, message, rating,uid);
+    _message = response;
     notifyListeners();
   }
   Future<void> fetchReview(int idProduct) async {

@@ -4,6 +4,7 @@ import 'package:furniture_app/components/slide_home_view.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/pages/product_list_page.dart';
+import 'package:furniture_app/pages/search%20page/searchPage.dart';
 import 'package:furniture_app/pages/user_information/user_information.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/category/categogies_provider.dart';
@@ -21,7 +22,6 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  final TextEditingController searchController = TextEditingController();
   int index = 2;
 
   @override
@@ -36,6 +36,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final searchProvi = ref.watch(searchProvider);
     final itemProducts = ref.watch(productProvider).products;
     final userId = ref.watch(userIdProvider);
     final user = ref.watch(userInfoModelProvider(userId.toString()));
@@ -147,7 +148,23 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
                 child: TextField(
                   textAlign: TextAlign.left,
-                  controller: searchController,
+                  controller: searchProvi.controllerTextField,
+                  onChanged: (v) {
+                    //request to get autocomplete searching value
+                    //check to can click to clear or not
+                    bool canClearTemp;
+                    if (v.isNotEmpty) {
+                      canClearTemp = true;
+                    } else {
+                      canClearTemp = false;
+                    }
+                    if (searchProvi.canClear != canClearTemp) {
+                      searchProvi.canClean();
+                    }
+                  },
+                  onSubmitted: (v) async {
+                    searchProvi.saveSearchingHistory(v);
+                  },
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(top: 5),
                     enabledBorder: InputBorder.none,
@@ -157,12 +174,16 @@ class _HomePageState extends ConsumerState<HomePage> {
                       icon: const Icon(Icons.search),
                       color: Colors.black87,
                       onPressed: () {
-                        debugPrint(searchController.text);
+                        if (searchProvi.controllerTextField.text.isNotEmpty) {
+                          searchProvi.saveSearchingHistory(
+                              searchProvi.controllerTextField.text);
+                          ref.read(productProvider.notifier).setHeight(400);
+                        }
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                ProductListPage(0, searchController.text),
+                            builder: (context) => ProductListPage(
+                                0, searchProvi.controllerTextField.text),
                           ),
                         );
                       },

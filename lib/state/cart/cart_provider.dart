@@ -80,9 +80,11 @@ class CartNotifier extends ChangeNotifier {
   }
 
   Future<void> fetchCart(String uid) async {
+    _discount =0;
     try {
       final response = await CartApi.getCart(uid);
       _carts = response;
+      total();
       totalnotDiscount();
       _discount = _totalBefore - _carts.products!.total!;
       notifyListeners();
@@ -140,6 +142,7 @@ class CartNotifier extends ChangeNotifier {
   }
 
   Future<void> changSelect(int index, bool select) async {
+    _discount= 0;
     try {
       _carts.products!.items![index].isSelected = select;
       total();
@@ -189,6 +192,7 @@ class CartNotifier extends ChangeNotifier {
   }
 
   void saveCartItem() {
+    totalSendBuy=0;
     _cartItemsShow = [];
     _cartItems = [];
     for (var item in _carts.products!.items!) {

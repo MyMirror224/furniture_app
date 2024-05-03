@@ -107,18 +107,6 @@ class PersonalPage extends ConsumerWidget {
               color: Colors.grey,
             ),
             PersonalButton(
-              text: "My Carts",
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CartPage(userId!.toString()),
-                    ));
-              },
-              icon: FontAwesomeIcons.wallet,
-            ),
-            Gap(10),
-            PersonalButton(
               text: "My Orders",
               onTap: () {
                 Navigator.push(

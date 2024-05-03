@@ -1,7 +1,7 @@
 class AppConstants {
   // ignore: constant_identifier_names
   static const String SERVER_API_URL =
-      "https://a6ec-2402-800-6294-9e0f-c580-6a7c-afc5-bcdb.ngrok-free.app/";
+      "https://75b5-2001-ee0-4c5d-6370-b548-5410-be27-f455.ngrok-free.app/";
 
   // ignore: constant_identifier_names
   // ignore: constant_identifier_names

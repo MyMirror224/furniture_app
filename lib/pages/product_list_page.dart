@@ -121,8 +121,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                             child: TextField(
                               // autofocus: true,
                               focusNode: searchProvi.focusNode,
-                              controller: TextEditingController(
-                                  text: widget.nameSearch ?? null),
+                              controller: searchProvi.controllerTextField,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 contentPadding: EdgeInsets.zero,
@@ -218,7 +217,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text("Lịch sử tìm kiếm"),
+                                      const Text("History searching"),
                                       InkWell(
                                         onTap: () {
                                           ref
@@ -230,7 +229,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                         },
                                         child: Row(
                                           children: const [
-                                            Text("Xóa tất cả"),
+                                            Text("Remove all"),
                                             Icon(Icons.close_rounded),
                                           ],
                                         ),

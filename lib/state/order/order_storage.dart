@@ -5,9 +5,9 @@ class OrderApi {
   static Future<List<OrderModel>> getModel(String uid) async {
     try {
       final response = await HttpUtil().post(
-        'api/orders/all',
+        'api/orders/allByUid',
         queryParameters: {
-        'uid': uid,
+      'uid': uid,
         },
       );
       return List<OrderModel>.from(response['data'].map((x) => OrderModel.fromJson(x)));
@@ -16,5 +16,25 @@ class OrderApi {
       throw Exception('Failed to load product');
     }
   }
-  
+
+  static Future<String> cancelOrder(int id ,String message) async {
+    final response = await HttpUtil().post(
+      'api/orders/cancel',
+      queryParameters: {
+        'order_id': id,
+        'reason': message,
+      },
+    );
+    return response['message'];
+}
+ static Future<String> refundOrder(int id,String message) async {
+    final response = await HttpUtil().post(
+      'api/orders/refund',
+      queryParameters: {
+        'order_id': id,
+        'reason': message,
+      },
+    );
+    return response['message'];
+}
 }
