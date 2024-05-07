@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.furniture_app"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -68,4 +68,5 @@ flutter {
 dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
     implementation 'androidx.multidex:multidex:2.0.1'
+    
 }

@@ -90,7 +90,8 @@ class InforProvider extends ChangeNotifier {
 }
 List<Widget>  listPage =[
    CategoryPage(),
-   ChatPage(),
+   Container(),
+   //ChatPage(),
    HomePage(),
    Container(),
    const PersonalPage(),

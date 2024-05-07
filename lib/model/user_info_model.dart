@@ -2,6 +2,8 @@
 
 
 
+import 'package:dash_chat_2/dash_chat_2.dart';
+
 class UserInfoModel  {
   
   String? name;
@@ -12,6 +14,7 @@ class UserInfoModel  {
   String? address;
   String? phone_number;
   String? password;
+  String? oldPassword;
 
   UserInfoModel({
     this.name,
@@ -19,6 +22,7 @@ class UserInfoModel  {
     this.avatar,
     this.user_type,
     this.address,
+    this.oldPassword,
     this.phone_number,
     this.uid,
     this.password,
@@ -28,6 +32,7 @@ class UserInfoModel  {
     return UserInfoModel(
       name: json['name'],
       avatar: json["avatar"],
+      oldPassword: json["old_password"] ?? "",
       uid: json["uid"],
       email : json["email"],
       user_type: json["user_type"] ,
@@ -42,14 +47,21 @@ class UserInfoModel  {
         "email": email,
         "name": name,
         "avatar": avatar,
+        "old_password": oldPassword,
         "user_type": user_type,
         "address": address,
         "phone_number": phone_number,
         "password": password,
       };
    
-  
-  }      
+
+  ChatUser get toChatUser {
+    return ChatUser(
+      id: uid.toString(),
+      firstName: name,
+    );
+  } 
+}      
       
 
   

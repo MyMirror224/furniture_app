@@ -22,13 +22,13 @@ class UserAPI {
     return UserInfoResponseEntity.fromJson(response);
   }
 
-  static Future<UserInfoResponseEntity> updateProfile({
+  static Future<String> updateProfile({
     UserInfoModel? params,
   }) async {
     var response = await HttpUtil().post(
       'api/users/update_profile',
       queryParameters: params?.toJson(),
     );
-    return UserInfoResponseEntity.fromJson(response);
+    return response['message'];
   }
 }

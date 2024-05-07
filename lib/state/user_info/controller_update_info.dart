@@ -13,6 +13,7 @@ import 'package:image_picker/image_picker.dart';
 
 class UpdateInfoController extends ChangeNotifier {
   bool isLoading = false;
+  String? message = '';
 
   void setLoading(bool value) {
     isLoading = value;
@@ -37,17 +38,25 @@ class UpdateInfoController extends ChangeNotifier {
       data: formData,
     );
 
-    if (response.statusCode == 200) {
+    String message = response['message'];
+
+    if (message == 'Avatar updated successfully') {
       final data = await UserAPI.getProfile(userIdProvider.toString());
       await Global.storageService
           .setProfile(userIdProvider.toString(), data.data as UserInfoModel);
     }
   }
 
-  Future<void> updateInfo(String uid, String? name, String? avatar,
-      String? phone, String? address, String? password) async {
+  Future<void> updateInfo(
+      String uid,
+      String? name,
+      String? avatar,
+      String? phone,
+      String? address,
+      String? oldPassword,
+      String? password) async {
     isLoading = true;
-    await UserAPI.updateProfile(
+    final response = await UserAPI.updateProfile(
       params: UserInfoModel(
         uid: uid,
         name: name,
@@ -55,12 +64,19 @@ class UpdateInfoController extends ChangeNotifier {
         address: address,
         phone_number: phone,
         email: null,
+        oldPassword: oldPassword,
         password: password,
       ),
     );
-    final respone = await UserAPI.getProfile(uid.toString());
-    await Global.storageService
-        .setProfile(uid.toString(), respone.data as UserInfoModel);
+    if (oldPassword != null && password != null) {
+      message = response;
+    }
+    if (message != 'Old password is incorrect') {
+      final respone1 = await UserAPI.getProfile(uid.toString());
+      await Global.storageService
+          .setProfile(uid.toString(), respone1.data as UserInfoModel);
+    }
+
     isLoading = false;
     notifyListeners();
   }

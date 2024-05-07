@@ -93,6 +93,7 @@ class UserInformation extends ConsumerWidget {
                                 if (imageFile == null) {
                                   return;
                                 } else {
+                                  print(imageFile);
                                   await ref
                                       .read(updateInfoProvider.notifier)
                                       .updateAvatar(
@@ -140,6 +141,7 @@ class UserInformation extends ConsumerWidget {
                     left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
                 child: TextFormField(
                   controller: phoneController,
+                  keyboardType: TextInputType.phone,
                   onChanged: (value) => phoneController.text = value,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -216,6 +218,7 @@ class UserInformation extends ConsumerWidget {
                             user.value!.avatar.toString(),
                             phoneController.text,
                             addressController.text,
+                            null,
                             null,
                           );
                       Fluttertoast.showToast(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -6,9 +7,10 @@ class InformationFields extends ConsumerWidget {
   late final String text;
   final String? type;
   final TextEditingController? controller;
+  final bool? inputformat;
   
   // ignore: prefer_const_constructors_in_immutables
-  InformationFields({super.key,required this.type, required this.text ,  this.controller });
+  InformationFields({super.key,required this.type, required this.text ,  this.controller, this.inputformat = false });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,6 +38,7 @@ class InformationFields extends ConsumerWidget {
             ),
             border: InputBorder.none,
           ),
+          inputFormatters: inputformat == true ? [_mobileFormatter] : null,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter some text';
@@ -59,5 +62,49 @@ class InformationFields extends ConsumerWidget {
         ),
       );
     }
+  }
+}
+
+class NumberTextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    final int newTextLength = newValue.text.length;
+    int selectionIndex = newValue.selection.end;
+    int usedSubstringIndex = 0;
+    final StringBuffer newText = new StringBuffer();
+    if (newTextLength >= 1) {
+      newText.write('+');
+      if (newValue.selection.end >= 1) selectionIndex++;
+    }
+    if (newTextLength >= 3) {
+      newText.write(newValue.text.substring(0, usedSubstringIndex = 2) + ' ');
+      if (newValue.selection.end >= 2) selectionIndex += 1;
+    }
+    // Dump the rest.
+    if (newTextLength >= usedSubstringIndex)
+      newText.write(newValue.text.substring(usedSubstringIndex));
+    return new TextEditingValue(
+      text: newText.toString(),
+      selection: new TextSelection.collapsed(offset: selectionIndex),
+    );
+  }
+}
+final _mobileFormatter = NumberTextInputFormatter();
+class PhoneNumberFormatter extends TextInputFormatter {
+  final phoneNumberRegExp = RegExp(r'^\d{10}$');
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final newText = newValue.text;
+    if (newText.length > 10) {
+      return oldValue;
+    }
+    if (phoneNumberRegExp.hasMatch(newText)) {
+      return newValue;
+    }
+    return oldValue;
   }
 }

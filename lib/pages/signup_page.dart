@@ -15,6 +15,47 @@ class SignUp extends HookConsumerWidget {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController =TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String? validatePassword(String password) {
+  final passwordRegex = RegExp(
+      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+
+  if (!passwordRegex.hasMatch(password)) {
+    return _getPasswordErrorMessage(password);
+  }
+
+  return null; // Mật khẩu hợp lệ
+}
+
+String? _getPasswordErrorMessage(String password) {
+  final hasLowercase = password.contains(RegExp(r'[a-z]'));
+  final hasUppercase = password.contains(RegExp(r'[A-Z]'));
+  final hasDigit = password.contains(RegExp(r'\d'));
+  final hasSpecialChar = password.contains(RegExp(r'[@$!%*?&]'));
+  final hasMinLength = password.length >= 8;
+
+  
+
+  if (!hasLowercase) {
+    return 'Must have at least one regular character (a-z)';
+  }
+
+  if (!hasUppercase) {
+    return 'Must have at least one uppercase character (A-Z)';
+  }
+
+  if (!hasDigit) {
+    return 'Must have at least one number (0-9)';
+  }
+
+  if (!hasSpecialChar) {
+    return 'Must have at least one special character (@\$!%*?&)';
+  }
+
+  if (!hasMinLength) {
+    return 'Must be at least 8 characters long';
+  }
+  return null;
+}
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final double deviceHeight = MediaQuery.of(context).size.height;
@@ -22,10 +63,8 @@ class SignUp extends HookConsumerWidget {
 
     final RegExp emailRegex = RegExp(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
-    final RegExp passwordRegex = RegExp(
-        r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
     final loginNotifier = ref.watch(obscurePasswordProvider);
-
+    
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -195,8 +234,8 @@ class SignUp extends HookConsumerWidget {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "please enter your password";
-                        } else if (!passwordRegex.hasMatch(value)) {
-                          return "please enter a valid password";
+                        } else {
+                         validatePassword(value);
                         }
                         return null;
                       },

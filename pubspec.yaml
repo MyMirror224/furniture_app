@@ -74,6 +74,11 @@ dependencies:
   crypto: ^3.0.3
   dash_chat_2: ^0.0.20
   onesignal_flutter: ^5.1.6
+  laravel_echo: ^1.0.0-beta.1
+  dart_pusher_channels: ^1.2.2+1
+  flutter_multi_formatter: ^2.12.8
+  bcrypt: ^1.1.3
+
 
 
 

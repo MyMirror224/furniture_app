@@ -61,12 +61,12 @@ class UserRegisterResponseEntity {
 }
 //api post response msg
 class UserInfoResponseEntity {
-  int? code;
+  
   String? msg;
   UserInfoModel? data;
 
   UserInfoResponseEntity({
-    this.code,
+    
     this.msg,
     this.data,
   });
@@ -74,9 +74,9 @@ class UserInfoResponseEntity {
 
   factory UserInfoResponseEntity.fromJson(Map<String, dynamic> json) =>
       UserInfoResponseEntity(
-        code: json["code"],
+       
         msg: json["message"],
-        data: UserInfoModel.fromJson(json["user"]),
+        data: UserInfoModel.fromJson(json["user"] ), 
       );
   
 }

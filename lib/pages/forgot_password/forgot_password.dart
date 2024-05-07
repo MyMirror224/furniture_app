@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:furniture_app/components/forgot_password/fogot_button.dart';
 import 'package:furniture_app/components/forgot_password/forgot_field.dart';
 import 'package:furniture_app/pages/forgot_password/email_verification.dart';
+import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../components/wave_clipper_custom_appbar.dart';
 
-class ForgotPassword extends StatelessWidget {
+class ForgotPassword extends ConsumerWidget {
   const ForgotPassword({super.key});
 
   get child => null;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context , WidgetRef ref) {
+    final TextEditingController _emailController = TextEditingController();
     Size size = MediaQuery.of(context).size; // ------ lấy nhanh size màn hình
     return Scaffold(
       backgroundColor: Colors.white,
@@ -121,18 +124,20 @@ class ForgotPassword extends StatelessWidget {
                       const Gap(25),
                       // nhâp email và gửi
 
-                      const PasswordField(
-                          nameField: "Email", icon: Icons.email),
+                       PasswordField(
+                          nameField: "Email", icon: Icons.email, controller: _emailController),
                       const SizedBox(height: 20),
                       ForgotButton(
-                        text: "Recover Password",
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const emailVerification(),
-                          ),
-                        ),
-                      ),
+                          text: "Recover Password",
+                          onTap: ()  async{
+                             await ref.read(authStateProvider.notifier).forgotPassword(_emailController.text);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const emailVerification(),
+                              ),
+                            );
+                          }),
                     ],
                   ),
                 ],
