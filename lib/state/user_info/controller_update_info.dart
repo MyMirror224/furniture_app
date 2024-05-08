@@ -45,6 +45,7 @@ class UpdateInfoController extends ChangeNotifier {
       await Global.storageService
           .setProfile(userIdProvider.toString(), data.data as UserInfoModel);
     }
+    
   }
 
   Future<void> updateInfo(
@@ -76,6 +77,7 @@ class UpdateInfoController extends ChangeNotifier {
       await Global.storageService
           .setProfile(uid.toString(), respone1.data as UserInfoModel);
     }
+
 
     isLoading = false;
     notifyListeners();

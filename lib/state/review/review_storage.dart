@@ -8,7 +8,10 @@ class ReviewApi {
       'api/comments/show',
       queryParameters: { 'product_id': idProduct },
     );
-    reviewList = List<ReviewModel>.from(response['data'].map((x) => ReviewModel.fromJson(x)));
+    if( response['message'] != 'No comments found') {
+      reviewList = List<ReviewModel>.from(response['data'].map((x) => ReviewModel.fromJson(x)));
+    }
+    
     return reviewList;
   }
   static Future<String> addReview(int idProduct,int order_id, String message, int rating,String uid) async {

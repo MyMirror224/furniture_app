@@ -1,49 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_app/components/top%20navigation/topNavigation.dart';
-import 'package:furniture_app/models/notification/notification.dart';
-import 'package:furniture_app/pages/notification_page/widgets/notificationItem.dart';
+import 'package:furniture_app/components/HomeAppBar.dart';
+import 'package:furniture_app/components/notify_view.dart';
+import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'controller/futureGetNoti.dart';
-
-class NotificationPage extends StatefulWidget {
+class NotificationPage extends ConsumerStatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
 
   @override
-  State<NotificationPage> createState() => _NotificationPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _NotificationPageState();
 }
 
-class _NotificationPageState extends State<NotificationPage> {
+class _NotificationPageState extends ConsumerState<NotificationPage> {
+  int index = 2;
+
+  @override
+  void didChangeDependencies() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xff93B1A6),
       body: SafeArea(
-          child: Column(
-        children: [
-          TopNavigation(
-            left: Text("notifications",
-                style: Theme.of(context).textTheme.titleMedium),
-            isSearcher: false,
-          ), // TopNavigation(
-
-          Expanded(
-              child: FutureBuilder<List<NotificationModel>>(
-                  future: futureGetNotification(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 10 / 2),
-                        children: [
-                          for (var i in snapshot.data!.reversed)
-                            notificationItem(i)
-                        ],
-                      );
-                    } else {
-                      return Container();
-                    }
-                  })),
-        ],
-      )),
+        
+        child: Column(
+          children: [
+            Row(
+              children: [
+                HomeAppBar(),
+                Gap(20),
+                Text(
+                  "Notification",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            Gap(10),
+            Expanded(child:   NotifyView()),
+          ],
+        ),
+      ),
     );
   }
 }

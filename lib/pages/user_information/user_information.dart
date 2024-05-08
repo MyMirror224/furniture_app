@@ -21,6 +21,7 @@ class UserInformation extends ConsumerWidget {
     final appThemeState = ref.watch(appThemeStateNotifier);
     final userId = ref.watch(userIdProvider);
     final user = ref.watch(userInfoModelProvider(userId.toString()));
+    
     String userName = user.hasValue ? user.value!.name.toString() : "User";
     String avatar = user.hasValue
         ? user.value!.avatar.toString()
