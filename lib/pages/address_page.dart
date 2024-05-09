@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:furniture_app/components/HomeAppBar.dart';
-
 import 'package:furniture_app/pages/payment_page.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/cart/cart_provider.dart';
 import 'package:furniture_app/state/user_info/controller_update_info.dart';
 import 'package:furniture_app/state/user_info/user_info_provider.dart';
-
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -22,12 +19,6 @@ class AddressPage extends ConsumerStatefulWidget {
 }
 
 class _AddressPageState extends ConsumerState<AddressPage> {
-  @override
-  void didChangeDependencies() {
-    Future.delayed(Duration(seconds: 1), () {});
-    super.didChangeDependencies();
-  }
-
   @override
   Widget build(BuildContext context) {
     final userId = ref.watch(userIdProvider);
@@ -46,7 +37,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
     final TextEditingController messageController =
         TextEditingController(text: '');
     bool setAsDefalt = true;
- 
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -250,7 +241,6 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                             nameController.text = value;
                           },
                           decoration: InputDecoration(
-      
                             focusColor: Colors.blueAccent,
                             enabledBorder: const OutlineInputBorder(
                                 borderRadius:

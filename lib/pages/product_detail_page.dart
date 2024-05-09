@@ -34,18 +34,17 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
           .read(countProvider.notifier)
           .totalPricehavePromotion(widget.product.promotion!.toDouble());
       ref.read(countProvider.notifier).setCount();
-       ref.read(productReviewsProvider).fetchReview(widget.product.id!);
+      ref.read(productReviewsProvider).fetchReview(widget.product.id!);
     });
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    
     final width = MediaQuery.of(context).size.width;
     final userId = ref.watch(userIdProvider);
     final rating = widget.product.rating;
-    
+
     final TextEditingController? textController =
         ref.watch(countProvider)._countText;
     final countController = ref.watch(countProvider).count;
@@ -99,7 +98,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
               ],
             ),
             bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(80),
+              preferredSize: const Size.fromHeight(90),
               child: Container(
                 width: double.maxFinite,
                 decoration: const BoxDecoration(
@@ -150,19 +149,17 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                             style: GoogleFonts.roboto(
                               fontSize: 16,
                             )),
-                        Row(
-                          children: [
-                            Text("Color: "), 
-                        Container(
-                          height: 20,
-                          width: 20,
-                          decoration: BoxDecoration(
-                            color:  Color(int.parse(widget.product.color!, radix: 16) + 0xFF000000),
-                          )
-                        )
-                          ]
-                        )
-                        
+                        Row(children: [
+                          Text("Color: "),
+                          Container(
+                              height: 20,
+                              width: 20,
+                              decoration: BoxDecoration(
+                                color: Color(int.parse(widget.product.color!,
+                                        radix: 16) +
+                                    0xFF000000),
+                              ))
+                        ])
                       ],
                     ),
                     const Gap(10),

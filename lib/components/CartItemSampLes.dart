@@ -14,7 +14,7 @@ class CartItemSampLess extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userId = ref.watch(userIdProvider);
-    
+
     return ListView.builder(
         itemCount: items.length,
         itemBuilder: (context, index) {
@@ -24,7 +24,7 @@ class CartItemSampLess extends HookConsumerWidget {
             return const Center(child: Text('No Item in cart'));
           }
           return Container(
-            height: 100,
+            height: 120,
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             padding: const EdgeInsets.only(top: 10, bottom: 10),
             decoration: BoxDecoration(

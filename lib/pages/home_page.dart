@@ -5,7 +5,7 @@ import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/pages/product_list_page.dart';
 import 'package:furniture_app/pages/search%20page/searchPage.dart';
-import 'package:furniture_app/pages/user_information/user_information.dart';
+import 'package:furniture_app/pages/user_information/detail_information.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/category/categogies_provider.dart';
 import 'package:furniture_app/state/product/product_provider.dart';
@@ -72,7 +72,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const UserInformation()));
+                                          DeteilInformationPage(
+                                              userId.toString())));
                             },
                             child: Container(
                               width: 40,

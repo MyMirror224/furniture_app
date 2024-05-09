@@ -7,14 +7,13 @@ class InformationFields extends ConsumerWidget {
   late final String text;
   final String? type;
   final TextEditingController? controller;
-  final bool? inputformat;
-  
+
   // ignore: prefer_const_constructors_in_immutables
-  InformationFields({super.key,required this.type, required this.text ,  this.controller, this.inputformat = false });
+  InformationFields(
+      {super.key, required this.type, required this.text, this.controller});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final appThemeState = ref.watch(appThemeStateNotifier);
     if (type == 'field') {
       return Container(
@@ -38,7 +37,6 @@ class InformationFields extends ConsumerWidget {
             ),
             border: InputBorder.none,
           ),
-          inputFormatters: inputformat == true ? [_mobileFormatter] : null,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter some text';
@@ -90,7 +88,9 @@ class NumberTextInputFormatter extends TextInputFormatter {
     );
   }
 }
+
 final _mobileFormatter = NumberTextInputFormatter();
+
 class PhoneNumberFormatter extends TextInputFormatter {
   final phoneNumberRegExp = RegExp(r'^\d{10}$');
   @override

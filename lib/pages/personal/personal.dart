@@ -3,21 +3,31 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/personal_button.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/pages/Invoice_history_page.dart';
-import 'package:furniture_app/pages/cart_page.dart';
-import 'package:furniture_app/pages/user_information/user_information.dart';
+import 'package:furniture_app/pages/user_information/detail_information.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:furniture_app/state/user_info/user_info_provider.dart';
 import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:gap/gap.dart';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class PersonalPage extends ConsumerWidget {
-  const PersonalPage({super.key});
+class PersonalPage extends ConsumerStatefulWidget {
+  const PersonalPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _PersonalPageState();
+}
+
+class _PersonalPageState extends ConsumerState<PersonalPage> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
     final userId = ref.watch(userIdProvider);
     final user = ref.watch(userInfoModelProvider(userId.toString()));
     String userName = user.hasValue ? user.value!.name.toString() : "User";
@@ -68,7 +78,8 @@ class PersonalPage extends ConsumerWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => UserInformation(),
+                    builder: (context) =>
+                        DeteilInformationPage(userId.toString()),
                   ),
                 );
               },

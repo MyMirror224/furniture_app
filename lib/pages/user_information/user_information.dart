@@ -13,11 +13,22 @@ import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class UserInformation extends ConsumerWidget {
-  const UserInformation({super.key});
+class UserInformation extends ConsumerStatefulWidget {
+  const UserInformation({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _UserInformationState();
+}
+
+class _UserInformationState extends ConsumerState<UserInformation> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final appThemeState = ref.watch(appThemeStateNotifier);
     final userId = ref.watch(userIdProvider);
     final user = ref.watch(userInfoModelProvider(userId.toString()));
@@ -45,8 +56,6 @@ class UserInformation extends ConsumerWidget {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
-          reverse: true,
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -122,10 +131,60 @@ class UserInformation extends ConsumerWidget {
                 type: "name",
                 text: 'Name',
               ),
-              InformationFields(
-                type: "field",
-                text: 'Full name',
-                controller: nameController,
+              Container(
+                padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Your name",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your name';
+                          }
+                          return null;
+                        },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        controller: nameController,
+                        textAlign: TextAlign.start,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                        onChanged: (value) {
+                          userName = value;
+                        },
+                        decoration: const InputDecoration(
+                          focusColor: Colors.blueAccent,
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0))),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(
+                                color: Colors
+                                    .red), // Màu sắc của đường biên khi có lỗi
+                          ),
+                        ),
+                      ),
+                    ), // Khoảng cách giữa Text và TextField
+                  ],
+                ),
               ),
               InformationFields(type: "name", text: 'Phone Number'),
               Container(
@@ -141,8 +200,8 @@ class UserInformation extends ConsumerWidget {
                     left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
                 child: TextFormField(
                   controller: phoneController,
-                  keyboardType: TextInputType.phone,
-                  onChanged: (value) => phoneController.text = value,
+                  // keyboardType: TextInputType.number,
+                  onChanged: (value) => phoneNumber = value,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter some text';
@@ -180,7 +239,6 @@ class UserInformation extends ConsumerWidget {
                     const Expanded(
                       child: Text(
                         "********",
-                       
                       ),
                     ),
                     IconButton(
@@ -216,7 +274,7 @@ class UserInformation extends ConsumerWidget {
                             userId.toString(),
                             nameController.text,
                             user.value!.avatar.toString(),
-                            phoneController.text,
+                            phoneNumber,
                             addressController.text,
                             null,
                             null,
