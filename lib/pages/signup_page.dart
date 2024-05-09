@@ -235,9 +235,8 @@ String? _getPasswordErrorMessage(String password) {
                         if (value == null || value.isEmpty) {
                           return "please enter your password";
                         } else {
-                         validatePassword(value);
+                         return validatePassword(value);
                         }
-                        return null;
                       },
                       obscureText: loginNotifier.isObscure,
                       decoration: InputDecoration(

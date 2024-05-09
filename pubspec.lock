@@ -805,6 +805,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0+4"
+  logger:
+    dependency: "direct main"
+    description:
+      name: logger
+      sha256: "8c94b8c219e7e50194efc8771cd0e9f10807d8d3e219af473d89b06cc2ee4e04"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   logging:
     dependency: transitive
     description:
@@ -1013,6 +1021,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
+  pusher_client_fixed:
+    dependency: "direct main"
+    description:
+      name: pusher_client_fixed
+      sha256: "944fd8d5f4126ceaf777214826b87308753858cedc3c1e364585b7b6127b534a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2+2"
   riverpod:
     dependency: transitive
     description:

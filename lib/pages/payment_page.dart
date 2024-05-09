@@ -6,6 +6,7 @@ import 'package:furniture_app/components/paymenttt.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/pages/order_results_page.dart';
 import 'package:furniture_app/pages/pay_online_page.dart';
+import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/cart/cart_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -26,6 +27,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     final _cart = ref.watch(cartProvider);
+    final userId = ref.watch(userIdProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -405,7 +407,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
         child: ElevatedButton(
           onPressed: () async {
             // Xử lý sự kiện khi nút "Continue" được nhấn
-            await ref.read(cartProvider.notifier).sendItemBuy();
+            await ref.read(cartProvider.notifier).sendItemBuy(userId.toString());
             if (_cart.isSelectDirect) {
               Navigator.push(
                 context,
