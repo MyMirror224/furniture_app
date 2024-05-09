@@ -8,6 +8,7 @@ import 'package:furniture_app/state/cart/cart_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CartNotifier extends ChangeNotifier {
+  
   CartModel get carts => _carts;
   CartModel _carts = CartModel();
   double get totalBefore => _totalBefore;

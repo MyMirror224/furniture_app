@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/personal_button.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/pages/Invoice_history_page.dart';
-import 'package:furniture_app/pages/user_information/detail_information.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:furniture_app/state/user_info/user_info_provider.dart';
@@ -138,7 +137,13 @@ class _PersonalPageState extends ConsumerState<PersonalPage> {
             const Gap(10),
             PersonalButton(
               text: "Notification",
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NotificationPage(),
+                    ));
+              },
               icon: FontAwesomeIcons.bell,
             ),
             // const Gap(10),

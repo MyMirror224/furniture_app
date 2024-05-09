@@ -46,6 +46,7 @@ class UpdateInfoController extends ChangeNotifier {
       await Global.storageService
           .setProfile(uid.toString(), respone1.data as UserInfoModel);
     }
+
     final sub = Global.storageService.getProfile(uid.toString());
     print(sub!.avatar?.toString());
     isLoading = false;
@@ -82,6 +83,7 @@ class UpdateInfoController extends ChangeNotifier {
       await Global.storageService
           .setProfile(uid.toString(), respone1.data as UserInfoModel);
     }
+
     final sub = Global.storageService.getProfile(uid.toString());
     print(sub!.name?.toString());
 
