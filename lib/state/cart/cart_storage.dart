@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_app/model/cart_model.dart';
+import 'package:furniture_app/model/order_model.dart';
 
 import 'package:furniture_app/service/http_util.dart';
 
 class CartApi {
-  static Future<String> sendItemBuy(
+  static Future<dynamic> sendItemBuy(
       String uid,
       List<CartItemsSendOrder> items,
       double total,
@@ -35,7 +36,8 @@ class CartApi {
             'name': name,
           },
         );
-        url = response['data'];
+                
+        return OrderModel.fromJson(response['data']);
       }
       if (type == 2) {
         final response = await HttpUtil().post(
@@ -50,7 +52,8 @@ class CartApi {
             'name': name,
           },
         );
-        url = response['data'];
+        url = response['data'] as String;
+        return url;
       }
       if (type == 3) {
         final response = await HttpUtil().post(
@@ -65,10 +68,11 @@ class CartApi {
             'name': name,
           },
         );
-        url = response['data'];
+        url = response['data'] as String;
+        return url;
       }
-      print(url);
-      return url;
+      
+      
     } catch (e) {
       return 'failed';
     }

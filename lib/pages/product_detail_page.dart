@@ -57,14 +57,13 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
     final title = widget.product.productName!
         .substring(widget.product.productName!.indexOf(' '));
     bool isContainerInvisible = countController != 1;
+    bool isContainerInvisiblePlus = countController != widget.product.quantity;
     bool isPromote = pricePromote != price;
     final List<Widget> imageWidgets =
         ImageWidgets.getImageWidgets(widget.product);
 
     return Scaffold(
       body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         slivers: [
           SliverAppBar(
             toolbarHeight: 90,
@@ -361,30 +360,37 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                       ),
                     ),
                     const Gap(10),
-                    Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black),
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          ref.read(countProvider.notifier).increment();
-                          ref.read(countProvider.notifier).updateCountText();
-                          ref
-                              .read(countProvider.notifier)
-                              .totalPrice(widget.product.price!);
-                          ref
-                              .read(countProvider.notifier)
-                              .totalPricehavePromotion(promotion);
-                        },
-                        child: const Icon(
-                          Icons.add,
-                          size: 20,
+                    Opacity(
+                      opacity: isContainerInvisiblePlus ? 1 : 0.5,
+                      child: Container(
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.black),
+                        ),
+                        child: GestureDetector(
+                          child: const Icon(
+                            Icons.add,
+                            size: 20,
+                          ),
+                          onTap: () {
+                            if (isContainerInvisiblePlus) {
+                              ref.read(countProvider.notifier).increment();
+                              ref
+                                  .read(countProvider.notifier)
+                                  .updateCountText();
+                              ref
+                                  .read(countProvider.notifier)
+                                  .totalPrice(widget.product.price!);
+                              ref
+                                  .read(countProvider.notifier)
+                                  .totalPricehavePromotion(promotion);
+                            }
+                          },
                         ),
                       ),
-                    ),
+                    )
                   ])
                 ],
               ),
@@ -638,6 +644,7 @@ class CountProduct extends ChangeNotifier {
 
   void setCount() {
     _count = 1;
+    _countText?.text = '1';
     notifyListeners();
   }
 

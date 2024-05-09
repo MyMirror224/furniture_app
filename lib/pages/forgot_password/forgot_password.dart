@@ -14,7 +14,7 @@ class ForgotPassword extends ConsumerWidget {
   get child => null;
 
   @override
-  Widget build(BuildContext context , WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final TextEditingController _emailController = TextEditingController();
     Size size = MediaQuery.of(context).size; // ------ lấy nhanh size màn hình
     return Scaffold(
@@ -76,7 +76,7 @@ class ForgotPassword extends ConsumerWidget {
                       text: const TextSpan(
                         children: [
                           TextSpan(
-                            text: 'Ow no! ',
+                            text: 'Oh no! ',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 35,
@@ -124,20 +124,20 @@ class ForgotPassword extends ConsumerWidget {
                       const Gap(25),
                       // nhâp email và gửi
 
-                       PasswordField(
-                          nameField: "Email", icon: Icons.email, controller: _emailController),
+                      PasswordField(
+                          nameField: "Email",
+                          icon: Icons.email,
+                          controller: _emailController),
                       const SizedBox(height: 20),
                       ForgotButton(
-                          text: "Recover Password",
-                          onTap: ()  async{
-                             await ref.read(authStateProvider.notifier).forgotPassword(_emailController.text);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const emailVerification(),
-                              ),
-                            );
-                          }),
+                        text: "Recover Password",
+                        onTap: () async {
+                          await ref
+                              .read(authStateProvider.notifier)
+                              .forgotPassword(_emailController.text);
+                          
+                        },
+                      ),
                     ],
                   ),
                 ],

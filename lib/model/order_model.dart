@@ -82,7 +82,7 @@ class ProductInOrder {
       name: json['name'],
       price: json['price'] /1.0 ,
       quantity: json['quantity'],
-      image: json['image'],
+      image: json['image'] ?? '',
     );
   }
 

@@ -19,6 +19,7 @@ class AddressPage extends ConsumerStatefulWidget {
 }
 
 class _AddressPageState extends ConsumerState<AddressPage> {
+  bool setAsDefalt = true;
   @override
   Widget build(BuildContext context) {
     final userId = ref.watch(userIdProvider);
@@ -36,6 +37,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
         TextEditingController(text: address);
     final TextEditingController messageController =
         TextEditingController(text: '');
+
     bool setAsDefalt = true;
 
     return Scaffold(
@@ -397,9 +399,13 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                       Switch(
                         value: setAsDefalt,
                         onChanged: (value) {
-                          setAsDefalt = value;
+                          setState(() {
+                            setAsDefalt = value;
+                          });
                         },
                         activeColor: Color(0xff193d3d),
+                        inactiveTrackColor: Colors.grey,
+                        inactiveThumbColor: Colors.white,
                       ),
                     ],
                   ),
