@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:furniture_app/components/CartItemSampLes.dart';
 import 'package:furniture_app/components/HomeAppBar.dart';
 import 'package:furniture_app/pages/address_page.dart';
@@ -33,6 +34,7 @@ class _CartPageState extends ConsumerState<CartPage> {
     final total = ref.watch(cartProvider).carts.products?.total;
     final totalBefore = ref.watch(cartProvider).totalBefore;
     final discount = ref.watch(cartProvider).discount;
+    bool isContinue = total! > 0;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -404,28 +406,40 @@ class _CartPageState extends ConsumerState<CartPage> {
               padding: EdgeInsets.only(bottom: 10, left: 20, right: 20),
               child: ElevatedButton(
                 onPressed: () {
-                  ref.read(cartProvider.notifier).saveCartItem();
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          AddressPage(),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        return SlideTransition(
-                          position: Tween<Offset>(
-                            begin: const Offset(1.0, 0.0),
-                            end: Offset.zero,
-                          ).animate(animation),
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
+                  if (isContinue) {
+                    ref.read(cartProvider.notifier).saveCartItem();
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            AddressPage(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return SlideTransition(
+                            position: Tween<Offset>(
+                              begin: const Offset(1.0, 0.0),
+                              end: Offset.zero,
+                            ).animate(animation),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: "Please choose product",
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: const Color(0xff193d3d),
+                      textColor: Colors.white,
+                      fontSize: 20.0,
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
-                  backgroundColor: const Color(0xff193d3d),
+                  backgroundColor: isContinue ? Color(0xff193d3d) : Colors.grey,
                   elevation: 8.0,
                 ),
                 child: Text('Continue'),

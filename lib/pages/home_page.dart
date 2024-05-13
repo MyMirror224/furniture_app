@@ -3,6 +3,7 @@ import 'package:furniture_app/components/grip_view_search.dart';
 import 'package:furniture_app/components/notify_view.dart';
 import 'package:furniture_app/components/slide_home_view.dart';
 import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/global.dart';
 import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/pages/product_list_page.dart';
 import 'package:furniture_app/pages/search%20page/searchPage.dart';
@@ -17,7 +18,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomePage extends ConsumerStatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+ 
+  const HomePage({ Key? key}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
@@ -25,13 +27,16 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   int index = 2;
-
+   String userId=""; 
   @override
   void didChangeDependencies() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_)  {
       ref.read(productProvider).fetchCategories();
       ref.read(categoryProvider).fetchCategories();
       ref.read(productProvider).fetchProduct();
+       userId =   ref.watch(userIdProvider).toString();
+      ref.read(notifyProvider).fetchNotification(userId);
+    
     });
     super.didChangeDependencies();
   }
@@ -49,6 +54,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     final imageUrl = AppConstants.SERVER_API_URL + avatar;
     final catelogiesProvider = ref.watch(categoryProvider).categories;
     bool isShownotify = ref.watch(notifyProvider).isShow;
+    final listNotify = ref.watch(notifyProvider).notifications;
     return Scaffold(
       body: Stack(children: [
         SingleChildScrollView(
@@ -340,7 +346,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       spreadRadius: 8,
                     )
                   ]),
-              child: NotifyView(),
+              child: NotifyView(lists: listNotify),
             ),
           ),
 

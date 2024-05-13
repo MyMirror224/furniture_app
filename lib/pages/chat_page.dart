@@ -2,11 +2,11 @@ import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
+import 'package:furniture_app/services/laravel_echo.dart';
+import 'package:furniture_app/state/chat/chat_provider.dart';
 import 'package:furniture_app/state/user_info/user_info_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
-//import 'package:pusher_client/pusher_client.dart';
 class ChatPage extends ConsumerStatefulWidget {
   const ChatPage({super.key});
 
@@ -20,18 +20,6 @@ class _ChatPageState extends ConsumerState<ChatPage> {
   @override
   void initState() {
     super.initState();
-    users = ChatUser(
-      id: '1',
-      firstName: 'Charles',
-      lastName: 'Leclerc',
-    );
-    messages = <ChatMessage>[
-      ChatMessage(
-        text: 'Hey!',
-        user: users,
-        createdAt: DateTime.now(),
-      ),
-    ];
   }
 
   // void listenChatChannel(ChatEntity chat) {
@@ -93,11 +81,14 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                 profileImage: avatarPath,
               ),
               onSend: (ChatMessage message) {
-                setState(() {
-                  messages.insert(0, message);
-                });
+                print(LaravelEcho.socketId);
+                ref.read(chatProvider.notifier).createChatMessage(
+                      message,
+                      userId.toString(),
+                      LaravelEcho.socketId,
+                    );
               },
-              messages: messages,
+              messages: ref.watch(chatProvider).uiChatMessages,
             ),
           )),
     );

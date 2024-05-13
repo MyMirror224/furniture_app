@@ -1,6 +1,6 @@
+import 'package:furniture_app/constant/appconstant.dart';
 import 'package:laravel_echo/laravel_echo.dart';
 import 'package:pusher_client_fixed/pusher_client_fixed.dart';
-
 
 class LaravelEcho {
   static LaravelEcho? _singleton;
@@ -10,7 +10,7 @@ class LaravelEcho {
   LaravelEcho._({
     required this.token,
   }) {
-    _echo = createLaravelEcho(token);
+    _echo = createLaravelEcho();
   }
 
   factory LaravelEcho.init({
@@ -29,44 +29,37 @@ class LaravelEcho {
 }
 
 class PusherConfig {
-  static const appId = "";
-  static const key = "";
-  static const secret = "";
-  static const cluster = "";
-  static const hostEndPoint = "";
-  static const hostAuthEndPoint = "$hostEndPoint/api/broadcasting/auth";
-  static const port = 6001;
+  static const appId = "1793464";
+  static const key = "4c55c513a0c2bd70d338";
+  static const secret = "ef3a9c2724296041b9de";
+  static const cluster = "ap1";
+  static const hostEndPoint = AppConstants.SettingEndPoint;
+  static const hostAuthEndPoint = AppConstants.SERVER_API_URL;
+  static const port = 443;
 }
 
-PusherClient createPusherClient(String token) {
+PusherClient createPusherClient() {
   PusherOptions options = PusherOptions(
     wsPort: PusherConfig.port,
     encrypted: true,
     host: PusherConfig.hostEndPoint,
     cluster: PusherConfig.cluster,
-    auth: PusherAuth(
-      PusherConfig.hostAuthEndPoint,
-      headers: {
-        'Authorization': "Bearer $token",
-        'Content-Type': "application/json",
-        'Accept': 'application/json'
-      },
-    ),
   );
 
   PusherClient pusherClient = PusherClient(
     PusherConfig.key,
     options,
-    autoConnect: false,
+    autoConnect: true,
     enableLogging: true,
   );
-
+  pusherClient.connect();
+  print("ket noi thanh cong" + pusherClient.getSocketId().toString());
   return pusherClient;
 }
 
-Echo createLaravelEcho(String token) {
+Echo createLaravelEcho() {
   return Echo(
-    client: createPusherClient(token),
+    client: createPusherClient(),
     broadcaster: EchoBroadcasterType.Pusher,
   );
 }

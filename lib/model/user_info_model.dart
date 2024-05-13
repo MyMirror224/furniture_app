@@ -55,12 +55,7 @@ class UserInfoModel  {
       };
    
 
-  ChatUser get toChatUser {
-    return ChatUser(
-      id: uid.toString(),
-      firstName: name,
-    );
-  } 
+  
 }      
       
 

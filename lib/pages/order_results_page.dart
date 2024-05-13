@@ -13,6 +13,7 @@ class OrderResults extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final userId = ref.watch(userIdProvider);
     return Scaffold(
       // backgroundColor: Colors.green,oderfail
@@ -369,11 +370,11 @@ class OrderResults extends HookConsumerWidget {
                             print('Back Home button pressed!');
 
                             // Chuyển về trang chủ
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomeScreen()),
-                            );
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()),
+                                (route) => false);
                           },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: const Color(0xff193d3d),
@@ -390,14 +391,20 @@ class OrderResults extends HookConsumerWidget {
                           onPressed: () {
                             // Xử lý sự kiện khi nút "Track your order" được nhấn
                             print('Track your order button pressed!');
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()),
+                                (route) => false);
 
-                            // Chuyển sang trang mới
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) =>  CartPage(),
-                            //   ),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HistoryInvoicePage(
+                                  uid: userId.toString(),
+                                ),
+                              ),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Colors.white,

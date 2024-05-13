@@ -53,7 +53,9 @@ class HomeScreen extends ConsumerWidget {
         widget = listPage.elementAt(index);
         break;
       case 1:
-        widget = listPage.elementAt(index);
+        widget = ChatPage(
+          uid!,
+        );
         break;
       case 2:
         widget = listPage.elementAt(index);
@@ -84,7 +86,10 @@ class InforProvider extends ChangeNotifier {
 
 List<Widget> listPage = [
   CategoryPage(),
-  ChatPage(),
+
+  //Container(),
+  Container(),
+
   HomePage(),
   Container(),
   const PersonalPage(),

@@ -20,7 +20,7 @@ class AddressPage extends ConsumerStatefulWidget {
 }
 
 class _AddressPageState extends ConsumerState<AddressPage> {
-  bool setAsDefalt = true;
+  bool setAsDefalt = false;
   @override
   Widget build(BuildContext context) {
     final userId = ref.watch(userIdProvider);
