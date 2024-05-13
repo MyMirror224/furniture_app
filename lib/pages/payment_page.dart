@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:furniture_app/components/HomeAppBar.dart';
-import 'package:furniture_app/components/paymenttt.dart';
 import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/model/order_model.dart';
 import 'package:furniture_app/pages/order_results_page.dart';
 import 'package:furniture_app/pages/pay_online_page.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
@@ -407,12 +405,16 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
         child: ElevatedButton(
           onPressed: () async {
             // Xử lý sự kiện khi nút "Continue" được nhấn
-            await ref.read(cartProvider.notifier).sendItemBuy(userId.toString());
+            await ref
+                .read(cartProvider.notifier)
+                .sendItemBuy(userId.toString());
             if (_cart.isSelectDirect) {
+              final OrderModel? order = ref.watch(cartProvider.notifier).order;
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => OrderResults(isSuccess: true),
+                  builder: (context) =>
+                      OrderResults(order: order!, isSuccess: true),
                 ),
               );
             } else {

@@ -19,21 +19,28 @@ class listhistorypage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Giả định danh sách các đơn hàng
     List<OrderModel> orders = ref.watch(orderProvider).orders;
-    List<String> is_done = ['Pending','Delivering', 'Delivering', 'Goods delivered', 'Returned'];
+    List<String> is_done = [
+      'Pending',
+      'Delivering',
+      'Delivering',
+      'Goods delivered',
+      'Returned'
+    ];
 
     // Lọc danh sách đơn hàng dựa trên bộ lọc hiện tại
     List<OrderModel> filteredOrders = orders.where((order) {
       if (currentFilter == 0 && filter == 'All') {
         return true;
-      } else if( currentFilter == 1 && filter =='Pending') {
-        return  order.is_done == currentFilter-1;
-      } else if( currentFilter == 2  && filter =='Delivering') {
-        return  order.is_done == currentFilter || order.is_done+1 == currentFilter;
-      } else if( currentFilter == 3  && filter =='Goods delivered') {
-        return  order.is_done == currentFilter;
-      } else if( currentFilter == 4  && filter =='Returned') {
+      } else if (currentFilter == 1 && filter == 'Pending') {
+        return order.is_done == currentFilter - 1;
+      } else if (currentFilter == 2 && filter == 'Delivering') {
+        return order.is_done == currentFilter ||
+            order.is_done + 1 == currentFilter;
+      } else if (currentFilter == 3 && filter == 'Goods delivered') {
         return order.is_done == currentFilter;
-      } else if( currentFilter == -1 && filter =='Cancelled') {
+      } else if (currentFilter == 4 && filter == 'Returned') {
+        return order.is_done == currentFilter;
+      } else if (currentFilter == -1 && filter == 'Cancelled') {
         return order.is_done == currentFilter;
       }
       return false;
@@ -47,7 +54,7 @@ class listhistorypage extends HookConsumerWidget {
       itemBuilder: (context, index) {
         OrderModel order = filteredOrders[index];
         return Container(
-          height: 100,
+            height: 130,
             color: Colors.grey.shade200,
             child: ListTile(
               leading: Container(
@@ -57,7 +64,8 @@ class listhistorypage extends HookConsumerWidget {
                     borderRadius: BorderRadius.circular(30.0),
                     image: DecorationImage(
                       image: NetworkImage(
-                        "${AppConstants.SERVER_API_URL}storage/" + order.products[0].image,
+                        "${AppConstants.SERVER_API_URL}storage/" +
+                            order.products[0].image,
                       ),
                       fit: BoxFit.fill,
                     )),
@@ -68,7 +76,6 @@ class listhistorypage extends HookConsumerWidget {
               ), // Tên đơn hàng
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-               
                 children: [
                   Gap(10),
                   Text(
@@ -89,7 +96,9 @@ class listhistorypage extends HookConsumerWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    order.is_done>=0 ? '${is_done[order.is_done]}' : 'Cancelled',
+                    order.is_done >= 0
+                        ? '${is_done[order.is_done]}'
+                        : 'Cancelled',
                     style: const TextStyle(
                       fontSize: 12,
                       color: Color.fromARGB(255, 84, 154, 211),
@@ -104,7 +113,13 @@ class listhistorypage extends HookConsumerWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>  InvoicedetailsNotCofirmPage(order: order,products : order.products,is_done: order.is_done >= 0 ? is_done[order.is_done] : 'Cancelled' , )),
+                        builder: (context) => InvoicedetailsNotCofirmPage(
+                              order: order,
+                              products: order.products,
+                              is_done: order.is_done >= 0
+                                  ? is_done[order.is_done]
+                                  : 'Cancelled',
+                            )),
                   );
                 },
                 style: ElevatedButton.styleFrom(

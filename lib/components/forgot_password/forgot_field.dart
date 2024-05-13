@@ -5,9 +5,10 @@ class PasswordField extends StatefulWidget {
   final String nameField;
   final IconData icon;
   final TextEditingController? controller;
+
   const PasswordField({
     Key? key,
-     this.controller,
+    this.controller,
     required this.nameField,
     required this.icon,
   }) : super(key: key);

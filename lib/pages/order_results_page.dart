@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_app/pages/cart_page.dart';
+import 'package:furniture_app/model/order_model.dart';
 import 'package:furniture_app/pages/Invoice_history_page.dart';
 import 'package:furniture_app/pages/navigator_bar.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OrderResults extends HookConsumerWidget {
+  final OrderModel order;
   final bool isSuccess; // Biến isSuccess xác định thành công hay thất bại
-  OrderResults({required this.isSuccess});
+  const OrderResults({required this.isSuccess, required this.order, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -120,15 +122,7 @@ class OrderResults extends HookConsumerWidget {
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  "Traking id",
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                Text(
-                                  "Payment code",
+                                  "Order Id",
                                   style: TextStyle(
                                     fontSize: 10,
                                     color: Colors.black,
@@ -143,13 +137,6 @@ class OrderResults extends HookConsumerWidget {
                                   ),
                                 ),
                                 SizedBox(height: 5),
-                                Text(
-                                  "Date",
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.black,
-                                  ),
-                                ),
                               ],
                             ),
                             Container(
@@ -172,7 +159,7 @@ class OrderResults extends HookConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Dungvo",
+                                    order.name,
                                     style: TextStyle(
                                       fontSize: 10,
                                       color: const Color(0xff193d3d),
@@ -180,7 +167,7 @@ class OrderResults extends HookConsumerWidget {
                                   ),
                                   SizedBox(height: 5),
                                   Text(
-                                    "999-155-200",
+                                    order.id.toString(),
                                     style: TextStyle(
                                       fontSize: 10,
                                       color: const Color(0xff193d3d),
@@ -188,28 +175,13 @@ class OrderResults extends HookConsumerWidget {
                                   ),
                                   SizedBox(height: 5),
                                   Text(
-                                    "Pay-150520",
+                                    order.address.toString(),
                                     style: TextStyle(
                                       fontSize: 10,
                                       color: const Color(0xff193d3d),
                                     ),
                                   ),
                                   SizedBox(height: 5),
-                                  Text(
-                                    "254 Nguyễn Tất Thành, Đà Nẵng",
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: const Color(0xff193d3d),
-                                    ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    "05/04/2024",
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: const Color(0xff193d3d),
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -225,11 +197,12 @@ class OrderResults extends HookConsumerWidget {
                             print('Back Home button pressed!');
 
                             // Chuyển về trang chủ
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomeScreen()),
-                            );
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomeScreen(),
+                                ),
+                                (route) => false);
                           },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: const Color(0xff193d3d),
@@ -246,15 +219,16 @@ class OrderResults extends HookConsumerWidget {
                           onPressed: () {
                             // Xử lý sự kiện khi nút "Track your order" được nhấn
                             print('Track your order button pressed!');
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HistoryInvoicePage(
+                                    uid: userId.toString(),
+                                  ),
+                                ),
+                                (route) => false);
 
                             // Chuyển sang trang mới
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HistoryInvoicePage(
-                                        uid: userId.toString(),
-                                      )),
-                            );
                           },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Colors.white,

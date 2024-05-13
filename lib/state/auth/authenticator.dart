@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/model/user_respone.dart';
 import 'package:furniture_app/state/auth/auth_result.dart';
 import 'package:furniture_app/state/auth/constants.dart';
@@ -34,13 +31,11 @@ class Authenticator {
     required String toEmail,
   }) async {
     try {
-      
-      
       await FirebaseAuth.instance.sendPasswordResetEmail(
         email: toEmail,
       );
       //FirebaseAuth.instance.verifyPasswordResetCode(code)
-      return AuthResult.failure;
+      return AuthResult.aborted;
     } catch (e) {
       return AuthResult.failure;
     }
@@ -51,7 +46,6 @@ class Authenticator {
   }) async {
     try {
       await FirebaseAuth.instance.currentUser?.updatePassword(newPassword);
-      
     } catch (e) {
       print(e);
     }

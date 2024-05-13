@@ -332,8 +332,8 @@ class _HomePageState extends ConsumerState<HomePage> {
           AnimatedPositioned(
             duration: Duration(milliseconds: 5000),
             curve: Curves.easeInOut,
-            top:  70 ,
-            right: 20 ,
+            top: 70,
+            right: 20,
             child: Container(
               height: 600,
               width: 320,

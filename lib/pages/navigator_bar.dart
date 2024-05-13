@@ -1,14 +1,11 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/pages/category_page.dart';
 import 'package:furniture_app/pages/chat_page.dart';
-import 'package:furniture_app/pages/giff_box_page.dart';
 import 'package:furniture_app/pages/home_page.dart';
 import 'package:furniture_app/pages/personal/personal.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // ignore: must_be_immutable
@@ -56,7 +53,9 @@ class HomeScreen extends ConsumerWidget {
         widget = listPage.elementAt(index);
         break;
       case 1:
-        widget = ChatPage(uid: uid!,);
+        widget = ChatPage(
+          uid!,
+        );
         break;
       case 2:
         widget = listPage.elementAt(index);
@@ -87,8 +86,10 @@ class InforProvider extends ChangeNotifier {
 
 List<Widget> listPage = [
   CategoryPage(),
+
   //Container(),
   Container(),
+
   HomePage(),
   Container(),
   const PersonalPage(),

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/global.dart';
 import 'package:furniture_app/model/user_info_model.dart';
-import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/service/http_util.dart';
 import 'package:furniture_app/state/user_info/backend/user_info_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -30,22 +29,28 @@ class UpdateInfoController extends ChangeNotifier {
   }
 
   Future<void> updateAvatar({required File empFace, String? uid}) async {
+    isLoading = true;
     const url = '${AppConstants.SERVER_API_URL}api/users/update_avatar';
-    var formData = FormData.fromMap({'uid': uid, 'avatar': empFace});
+    var formData = FormData.fromMap(
+        {'uid': uid, 'avatar': await MultipartFile.fromFile(empFace.path)});
 
     final response = await HttpUtil().postForm(
       url,
       data: formData,
     );
 
-    String message = response['message'];
+    String message = response;
 
     if (message == 'Avatar updated successfully') {
-      final data = await UserAPI.getProfile(userIdProvider.toString());
+      final respone1 = await UserAPI.getProfile(uid.toString());
       await Global.storageService
-          .setProfile(userIdProvider.toString(), data.data as UserInfoModel);
+          .setProfile(uid.toString(), respone1.data as UserInfoModel);
     }
-    
+
+    final sub = Global.storageService.getProfile(uid.toString());
+    print(sub!.avatar?.toString());
+    isLoading = false;
+    notifyListeners();
   }
 
   Future<void> updateInfo(
@@ -72,12 +77,15 @@ class UpdateInfoController extends ChangeNotifier {
     if (oldPassword != null && password != null) {
       message = response;
     }
+    print('Ten toi la: ');
     if (message != 'Old password is incorrect') {
       final respone1 = await UserAPI.getProfile(uid.toString());
       await Global.storageService
           .setProfile(uid.toString(), respone1.data as UserInfoModel);
     }
 
+    final sub = Global.storageService.getProfile(uid.toString());
+    print(sub!.name?.toString());
 
     isLoading = false;
     notifyListeners();

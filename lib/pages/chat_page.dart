@@ -11,12 +11,12 @@ import 'package:furniture_app/services/logger.dart';
 import 'package:furniture_app/state/chat/chat_provider.dart';
 import 'package:furniture_app/state/user_info/user_info_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:pusher_client_fixed/pusher_client_fixed.dart';
 
 class ChatPage extends ConsumerStatefulWidget {
   final String uid;
-  const ChatPage({required this.uid, super.key});
+  const ChatPage(this.uid, {super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChatPageState();
@@ -31,14 +31,13 @@ class _ChatPageState extends ConsumerState<ChatPage> {
       ref.read(chatProvider).fetchChatMessage(widget.uid);
     });
     super.initState();
-    
   }
-   
-   
+
   void listenChatChannel() {
     final userId = ref.watch(userIdProvider);
-    LaravelEcho.instance.channel('chat-room.1${userId.toString()}').listen('.message.sent',
-        (e) {
+    LaravelEcho.instance
+        .channel('chat-room.1${userId.toString()}')
+        .listen('.message.sent', (e) {
       if (e is PusherEvent) {
         if (e.data != null) {
           _handleNewMessage(jsonDecode(e.data!) as Map<String, dynamic>);
@@ -59,18 +58,15 @@ class _ChatPageState extends ConsumerState<ChatPage> {
   }
 
   void _handleNewMessage(Map<String, dynamic> data) {
-      final chatMessage = ChatMessageEntity.fromJson(data['message']);
-      print(data);
-      print('abc');
-      print(chatMessage);
+    final chatMessage = ChatMessageEntity.fromJson(data['message']);
 
-      ref.read(chatProvider.notifier).addNewMessage(chatMessage as ChatMessageEntity);
+    ref
+        .read(chatProvider.notifier)
+        .addNewMessage(chatMessage as ChatMessageEntity);
   }
 
   @override
   Widget build(BuildContext context) {
-    
-
     final userId = ref.watch(userIdProvider);
     final user = ref.watch(userInfoModelProvider(userId.toString()));
     String userName = user.hasValue ? user.value!.name.toString() : "User";
@@ -78,41 +74,45 @@ class _ChatPageState extends ConsumerState<ChatPage> {
         ? user.value!.avatar.toString()
         : 'storage/avatars/default.png';
     String avatarPath = '${AppConstants.SERVER_API_URL}$avatar';
-    return StartUpContainer(
-      onInit: () {
-        LaravelEcho.init(token: userId.toString());
-        listenChatChannel();
-        //setupOneSignal(authBloc.state.user!.id);
-      },
-      onDisposed: () {
-        leaveChatChannel();
-      },
-      child: Scaffold(
-          appBar: AppBar(
-            title: Text('Support'),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.only(bottom: 50),
-            child: DashChat(
-              currentUser: ChatUser(
-                id: userId!.toString(),
-                firstName: userName,
-                profileImage: avatarPath,
-              ),
-            
-              onSend: (ChatMessage message) {
-                print(LaravelEcho.socketId);
-                ref.read(chatProvider.notifier).createChatMessage(
-                      message,
-                      userId.toString(),
-                      LaravelEcho.socketId,
-                    );
-                
-              },
-              messages: ref.watch(chatProvider).uiChatMessages,
+    return KeyboardDismisser(
+      child: StartUpContainer(
+        onInit: () {
+          LaravelEcho.init(token: userId.toString());
+          listenChatChannel();
+          //setupOneSignal(authBloc.state.user!.id);
+        },
+        onDisposed: () {
+          leaveChatChannel();
+        },
+        child: Scaffold(
+            appBar: AppBar(
+              title: Center(
+                  child: Text('Support',
+                      style: TextStyle(
+                          color: Color(0xff193d3d),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold))),
             ),
-          )),
+            body: Padding(
+              padding: const EdgeInsets.only(bottom: 50),
+              child: DashChat(
+                currentUser: ChatUser(
+                  id: userId!.toString(),
+                  firstName: userName,
+                  profileImage: avatarPath,
+                ),
+                onSend: (ChatMessage message) {
+                  print(LaravelEcho.socketId);
+                  ref.read(chatProvider.notifier).createChatMessage(
+                        message,
+                        userId.toString(),
+                        LaravelEcho.socketId,
+                      );
+                },
+                messages: ref.watch(chatProvider).uiChatMessages,
+              ),
+            )),
+      ),
     );
   }
- 
 }

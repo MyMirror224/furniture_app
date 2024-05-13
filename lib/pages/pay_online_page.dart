@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_app/components/loading/loading_screen.dart';
-import 'package:furniture_app/pages/home_page.dart';
+import 'package:furniture_app/pages/navigator_bar.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewScreen extends StatefulWidget {
@@ -20,34 +19,25 @@ class _WebViewScreenState extends State<WebViewScreen> {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
-      
       ..setNavigationDelegate(
         NavigationDelegate(
-          onProgress: (int progress) {
-            
-          },
-          onPageStarted: (String url) {
-            
-          },
-          onPageFinished: (String url) {
-            // Handle page finished loading here
-          },
-          onWebResourceError: (WebResourceError error) {
-            // Handle web resource error here
-          },
-          onUrlChange: (UrlChange change) {
-            
-          }
-        ),
+            onProgress: (int progress) {},
+            onPageStarted: (String url) {},
+            onPageFinished: (String url) {
+              // Handle page finished loading here
+            },
+            onWebResourceError: (WebResourceError error) {
+              // Handle web resource error here
+            },
+            onUrlChange: (UrlChange change) {}),
       )
-      ..addJavaScriptChannel('Pay', onMessageReceived: (JavaScriptMessage message) {
-        if (message.message == 'suscess') {
-          
+      ..addJavaScriptChannel('Pay',
+          onMessageReceived: (JavaScriptMessage message) {
+        if (message.message == 'success' || message.message == 'cancel') {
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) => HomeScreen()),
             (route) => false,
           );
-          
         }
       })
       ..loadRequest(Uri.parse(widget.url));
@@ -56,8 +46,10 @@ class _WebViewScreenState extends State<WebViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WebViewWidget(
-        controller: _controller,
+      body: SafeArea(
+        child: WebViewWidget(
+          controller: _controller,
+        ),
       ),
     );
   }
