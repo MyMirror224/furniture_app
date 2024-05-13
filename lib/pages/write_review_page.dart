@@ -89,14 +89,24 @@ class _WriteReviewPageState extends ConsumerState<WriteReviewPage> {
                 if (message2 == 'Comment added successfully') {
                   await Fluttertoast.showToast(
                     msg: "Review submitted successfully",
-                    toastLength: Toast.LENGTH_SHORT,
+                    toastLength: Toast.LENGTH_LONG,
                     gravity: ToastGravity.CENTER,
                     timeInSecForIosWeb: 1,
                     backgroundColor: const Color(0xff193d3d),
                     textColor: Colors.white,
-                    fontSize: 16.0,
+                    fontSize: 20.0,
                   );
                   Navigator.pop(context);
+                } else {
+                  await Fluttertoast.showToast(
+                    msg: "Review failed to submit",
+                    toastLength: Toast.LENGTH_LONG,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: const Color(0xff193d3d),
+                    textColor: Colors.white,
+                    fontSize: 20.0,
+                  );
                 }
               },
               child: Text('Submit Review'),

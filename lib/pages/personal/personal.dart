@@ -4,7 +4,8 @@ import 'package:furniture_app/components/personal_button.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/pages/Invoice_history_page.dart';
 import 'package:furniture_app/pages/cart_page.dart';
-import 'package:furniture_app/pages/notification_page/notificationPage.dart';
+import 'package:furniture_app/pages/notification_page.dart';
+
 import 'package:furniture_app/pages/user_information/user_information.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
@@ -130,11 +131,10 @@ class PersonalPage extends ConsumerWidget {
               text: "Notification",
               onTap: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NotificationPage(),
-                  )
-                );
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NotificationPage(userId.toString()),
+                    ));
               },
               icon: FontAwesomeIcons.bell,
             ),

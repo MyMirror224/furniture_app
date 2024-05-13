@@ -3,38 +3,47 @@ import 'package:furniture_app/model/user_info_model.dart';
 
 class ChatMessageEntity {
   final int id;
-  final String chatId;
-  final int userId;
+  final String roomId;
+  final String uidSender;
+  final String uidReceiver;
   final String message;
   final String createdAt;
   final String updatedAt;
-  final UserInfoModel user;
+  final String name;
+  
 
   ChatMessageEntity({
     required this.id,
-    required this.chatId,
-    required this.userId,
+    required this.roomId,
     required this.message,
     required this.createdAt,
     required this.updatedAt,
-    required this.user,
+    required this.uidSender,
+    required this.uidReceiver,
+    required this.name,
   });
   factory ChatMessageEntity.fromJson(Map<String, dynamic> json) {
     return ChatMessageEntity(
       id: json['id'],
-      chatId: json['chat_id'],
-      userId: json['user_id'],
+      roomId: json['room_id'],
       message: json['message'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
-      user: UserInfoModel.fromJson(json['user']),
+      uidSender: json['uidsender'] ?? '1',
+      uidReceiver: json['uidreceiver'] ?? "",
+      name: 'Supporter',
     );
   }
   ChatMessage get toChatMessage {
     return ChatMessage(
-      user:  user.toChatUser,
+      user:  ChatUser(
+        firstName:  name,
+        id: uidSender,
+      ),
       text:  message,
       createdAt:  DateTime.parse(createdAt),
     );
   }
 } 
+
+

@@ -3,15 +3,16 @@ import 'package:furniture_app/model/chat_entity_model.dart';
 import 'package:furniture_app/service/http_util.dart';
 
 class ChatApi {
-  static Future<ChatMessageEntity?> createChatMessage(
+  static Future<void> createChatMessage(
     String chatID,
     String message,
-    String socketId,
+    String socketId, 
   ) async {
     final response = await HttpUtil().post(
-      'api/chat/create',
+      'api/message/store',
       queryParameters: {
-        'chat_id': chatID,
+        'room_id': chatID,
+        'uidsender': chatID,
         'message': message,
       },
       options: Options(
@@ -21,20 +22,19 @@ class ChatApi {
       ),
     );
 
-    return ChatMessageEntity?.fromJson(
-      response.data,
-    );
+
+    
   }
 
   Future<List<ChatMessageEntity>> getChatMessages({
-    required int chatId,
+    required String chatId,
     required int page,
   }) async {
     final response = await HttpUtil().get(
-      'api/chat/show',
+      'api/message/show',
       queryParameters: {
         'page': page,
-        'chat_id': chatId,
+        'room_id': chatId,
       },
     );
     var productJson = response['data'];

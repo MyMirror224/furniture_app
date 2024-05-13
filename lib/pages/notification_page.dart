@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/HomeAppBar.dart';
 import 'package:furniture_app/components/notify_view.dart';
+import 'package:furniture_app/state/notify/notify_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class NotificationPage extends ConsumerStatefulWidget {
-  const NotificationPage({Key? key}) : super(key: key);
+  final String uid;
+  const NotificationPage(this.uid, {Key? key}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -13,20 +15,20 @@ class NotificationPage extends ConsumerStatefulWidget {
 }
 
 class _NotificationPageState extends ConsumerState<NotificationPage> {
-  int index = 2;
-
   @override
   void didChangeDependencies() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(notifyProvider.notifier).fetchNotification(widget.uid);
+    });
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    final lists = ref.watch(notifyProvider).notifications;
     return Scaffold(
       backgroundColor: Color(0xff93B1A6),
       body: SafeArea(
-        
         child: Column(
           children: [
             Row(
@@ -40,7 +42,10 @@ class _NotificationPageState extends ConsumerState<NotificationPage> {
               ],
             ),
             Gap(10),
-            Expanded(child:   NotifyView()),
+            Expanded(
+                child: NotifyView(
+              lists: lists,
+            )),
           ],
         ),
       ),

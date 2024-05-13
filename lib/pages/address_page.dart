@@ -22,7 +22,7 @@ class AddressPage extends ConsumerStatefulWidget {
 }
 
 class _AddressPageState extends ConsumerState<AddressPage> {
-  bool setAsDefalt = true;
+  bool setAsDefalt = false;
   @override
   void didChangeDependencies() {
     Future.delayed(Duration(seconds: 1), () {});
