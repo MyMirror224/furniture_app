@@ -1,22 +1,17 @@
-
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/pages/category_page.dart';
 import 'package:furniture_app/pages/chat_page.dart';
-import 'package:furniture_app/pages/giff_box_page.dart';
 import 'package:furniture_app/pages/home_page.dart';
 import 'package:furniture_app/pages/personal/personal.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends ConsumerWidget {
- 
   int index = 2;
-  HomeScreen( {super.key});
+  HomeScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userId = ref.watch(userIdProvider);
@@ -40,7 +35,6 @@ class HomeScreen extends ConsumerWidget {
         items: const [
           Icon(Icons.category, size: 30, color: Colors.white),
           Icon(Icons.chat, size: 30, color: Colors.white),
-          
           Icon(Icons.home, size: 30, color: Colors.white),
           Icon(Icons.shopping_cart, size: 30, color: Colors.white),
           Icon(Icons.person, size: 30, color: Colors.white),
@@ -65,7 +59,7 @@ class HomeScreen extends ConsumerWidget {
         widget = listPage.elementAt(index);
         break;
       case 3:
-        widget =CartPage(uid!);
+        widget = CartPage(uid!);
         break;
       case 4:
         widget = listPage.elementAt(index);
@@ -76,7 +70,6 @@ class HomeScreen extends ConsumerWidget {
     }
     return widget;
   }
-  
 }
 
 final inforProvider = ChangeNotifierProvider((ref) => InforProvider());
@@ -88,13 +81,11 @@ class InforProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
-List<Widget>  listPage =[
-   CategoryPage(),
-   Container(),
-   //ChatPage(),
-   HomePage(),
-   Container(),
-   const PersonalPage(),
+
+List<Widget> listPage = [
+  CategoryPage(),
+  ChatPage(),
+  HomePage(),
+  Container(),
+  const PersonalPage(),
 ];
-
-

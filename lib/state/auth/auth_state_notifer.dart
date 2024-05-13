@@ -29,11 +29,20 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     await _authenticator.signOut();
     state = const AuthState.unknown();
   }
+
   Future<void> forgotPassword(String email) async {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.sendPasswordReset(
       toEmail: email,
     );
+    if (result == AuthResult.failure) {
+      state = AuthState(
+        isLoading: false,
+        authResult: result,
+        userId: _authenticator.userId,
+        errorMessage: 'Have error when send email',
+      );
+    }
     state = AuthState(
       isLoading: false,
       authResult: result,
@@ -41,6 +50,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       errorMessage: '',
     );
   }
+
   Future<void> loginWithGoogle() async {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.loginWithGoogle();
@@ -98,13 +108,15 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       errorMessage: '',
     );
   }
+
   Future<void> updatePassword(String newPassword) async {
     state = state.copiedWithIsLoading(true);
-     await _authenticator.updatePassword(
+    await _authenticator.updatePassword(
       newPassword: newPassword,
     );
     state = state.copiedWithIsLoading(false);
   }
+
   Future<void> loginWithEmailandPassword(String email, String password) async {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.logInWithEmailPassword(

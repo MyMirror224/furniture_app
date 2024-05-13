@@ -80,6 +80,7 @@ dependencies:
   bcrypt: ^1.1.3
   logger: ^2.2.0
   pusher_client_fixed: ^0.0.2+2
+  keyboard_dismisser: ^3.0.0
 
 
 
