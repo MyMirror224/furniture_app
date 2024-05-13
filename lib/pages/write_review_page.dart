@@ -86,7 +86,7 @@ class _WriteReviewPageState extends ConsumerState<WriteReviewPage> {
                     widget.uid);
                 final message2 =
                     await ref.watch(productReviewsProvider).message;
-                if (message2 == 'Comment added successfully') {
+                if (message2 == 'success') {
                   await Fluttertoast.showToast(
                     msg: "Review submitted successfully",
                     toastLength: Toast.LENGTH_LONG,

@@ -10,6 +10,7 @@ class ReviewNotifier extends ChangeNotifier {
   String _message = '';
 
   Future<void> addReview(int idProduct,int order_id, String message, int rating,String uid)  async {
+    _message = '';
     final response = await ReviewApi.addReview( idProduct,order_id, message, rating,uid);
     _message = response;
     notifyListeners();

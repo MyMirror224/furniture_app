@@ -64,9 +64,9 @@ class _OrderCancelPageState extends ConsumerState<OrderCancelPage> {
                 }
                 final message2 = await ref.watch(orderProvider).message;
                 
-                if (message2 == 'success') {
+                if (message2 == 'Cancel success') {
                   await Fluttertoast.showToast(
-                    msg: "Request sent successfully",
+                    msg: "Request sent successfully  ",
                     toastLength: Toast.LENGTH_LONG,
                     gravity: ToastGravity.CENTER,
                     timeInSecForIosWeb: 1,
@@ -75,7 +75,7 @@ class _OrderCancelPageState extends ConsumerState<OrderCancelPage> {
                     fontSize: 16.0,
                   );
                   
-                  Navigator.pop(context);
+                  
                 } else {
                   await Fluttertoast.showToast(
                     msg: "Request sent failed",
@@ -87,6 +87,7 @@ class _OrderCancelPageState extends ConsumerState<OrderCancelPage> {
                     fontSize: 16.0,
                   );
                 }
+                Navigator.pop(context);
               },
               child: Text('Submit Request'),
             ),

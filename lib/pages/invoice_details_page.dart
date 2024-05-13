@@ -560,7 +560,7 @@ class _InvoicedetailsNotCofirmPageState
                                 icon: stringButton == 'Tracking Order'
                                     ? Icon(Icons.track_changes)
                                     : Icon(Icons.cancel),
-                                label: Text(stringButton),
+                                label: stringButton == 'Refund Order' ? Text('Cancel Order') : Text(stringButton),
                                 style: TextButton.styleFrom(
                                   foregroundColor: const Color(0xff193d3d),
                                   backgroundColor:
