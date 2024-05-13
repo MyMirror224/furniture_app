@@ -13,7 +13,6 @@ class OrderResults extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-  Widget build(BuildContext context, WidgetRef ref) {
     final userId = ref.watch(userIdProvider);
     return Scaffold(
       // backgroundColor: Colors.green,oderfail
