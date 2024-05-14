@@ -43,17 +43,14 @@ class OrderNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> cancelOrder(int id, String message) async {
-    final response = await OrderApi.cancelOrder(id, message);
+  Future<void> cancelOrder(int id, String mess) async {
+    message = '';
+    final response = await OrderApi.cancelOrder(id, mess);
     message = response;
     notifyListeners();
   }
 
-  Future<void> refundOrder(int id, String message) async {
-    final response = await OrderApi.refundOrder(id, message);
-    message = response;
-    notifyListeners();
-  }
+  
 }
 
 final orderProvider = ChangeNotifierProvider((ref) => OrderNotifier());

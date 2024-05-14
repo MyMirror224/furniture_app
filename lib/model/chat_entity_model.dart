@@ -1,5 +1,5 @@
 import 'package:dash_chat_2/dash_chat_2.dart';
-import 'package:furniture_app/model/user_info_model.dart';
+
 
 class ChatMessageEntity {
   final int id;

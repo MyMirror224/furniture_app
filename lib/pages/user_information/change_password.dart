@@ -13,18 +13,25 @@ import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ChangePassword extends ConsumerWidget {
-  const ChangePassword({Key? key}) : super(key: key);
+  ChangePassword({Key? key}) : super(key: key);
+  final RegExp passwordRegex = RegExp(
+      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+  bool checkPassword(String password) {
+    if (!passwordRegex.hasMatch(password)) {
+      return false;
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userId = ref.watch(userIdProvider);
     final user = ref.watch(userInfoModelProvider(userId.toString()));
-    final password = user.hasValue ? user.value!.password.toString() : '';
+    //final password = user.hasValue ? user.value!.password.toString() : '';
     final TextEditingController oldPassword = TextEditingController();
     final TextEditingController newPassword = TextEditingController();
     final TextEditingController confirmPassword = TextEditingController();
-    final RegExp passwordRegex = RegExp(
-      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -52,22 +59,15 @@ class ChangePassword extends ConsumerWidget {
           const Gap(20),
           buttonLogin('Change Password', Colors.grey, 200, 50,
               onpressed: () async {
-                
-            
-              if (newPassword.text == confirmPassword.text ) {
-                
-                await ref.read(updateInfoProvider.notifier).updateInfo(
-                      userId.toString(),
-                      null,
-                      null,
-                      null,
-                      null,
-                      oldPassword.text,
-                      newPassword.text,
-                    );
-                final message = ref.watch(updateInfoProvider).message;
+            if (oldPassword == '') {
+              Fluttertoast.showToast(
+                msg: "Please enter old password",
+              );
+            } else {
+              if (!checkPassword(newPassword.text)) {
                 Fluttertoast.showToast(
-                  msg: message!,
+                  msg:
+                      "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one number and one special character",
                   toastLength: Toast.LENGTH_LONG,
                   gravity: ToastGravity.CENTER,
                   timeInSecForIosWeb: 1,
@@ -75,25 +75,48 @@ class ChangePassword extends ConsumerWidget {
                   textColor: Colors.white,
                   fontSize: 20.0,
                 );
-                if(message != 'Old password is incorrect'){
-                  await ref
-                    .read(authStateProvider.notifier)
-                    .updatePassword(newPassword.text);
-                }
-                return ref.refresh(userInfoModelProvider(userId.toString()));
               } else {
-                Fluttertoast.showToast(
-                  msg: "Confirm password is incorrect",
-                  toastLength: Toast.LENGTH_LONG,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: const Color(0xff193d3d),
-                  textColor: Colors.white,
-                  fontSize: 20.0,
-                );
+                if (newPassword.text == confirmPassword.text) {
+                  await ref.read(updateInfoProvider.notifier).updateInfo(
+                        userId.toString(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        oldPassword.text,
+                        newPassword.text,
+                      );
+                  final message = ref.watch(updateInfoProvider).message;
+                  Fluttertoast.showToast(
+                    msg: message!,
+                    toastLength: Toast.LENGTH_LONG,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: const Color(0xff193d3d),
+                    textColor: Colors.white,
+                    fontSize: 20.0,
+                  );
+                  if (message != 'Old password is incorrect') {
+                    await ref
+                        .read(authStateProvider.notifier)
+                        .updatePassword(newPassword.text);
+                  }
+                  return ref.refresh(userInfoModelProvider(userId.toString()));
+                } else {
+                  Fluttertoast.showToast(
+                    msg: "Confirm password is incorrect",
+                    toastLength: Toast.LENGTH_LONG,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: const Color(0xff193d3d),
+                    textColor: Colors.white,
+                    fontSize: 20.0,
+                  );
+                }
               }
-            
-             //ref.read(inforProvider.notifier).changePassword();
+            }
+
+            //ref.read(inforProvider.notifier).changePassword();
           }),
         ],
       ),

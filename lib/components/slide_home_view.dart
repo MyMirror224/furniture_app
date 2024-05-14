@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/model/product_model.dart';
+import 'package:furniture_app/state/product/product_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SlideHome extends ConsumerWidget {
+class SlideHome extends HookConsumerWidget {
   SlideHome({
     super.key,
     double? viewportFraction,
@@ -9,6 +12,7 @@ class SlideHome extends ConsumerWidget {
   final double viewportFraction;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final products =   ref.watch(productProvider).newProducts;
     final PageController pageController =
         PageController(viewportFraction: viewportFraction);
 
@@ -20,15 +24,19 @@ class SlideHome extends ConsumerWidget {
       height: 230,
       child: PageView.builder(
         controller: pageController,
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return _buiderPageItem(index, ref, viewportFraction);
+        itemCount: products.length,
+        itemBuilder: (context, index)  {
+          
+          
+          return _buiderPageItem(
+              index, ref, viewportFraction,  products[index]!);
         },
       ),
     );
   }
 
-  Widget _buiderPageItem(int index, WidgetRef ref, double scaleFactor) {
+  Widget _buiderPageItem(
+      int index, WidgetRef ref, double scaleFactor, ProductModel product) {
     double currPageValue = ref.watch(slideHomeProvider).currPageValue;
 
     const double height = 220;
@@ -67,9 +75,12 @@ class SlideHome extends ConsumerWidget {
               color: index.isEven
                   ? const Color(0xFF69c5df)
                   : const Color(0xFF9294cc),
-              image: const DecorationImage(
+              image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/images/background1.jpg'),
+                image: NetworkImage(
+                  "${AppConstants.SERVER_API_URL}storage/" +
+                      product.image!.first.toString(),
+                ),
               ),
             ),
           ),

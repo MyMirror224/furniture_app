@@ -78,6 +78,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
       child: StartUpContainer(
         onInit: () {
           LaravelEcho.init(token: userId.toString());
+          print(LaravelEcho.socketId);
           listenChatChannel();
           //setupOneSignal(authBloc.state.user!.id);
         },

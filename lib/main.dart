@@ -7,6 +7,7 @@ import 'package:furniture_app/pages/login_page.dart';
 import 'package:furniture_app/pages/navigator_bar.dart';
 import 'package:furniture_app/pages/verify_email_view.dart';
 import 'package:furniture_app/provider/error_message_provider.dart';
+import 'package:furniture_app/provider/isLockUser.dart';
 import 'package:furniture_app/provider/is_failure.dart';
 import 'package:furniture_app/provider/is_loading_provider.dart';
 import 'package:furniture_app/provider/is_logged_in_provider.dart';
@@ -83,7 +84,7 @@ class App extends ConsumerWidget {
           var isFailure = ref.watch(isFailureProvider);
           final isNotVerify = ref.watch(isNotVerifyEmailProvider);
           final isLoggedIn = ref.watch(isLoggedInProvider);
-
+          var isLockUser = ref.watch(isLockProvider);
           WidgetsBinding.instance.addPostFrameCallback((_) async {
             if (isFailure) {
               final dialogBool = await AuthDialog(errorMessage: errorText)
@@ -93,11 +94,21 @@ class App extends ConsumerWidget {
                 ref.read(authStateProvider.notifier).resetResult();
               }
             }
+            if (isLockUser) {
+              final dialogBool2 = await AuthDialog(errorMessage: "Account locked")
+                  .present(context)
+                  .then((shouldDelete) => shouldDelete ?? true);
+              if (dialogBool2) {
+                ref.read(authStateProvider.notifier).logOut();
+                ref.read(lockUserProvider.notifier).setLock();
+              }
+            }
           });
 
           //return MainView();
 
           if (isLoggedIn) {
+           
             return HomeScreen();
           } else if (isNotVerify) {
             return const VerifyEmailView();

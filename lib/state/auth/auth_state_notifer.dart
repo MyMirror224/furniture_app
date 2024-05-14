@@ -152,6 +152,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       errorMessage: _authenticator.errorMessage,
     );
   }
+  
 
   Future<void> registerWithEmailandPassword(
       String email, String password, String name) async {

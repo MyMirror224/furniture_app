@@ -18,6 +18,7 @@ class OrderApi {
   }
 
   static Future<String> cancelOrder(int id ,String message) async {
+  
     final response = await HttpUtil().post(
       'api/orders/cancel',
       queryParameters: {
@@ -25,16 +26,8 @@ class OrderApi {
         'reason': message,
       },
     );
+
     return response['message'];
 }
- static Future<String> refundOrder(int id,String message) async {
-    final response = await HttpUtil().post(
-      'api/orders/cancel',
-      queryParameters: {
-        'order_id': id,
-        'reason': message,
-      },
-    );
-    return response['message'];
-}
+
 }

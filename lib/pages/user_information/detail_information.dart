@@ -338,7 +338,7 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                         onPressed: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const ChangePassword())),
+                                builder: (context) =>  ChangePassword())),
                         icon: const Icon(
                           Icons.edit,
                           color: Colors.black,
