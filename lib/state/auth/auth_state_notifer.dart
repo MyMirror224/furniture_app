@@ -132,10 +132,14 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
 
     if (result == AuthResult.sussess) {
+      await _authenticator.createUserInDatabase(
+          password: password, name: _authenticator.displayName.toString());
+
       final response =
           await UserAPI.getProfile(_authenticator.userId.toString());
       await Global.storageService.setProfile(
           _authenticator.userId.toString(), response.data as UserInfoModel);
+      
 
       state = AuthState(
         isLoading: false,

@@ -59,9 +59,15 @@ class ChangePassword extends ConsumerWidget {
           const Gap(20),
           buttonLogin('Change Password', Colors.grey, 200, 50,
               onpressed: () async {
-            if (oldPassword == '') {
+            if (oldPassword.text == '') {
               Fluttertoast.showToast(
                 msg: "Please enter old password",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: const Color(0xff193d3d),
+                textColor: Colors.white,
+                fontSize: 20.0,
               );
             } else {
               if (!checkPassword(newPassword.text)) {

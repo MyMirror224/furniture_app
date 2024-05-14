@@ -77,7 +77,7 @@ class UpdateInfoController extends ChangeNotifier {
     if (oldPassword != null && password != null) {
       message = response;
     }
-    print('Ten toi la: ');
+   
     if (message != 'Old password is incorrect') {
       final respone1 = await UserAPI.getProfile(uid.toString());
       await Global.storageService
