@@ -35,7 +35,12 @@ class CartNotifier extends ChangeNotifier {
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   String? messageController = '';
-
+  bool get setAsDefalt => _setAsDefalt;
+  bool _setAsDefalt = false;
+  void setDefalt(bool value ){
+    _setAsDefalt = value;
+    notifyListeners();
+  }
   void saveInfo(String name, String phone, String address, String? message) {
     nameController.text = name;
     phoneController.text = phone;

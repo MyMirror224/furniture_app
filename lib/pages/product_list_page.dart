@@ -6,6 +6,7 @@ import 'package:furniture_app/pages/product_detail_page.dart';
 import 'package:furniture_app/pages/search%20page/searchPage.dart';
 import 'package:furniture_app/pages/search%20page/searchingItem.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
+import 'package:furniture_app/services/constain.dart';
 import 'package:furniture_app/services/shared%20preferences/sharedPreferences.dart';
 import 'package:furniture_app/state/product/product_provider.dart';
 import 'package:gap/gap.dart';
@@ -122,12 +123,12 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                               // autofocus: true,
                               focusNode: searchProvi.focusNode,
                               controller: searchProvi.controllerTextField,
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                 border: InputBorder.none,
                                 contentPadding: EdgeInsets.zero,
                                 isCollapsed: true,
                                 // focusColor: Colors.transparent,
-                                hintText: 'Input search here...',
+                                hintText: searchHint,
                               ),
 
                               onChanged: (v) {
@@ -179,12 +180,12 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                     color: Color(0xff193d3d),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: const Column(
+                                  child:  Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
                                         // "search".tr(),
-                                        "Search",
+                                        search,
                                         style: TextStyle(
                                           color: Colors.white,
                                         ),
@@ -217,7 +218,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text("History searching"),
+                                       Text(historySearch),
                                       InkWell(
                                         onTap: () {
                                           ref
@@ -228,8 +229,8 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                           searchProvi.changeTemp();
                                         },
                                         child: Row(
-                                          children: const [
-                                            Text("Remove all"),
+                                          children:  [
+                                            Text(removeAll),
                                             Icon(Icons.close_rounded),
                                           ],
                                         ),
@@ -263,11 +264,11 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                   children: [
                     ChoiceChip(
                       selectedColor: Color(0xFF93B1A6),
-                      label: Text('Price low to high'),
-                      selected: _selectedType == 'Price low to high',
+                      label: Text(priceLowToHigh),
+                      selected: _selectedType == priceLowToHigh,
                       onSelected: (bool selected) {
                         setState(() {
-                          _selectedType = selected ? 'Price low to high' : null;
+                          _selectedType = selected ? priceLowToHigh: null;
                           if (_selectedType != null) {
                             type = 'asc';
                           } else {
@@ -288,11 +289,11 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                     ),
                     ChoiceChip(
                       selectedColor: Color(0xFF93B1A6),
-                      label: Text('Price high to low'),
-                      selected: _selectedType == 'Price high to low',
+                      label: Text(priceHighToLow),
+                      selected: _selectedType == priceHighToLow,
                       onSelected: (bool selected) {
                         setState(() {
-                          _selectedType = selected ? 'Price high to low' : null;
+                          _selectedType = selected ? priceHighToLow : null;
                           // Lọc danh sách sản phẩm theo giá giảm dần
                           if (_selectedType != null) {
                             type = 'desc';
@@ -396,12 +397,12 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                     Row(
                       children: [
                         ChoiceChip(
-                          label: Text('Price'),
+                          label: Text(price),
                           selectedColor: Color(0xFF93B1A6),
-                          selected: _selectedPrice == 'Price',
+                          selected: _selectedPrice == price,
                           onSelected: (bool selected) {
                             setState(() {
-                              _selectedPrice = selected ? 'Price' : null;
+                              _selectedPrice = selected ? price : null;
                               if (_selectedPrice == null) {
                                 _maxPrice = null;
                                 _minPrice = 0;
@@ -418,7 +419,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                             });
                           },
                         ),
-                        if (_selectedPrice == 'Price')
+                        if (_selectedPrice == price)
                           Expanded(
                             child: Row(
                               children: [
@@ -426,7 +427,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                 Expanded(
                                   child: TextField(
                                     decoration: InputDecoration(
-                                      labelText: 'Minimum price',
+                                      labelText: minimumPrice,
                                     ),
                                     keyboardType: TextInputType.number,
                                     onChanged: (value) {
@@ -438,7 +439,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                 Expanded(
                                     child: TextField(
                                   decoration: InputDecoration(
-                                    labelText: 'Maximum price',
+                                    labelText: maximumPrice,
                                   ),
                                   keyboardType: TextInputType.number,
                                   onChanged: (value) {
@@ -449,12 +450,12 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                 Expanded(
                                   child: ChoiceChip(
                                     selectedColor: Color(0xFF93B1A6),
-                                    label: Text('Apply'),
-                                    selected: _selectedFilter == 'Áp Dụng',
+                                    label: Text(apply),
+                                    selected: _selectedFilter == apply,
                                     onSelected: (bool selected) {
                                       setState(() {
                                         _selectedFilter =
-                                            selected ? 'Apply' : null;
+                                            selected ? apply : null;
                                         if (_selectedFilter == null) {
                                           _minPrice = 0;
                                           _maxPrice = null;

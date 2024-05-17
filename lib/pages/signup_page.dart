@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/pages/login_page.dart';
 import 'package:furniture_app/pages/verify_email_view.dart';
+import 'package:furniture_app/services/constain.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -42,16 +43,16 @@ class SignUp extends HookConsumerWidget {
     if (!emailRegex.hasMatch(email)) {
       // Check for common email validation errors using regular expressions
       if (!email.contains('@')) {
-        return 'Missing "@" symbol';
+        return emailErrorMessage;
       } else if (!email.contains('.')) {
-        return 'Missing "." after domain name';
+        return emailErrorMessage2;
       } else if (email.startsWith('.') || email.endsWith('.')) {
-        return 'Email cannot start or end with "."';
+        return emailErrorMessage3;
       } else if (email.contains(' ')) {
-        return 'Email cannot contain spaces';
+        return emailErrorMessage4;
       }
       // Add more checks for specific use cases as needed
-      return 'Invalid email format';
+      return emailErrorMessage5;
     }
     return null;
   }
@@ -64,23 +65,23 @@ class SignUp extends HookConsumerWidget {
     final hasMinLength = password.length >= 8;
 
     if (!hasLowercase) {
-      return 'Must have at least one regular character (a-z)';
+      return passwordErrorMessage;
     }
 
     if (!hasUppercase) {
-      return 'Must have at least one uppercase character (A-Z)';
+      return passwordErrorMessage2;
     }
 
     if (!hasDigit) {
-      return 'Must have at least one number (0-9)';
+      return passwordErrorMessage3;
     }
 
     if (!hasSpecialChar) {
-      return 'Must have at least one special character (@\$!%*?&)';
+      return passwordErrorMessage4;
     }
 
     if (!hasMinLength) {
-      return 'Must be at least 8 characters long';
+      return passwordErrorMessage5;
     }
     return null;
   }
@@ -149,7 +150,7 @@ class SignUp extends HookConsumerWidget {
                       ],
                     ),
                     Text(
-                      'Create new Account',
+                      createNewAccount,
                       style: GoogleFonts.roboto(
                         fontWeight: FontWeight.bold,
                         fontSize: 30,
@@ -167,13 +168,13 @@ class SignUp extends HookConsumerWidget {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "please enter your name";
+                            return enterName;
                           }
                           return null;
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: const InputDecoration(
-                          labelText: "Name",
+                        decoration:  InputDecoration(
+                          labelText: name,
                           labelStyle: TextStyle(color: Colors.black),
                           enabledBorder: OutlineInputBorder(
                             borderRadius:
@@ -215,14 +216,14 @@ class SignUp extends HookConsumerWidget {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "please enter your email";
+                            return enterEmail;
                           } else {
                             return validateEmail(value);
                           }
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: const InputDecoration(
-                          labelText: "Email Address",
+                        decoration:  InputDecoration(
+                          labelText: email,
                           labelStyle: TextStyle(color: Colors.black),
                           enabledBorder: OutlineInputBorder(
                             borderRadius:
@@ -264,14 +265,14 @@ class SignUp extends HookConsumerWidget {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "please enter your password";
+                            return enterPassword;
                           } else {
                             return validatePassword(value);
                           }
                         },
                         obscureText: loginNotifier.isObscure,
                         decoration: InputDecoration(
-                          labelText: "Password",
+                          labelText: password,
                           labelStyle: const TextStyle(color: Colors.black),
                           focusColor: Colors.blueAccent,
                           enabledBorder: const OutlineInputBorder(
@@ -321,16 +322,16 @@ class SignUp extends HookConsumerWidget {
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "please enter your password";
+                            return enterPassword;
                           } else {
                             if (value != passwordController.text) {
-                              return "passwords do not match";
+                              return passwordNotMatch;
                             }
                           }
                           return null;
                         },
                         decoration: InputDecoration(
-                          labelText: "Confirm Password",
+                          labelText: confirmPassword,
                           labelStyle: const TextStyle(color: Colors.black),
                           focusColor: Colors.blueAccent,
                           enabledBorder: const OutlineInputBorder(
@@ -371,7 +372,7 @@ class SignUp extends HookConsumerWidget {
 
                     const Gap(15),
 
-                    buttonLogin("Sign up", Colors.grey,
+                    buttonLogin(signUp, Colors.grey,
                         (deviceHeight * 0.3).toInt(), 50, onpressed: () async {
                       if (_formKey.currentState!.validate()) {
                         ref
@@ -386,9 +387,9 @@ class SignUp extends HookConsumerWidget {
                       }
                     }),
                     const Gap(15),
-                    const Center(
+                     Center(
                       child: Text(
-                        "_________OR _________",
+                        or,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ),
                     ),
@@ -418,16 +419,16 @@ class SignUp extends HookConsumerWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Already have an account?",
+                         Text(
+                          alreadyHaveAccount,
                           style: TextStyle(color: Colors.grey, fontSize: 15),
                         ),
                         GestureDetector(
                           onTap: () {
                             Navigator.pop(context);
                           },
-                          child: const Text(
-                            " Login now",
+                          child:  Text(
+                            loginNow,
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 15,

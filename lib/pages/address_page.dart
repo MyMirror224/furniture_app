@@ -20,7 +20,7 @@ class AddressPage extends ConsumerStatefulWidget {
 }
 
 class _AddressPageState extends ConsumerState<AddressPage> {
-  bool setAsDefalt = false;
+  final _setAsDefaltNotifier = ValueNotifier<bool>(false);
   @override
   Widget build(BuildContext context) {
     final userId = ref.watch(userIdProvider);
@@ -400,15 +400,20 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                             textAlign: TextAlign.left,
                           ),
                         ),
-                        Switch(
-                          value: setAsDefalt,
-                          onChanged: (value) {
-                            setAsDefalt = value;
+                        ValueListenableBuilder<bool>(
+                          valueListenable: _setAsDefaltNotifier,
+                          builder: (context, value, child) {
+                            return Switch(
+                              value: value,
+                              onChanged: (newValue) {
+                                _setAsDefaltNotifier.value = newValue;
+                              },
+                              activeColor: Color(0xff193d3d),
+                              inactiveTrackColor: Colors.grey,
+                              inactiveThumbColor: Colors.white,
+                            );
                           },
-                          activeColor: Color(0xff193d3d),
-                          inactiveTrackColor: Colors.grey,
-                          inactiveThumbColor: Colors.white,
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -485,7 +490,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
           child: ElevatedButton(
             onPressed: () {
               if (_formKeyadd.currentState!.validate()) {
-                if (setAsDefalt) {
+                if (_setAsDefaltNotifier.value) {
                   ref.read(updateInfoProvider.notifier).updateInfo(
                         userId.toString(),
                         nameController.text,

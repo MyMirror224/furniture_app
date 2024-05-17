@@ -105,7 +105,7 @@ class App extends ConsumerWidget {
             }
           });
 
-          //return MainView();
+          return VerifyEmailView();
 
           if (isLoggedIn) {
            

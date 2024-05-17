@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/pages/forgot_password/forgot_password.dart';
 import 'package:furniture_app/pages/signup_page.dart';
+import 'package:furniture_app/services/constain.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:furniture_app/state/user_info/user_info_provider.dart';
 import 'package:gap/gap.dart';
@@ -54,7 +55,7 @@ class Login extends ConsumerWidget {
                     ),
                     const Gap(20),
                     Text(
-                      'SIGN IN',
+                      signIn,
                       style: GoogleFonts.roboto(
                         fontWeight: FontWeight.bold,
                         fontSize: 40,
@@ -68,10 +69,10 @@ class Login extends ConsumerWidget {
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
+                            return enterEmail;
                           }
                           if (!emailRegex.hasMatch(value)) {
-                            return 'Please enter a valid email';
+                            return invalidEmail;
                           }
                           return null;
                         },
@@ -81,8 +82,8 @@ class Login extends ConsumerWidget {
                         ),
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         controller: emailController,
-                        decoration: const InputDecoration(
-                          labelText: "Email Address",
+                        decoration:  InputDecoration(
+                          labelText: email,
                           labelStyle: TextStyle(color: Colors.black),
                           enabledBorder: OutlineInputBorder(
                             borderRadius:
@@ -118,7 +119,7 @@ class Login extends ConsumerWidget {
                       child: TextFormField(
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "please enter your password";
+                            return enterPassword;
                           }
                           return null;
                         },
@@ -130,7 +131,7 @@ class Login extends ConsumerWidget {
                         ),
                         obscureText: loginNotifier.isObscure,
                         decoration: InputDecoration(
-                          labelText: "Password",
+                          labelText: password,
                           labelStyle: const TextStyle(color: Colors.black),
                           focusColor: Colors.blueAccent,
                           enabledBorder: const OutlineInputBorder(
@@ -179,8 +180,8 @@ class Login extends ConsumerWidget {
                             builder: (context) => const ForgotPassword(),
                           ),
                         ),
-                        child: const Text(
-                          "Forgot Password?",
+                        child:  Text(
+                          forgotPassword,
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 15,
@@ -190,7 +191,7 @@ class Login extends ConsumerWidget {
                     ),
                     const Gap(15),
                     buttonLogin(
-                        "Login", Colors.grey, (deviceWidth * 0.3).toInt(), 50,
+                        login, Colors.grey, (deviceWidth * 0.3).toInt(), 50,
                         onpressed: () async {
                       if (_formKey.currentState!.validate()) {
                         await ref
@@ -203,9 +204,9 @@ class Login extends ConsumerWidget {
                       }
                     }),
                     const Gap(15),
-                    const Center(
+                     Center(
                       child: Text(
-                        "_________OR _________",
+                        or,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ),
                     ),
@@ -236,8 +237,8 @@ class Login extends ConsumerWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Don't have an account?",
+                         Text(
+                          dontHaveAccount,
                           style: TextStyle(color: Colors.grey, fontSize: 15),
                         ),
                         GestureDetector(

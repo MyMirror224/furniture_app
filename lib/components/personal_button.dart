@@ -13,7 +13,7 @@ class PersonalButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appThemeState = ref.watch(appThemeStateNotifier);
-    Size size = MediaQuery.of(context).size;
+   
     return ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
@@ -25,8 +25,7 @@ class PersonalButton extends ConsumerWidget {
         ),
       ),
       child: SizedBox(
-        height: size.height * 0.07,
-        width: size.width * 0.8,
+        
         child: Row(
           children: [
             Icon(

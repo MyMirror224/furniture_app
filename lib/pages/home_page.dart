@@ -13,6 +13,7 @@ import 'package:furniture_app/pages/search%20page/searchPage.dart';
 import 'package:furniture_app/pages/user_information/user_information.dart';
 import 'package:furniture_app/provider/isLockUser.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
+import 'package:furniture_app/services/constain.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:furniture_app/state/category/categogies_provider.dart';
 import 'package:furniture_app/state/notify/notify_provider.dart';
@@ -123,9 +124,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 //     : "Hi, $longText",
                                 // with vn language
                                 longText.length > 15
-                                    ? "Hi, "
+                                    ? "$hi"
                                         "...${longText.substring(4, longText.length)}"
-                                    : "Hi, $longText",
+                                    : "$hi$longText",
                                 maxLines: 1,
                                 overflow: TextOverflow.fade,
                                 style: GoogleFonts.roboto(
@@ -275,7 +276,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const TitleOfPage(name: "Popular"),
+                       TitleOfPage(name: '$popular'),
                       TextButton(
                         onPressed: () {
                           Navigator.push(
@@ -287,7 +288,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           );
                         },
                         child: Text(
-                          'See All...',
+                          seeAll,
                           style: GoogleFonts.roboto(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,

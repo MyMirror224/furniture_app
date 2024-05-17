@@ -31,10 +31,10 @@ class _CartPageState extends ConsumerState<CartPage> {
   @override
   Widget build(BuildContext context) {
     final products = ref.watch(cartProvider).carts;
-    final total = ref.watch(cartProvider).carts.products?.total;
+    final total = ref.watch(cartProvider).carts.products?.total ?? 0;
     final totalBefore = ref.watch(cartProvider).totalBefore;
     final discount = ref.watch(cartProvider).discount;
-    bool isContinue = total! > 0;
+    bool isContinue = total > 0;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -295,6 +295,7 @@ class _CartPageState extends ConsumerState<CartPage> {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
               children: [
                 Container(
                   padding: const EdgeInsets.only(left: 15, top: 5),
@@ -404,6 +405,7 @@ class _CartPageState extends ConsumerState<CartPage> {
             Gap(10),
             Container(
               padding: EdgeInsets.only(bottom: 10, left: 20, right: 20),
+              width: MediaQuery.of(context).size.width*0.9,
               child: ElevatedButton(
                 onPressed: () {
                   if (isContinue) {
@@ -411,10 +413,11 @@ class _CartPageState extends ConsumerState<CartPage> {
                     Navigator.push(
                       context,
                       PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            AddressPage(),
-                        transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
+                        pageBuilder:
+                            (context, animation, secondaryAnimation) =>
+                                AddressPage(),
+                        transitionsBuilder: (context, animation,
+                            secondaryAnimation, child) {
                           return SlideTransition(
                             position: Tween<Offset>(
                               begin: const Offset(1.0, 0.0),
@@ -439,8 +442,9 @@ class _CartPageState extends ConsumerState<CartPage> {
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
-                  backgroundColor: isContinue ? Color(0xff193d3d) : Colors.grey,
-                  elevation: 8.0,
+                  backgroundColor:
+                      isContinue ? Color(0xff193d3d) : Colors.grey,
+                  
                 ),
                 child: Text('Continue'),
               ),
