@@ -118,35 +118,48 @@ class _PersonalPageState extends ConsumerState<PersonalPage> {
               endIndent: 15,
               color: Colors.grey,
             ),
-            PersonalButton(
-              text: "My Orders",
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          HistoryInvoicePage(uid: userId.toString()),
-                    ));
-              },
-              icon: FontAwesomeIcons.listCheck,
+            Container(
+              height: size.height * 0.07,
+              width: size.width * 0.9,
+              child: PersonalButton(
+                text: "My Orders",
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            HistoryInvoicePage(uid: userId.toString()),
+                      ));
+                },
+                icon: FontAwesomeIcons.listCheck,
+              ),
             ),
             const Gap(10),
-            PersonalButton(
-              text: "Language",
-              onTap: () {},
-              icon: FontAwesomeIcons.language,
+            Container(
+              height: size.height * 0.07,
+              width: size.width * 0.9,
+              child: PersonalButton(
+                text: "Language",
+                onTap: () {},
+                icon: FontAwesomeIcons.language,
+              ),
             ),
             const Gap(10),
-            PersonalButton(
-              text: "Notification",
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NotificationPage(userId.toString()),
-                    ));
-              },
-              icon: FontAwesomeIcons.bell,
+            Container(
+              height: size.height * 0.07,
+              width: size.width * 0.9,
+              child: PersonalButton(
+                text: "Notification",
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            NotificationPage(userId.toString()),
+                      ));
+                },
+                icon: FontAwesomeIcons.bell,
+              ),
             ),
             // const Gap(10),
             // PersonalButton(
@@ -157,7 +170,7 @@ class _PersonalPageState extends ConsumerState<PersonalPage> {
             const Gap(10),
             Container(
               height: size.height * 0.07,
-              width: size.width * 0.88,
+              width: size.width * 0.9,
               decoration: BoxDecoration(
                 color: appThemeState.isDarkModeEnabled
                     ? const Color(0xff93b1a7)
@@ -169,18 +182,23 @@ class _PersonalPageState extends ConsumerState<PersonalPage> {
                   const Gap(20),
                   const Icon(Icons.contrast, color: Colors.black45),
                   const Gap(20),
-                  const Text("Theme",
-                      style: TextStyle(fontSize: 20, color: Colors.black87)),
-                  Gap(size.width * 0.4),
+                  Expanded(
+                    child: Text("Theme",
+                        style: TextStyle(fontSize: 20, color: Colors.black87)),
+                  ),
                   const DarkModeSwitch(),
                 ],
               ),
             ),
             const Gap(10),
-            PersonalButton(
-              text: "Logout",
-              onTap: () => ref.read(authStateProvider.notifier).logOut(),
-              icon: FontAwesomeIcons.signOutAlt,
+            Container(
+              height: size.height * 0.07,
+              width: size.width * 0.9,
+              child: PersonalButton(
+                text: "Logout",
+                onTap: () => ref.read(authStateProvider.notifier).logOut(),
+                icon: FontAwesomeIcons.signOutAlt,
+              ),
             ),
           ],
         ),

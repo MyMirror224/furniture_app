@@ -31,10 +31,10 @@ class _CartPageState extends ConsumerState<CartPage> {
   @override
   Widget build(BuildContext context) {
     final products = ref.watch(cartProvider).carts;
-    final total = ref.watch(cartProvider).carts.products?.total;
+    final total = ref.watch(cartProvider).carts.products?.total ?? 0;
     final totalBefore = ref.watch(cartProvider).totalBefore;
     final discount = ref.watch(cartProvider).discount;
-    bool isContinue = total! > 0;
+    bool isContinue = total > 0;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -404,6 +404,7 @@ class _CartPageState extends ConsumerState<CartPage> {
             Gap(10),
             Container(
               padding: EdgeInsets.only(bottom: 10, left: 20, right: 20),
+              width: MediaQuery.of(context).size.width * 0.9,
               child: ElevatedButton(
                 onPressed: () {
                   if (isContinue) {

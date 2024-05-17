@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:furniture_app/components/cartbottomnarbar.dart';
 import 'package:furniture_app/model/cart_model.dart';
 import 'package:furniture_app/model/order_model.dart';
 import 'package:furniture_app/model/product_model.dart';
@@ -35,6 +34,11 @@ class CartNotifier extends ChangeNotifier {
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   String? messageController = '';
+  bool get setAsDefault => _setAsDefault;
+  bool _setAsDefault = false;
+  void setDefault(bool value) {
+    _setAsDefault = value;
+  }
 
   void saveInfo(String name, String phone, String address, String? message) {
     nameController.text = name;
@@ -124,17 +128,11 @@ class CartNotifier extends ChangeNotifier {
     }
   }
 
- 
   Future<void> changQuantity(int index, int quantity, String uid) async {
     try {
-      
-      if (quantity == -1 && _carts.products!.items![index].quantity == 1) {
-      }if( 
-        quantity == -1 && _carts.products!.items![index].quantity == 0
-      ) {
-        
-      }else {
-        
+      if (quantity == -1 && _carts.products!.items![index].quantity == 1) {}
+      if (quantity == -1 && _carts.products!.items![index].quantity == 0) {
+      } else {
         final respone = await CartApi.update(
             uid,
             _carts.products!.items![index].quantity! + quantity,
@@ -142,7 +140,7 @@ class CartNotifier extends ChangeNotifier {
         if (respone != 'false') {
           _carts.products!.items![index].quantity =
               _carts.products!.items![index].quantity! + quantity;
-        } 
+        }
         total();
         totalnotDiscount();
         _discount = _totalBefore - _carts.products!.total!;
@@ -176,6 +174,7 @@ class CartNotifier extends ChangeNotifier {
     _carts.products!.total = sum;
     notifyListeners();
   }
+
   OrderModel? order;
   Future<void> sendItemBuy(String uid) async {
     int type;
@@ -199,9 +198,9 @@ class CartNotifier extends ChangeNotifier {
         addressController.text,
         messageController,
         type);
-    if(type ==1){
+    if (type == 1) {
       order = respone;
-    }else{
+    } else {
       url = respone;
     }
     notifyListeners();
