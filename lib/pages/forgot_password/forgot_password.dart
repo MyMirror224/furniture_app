@@ -1,18 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/forgot_password/fogot_button.dart';
-import 'package:furniture_app/components/forgot_password/forgot_field.dart';
-import 'package:furniture_app/pages/forgot_password/email_verification.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
+import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../components/wave_clipper_custom_appbar.dart';
 
-class ForgotPassword extends StatelessWidget {
+class ForgotPassword extends ConsumerWidget {
   const ForgotPassword({super.key});
 
   get child => null;
+  String? validateEmail(String email, BuildContext context) {
+    final RegExp emailRegex = RegExp(
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+    if (!emailRegex.hasMatch(email)) {
+      return _getEmailErrorMessage(email, context);
+    }
+    return null;
+  }
+
+  String? _getEmailErrorMessage(String email, BuildContext context) {
+    final RegExp emailRegex = RegExp(
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+
+    if (!emailRegex.hasMatch(email)) {
+      // Check for common email validation errors using regular expressions
+      if (!email.contains('@')) {
+        return context.loc.emailErrorMessage;
+      } else if (!email.contains('.')) {
+        return context.loc.emailErrorMessage2;
+      } else if (email.startsWith('.') || email.endsWith('.')) {
+        return context.loc.emailErrorMessage3 ;
+      } else if (email.contains(' ')) {
+        return context.loc.emailErrorMessage4;
+      }
+      // Add more checks for specific use cases as needed
+      return context.loc.emailErrorMessage5;
+    }
+    return null;
+  }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextEditingController _emailController = TextEditingController();
     Size size = MediaQuery.of(context).size; // ------ lấy nhanh size màn hình
     return Scaffold(
       backgroundColor: Colors.white,
@@ -20,8 +51,8 @@ class ForgotPassword extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.deepOrangeAccent,
         toolbarHeight: 150,
-        title: const Text(
-          'Forgot Password',
+        title:  Text(
+          context.loc.forgotPassword,
           style: TextStyle(
             color: Colors.black, // chinh mau
             fontSize: 25,
@@ -70,10 +101,10 @@ class ForgotPassword extends StatelessWidget {
                     margin: const EdgeInsets.only(left: 15, right: 15),
                     padding: const EdgeInsets.only(left: 20),
                     child: RichText(
-                      text: const TextSpan(
+                      text:  TextSpan(
                         children: [
                           TextSpan(
-                            text: 'Ow no! ',
+                            text: context.loc.ohno,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 35,
@@ -81,7 +112,7 @@ class ForgotPassword extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: ' You forgot your password ?',
+                            text: context.loc.forgotPassword2,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 25,
@@ -100,17 +131,16 @@ class ForgotPassword extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 25),
                         margin: const EdgeInsets.only(left: 15, right: 25),
                         child: RichText(
-                            text: const TextSpan(children: [
+                            text:  TextSpan(children: [
                           TextSpan(
-                              text: "Don't Worry!\n",
+                              text: context.loc.dontworry,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               )),
                           TextSpan(
-                            text:
-                                "Please enter your email address. You will receive a link to create a new password via email.",
+                            text: context.loc.pleaseInput,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 16,
@@ -121,17 +151,64 @@ class ForgotPassword extends StatelessWidget {
                       const Gap(25),
                       // nhâp email và gửi
 
-                      const PasswordField(
-                          nameField: "Email", icon: Icons.email),
+                      SizedBox(
+                        width: 350.0,
+                        child: TextFormField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.black,
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return context.loc.pleaseEnterYourEmail;
+                            } else {
+                              return validateEmail(value,context);
+                            }
+                          },
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: const InputDecoration(
+                            labelText: "Email Address",
+                            labelStyle: TextStyle(color: Colors.black),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(color: Colors.black),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.0),
+                              ),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                  color: Colors
+                                      .red), // Màu sắc của đường biên khi có lỗi
+                            ),
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color: Colors.black,
+                              size: 30.0,
+                            ),
+                            suffixIcon:
+                                Padding(padding: EdgeInsets.only(left: 30.0)),
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 20),
                       ForgotButton(
                         text: "Recover Password",
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const emailVerification(),
-                          ),
-                        ),
+                        onTap: () async {
+                          if (validateEmail(_emailController.text, context) == null) {
+                            await ref
+                                .read(authStateProvider.notifier)
+                                .forgotPassword(_emailController.text);
+                          }
+                        },
                       ),
                     ],
                   ),

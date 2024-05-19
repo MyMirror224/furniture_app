@@ -4,9 +4,11 @@ import 'package:gap/gap.dart';
 class PasswordField extends StatefulWidget {
   final String nameField;
   final IconData icon;
+  final TextEditingController? controller;
 
   const PasswordField({
     Key? key,
+    this.controller,
     required this.nameField,
     required this.icon,
   }) : super(key: key);
@@ -39,6 +41,7 @@ class _PasswordWidgetState extends State<PasswordField> {
           // TextField để nhập mật khẩu
           Expanded(
             child: TextField(
+              controller: widget.controller,
               obscureText: _obscureText,
               decoration: InputDecoration(
                 hintText: widget.nameField,

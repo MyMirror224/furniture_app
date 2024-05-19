@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>vn</string>
+		<string>en</string>
+	</array>
+	<key> CFBundleDevelopmentRegion</key>
+	<string> ${DEVELOPMENT_LANGUAGE}</string>
 	
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
@@ -14,20 +21,20 @@
 	<dict>
 	<key>CFBundleURLSchemes</key>
 	<array>
-		<string>fb2159970027690547</string>
+		<string>fb955811766291248</string>
 	</array>
 	</dict>
 	</array>
 	<key>FacebookAppID</key>
-	<string>2159970027690547</string>
+	<string>955811766291248</string>
 	<key>FacebookClientToken</key>
-	<string>5eb193f198b940b4d643c3f2e4a92222</string>
+	<string>070ca0d5663065b1a6a6b6f5103822ea</string>
 	<key>FacebookDisplayName</key>
-	<string>FurnitureApp</string>
+	<string>Furniture_App</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Furniture App</string>
+	<string>Furniture_App</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

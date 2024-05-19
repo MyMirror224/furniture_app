@@ -1,9 +1,9 @@
-import 'dart:io';
+
 
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/evaluateee.dart';
 
-import 'package:image_picker/image_picker.dart';
+
 //import 'package:furniture_app/widgets/cartbottomnarbar.dart';
 //import 'package:image/image.dart';
 

@@ -3,6 +3,7 @@ import 'package:furniture_app/components/forgot_password/fogot_button.dart';
 import 'package:furniture_app/components/forgot_password/verify.dart';
 import 'package:furniture_app/components/wave_clipper_custom_appbar.dart';
 import 'package:furniture_app/pages/forgot_password/reset_password.dart';
+import 'package:furniture_app/pages/login_page.dart';
 import 'package:gap/gap.dart';
 
 class emailVerification extends StatelessWidget {
@@ -127,10 +128,31 @@ class emailVerification extends StatelessWidget {
                   // button xác nhận
                   ForgotButton(
                       text: "Confirm",
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ResetPassword()))),
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Change Password'),
+                              content: Text(
+                                  'Please check your email to change password'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Login()),
+                                        (route) => false); // Close the dialog
+                                  },
+                                  child: Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }),
                 ],
               ),
             ],

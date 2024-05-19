@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -42,15 +48,6 @@ class DefaultFirebaseOptions {
         );
     }
   }
-
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAQjeciyEcQyG1q8SKhqGsfIyMyFyStvcM',
-    appId: '1:11058742887:web:473df9e12459772cf236c2',
-    messagingSenderId: '11058742887',
-    projectId: 'furniture-app-endgame',
-    authDomain: 'furniture-app-endgame.firebaseapp.com',
-    storageBucket: 'furniture-app-endgame.appspot.com',
-  );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCPEI-Fpv1k1zNL0yqU_w26b6Tk9-Y6ED8',
@@ -69,16 +66,5 @@ class DefaultFirebaseOptions {
     androidClientId: '11058742887-0be14utbrut6i79lmu5epjp3c6uqhfp0.apps.googleusercontent.com',
     iosClientId: '11058742887-enal6lfkmckidfs3alrj27of7ap0fbln.apps.googleusercontent.com',
     iosBundleId: 'com.example.furnitureApp',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyD9p5hWu1ys6xAk82M6vuDiaaSe2gpWwDc',
-    appId: '1:11058742887:ios:0d7d810d2bb4eaf1f236c2',
-    messagingSenderId: '11058742887',
-    projectId: 'furniture-app-endgame',
-    storageBucket: 'furniture-app-endgame.appspot.com',
-    androidClientId: '11058742887-0be14utbrut6i79lmu5epjp3c6uqhfp0.apps.googleusercontent.com',
-    iosClientId: '11058742887-8jo5b55h94ju16enkhjdshu3dm24stj2.apps.googleusercontent.com',
-    iosBundleId: 'com.example.furnitureApp.RunnerTests',
   );
 }

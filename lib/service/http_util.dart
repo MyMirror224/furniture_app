@@ -14,11 +14,8 @@ class HttpUtil {
     BaseOptions options = BaseOptions(
         baseUrl: AppConstants.SERVER_API_URL,
         connectTimeout: Duration(seconds: 4),
-        receiveTimeout: Duration(seconds: 4),
-        headers: {
-         
-        },
-        
+        receiveTimeout: Duration(seconds: 8),
+        headers: {},
         contentType: "application/json: charset=utf-8",
         responseType: ResponseType.json);
     dio = Dio(options);
@@ -34,7 +31,7 @@ class HttpUtil {
       onError(eInfo);
     }));
   } //finish internal()
-  Future postForm(
+  Future<String> postForm(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
@@ -45,7 +42,8 @@ class HttpUtil {
       data: data,
       queryParameters: queryParameters,
     );
-    return response.data;
+
+    return response.data['message'];
   }
 
   Future post(

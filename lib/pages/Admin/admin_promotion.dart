@@ -11,7 +11,7 @@ class PromotionScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final promoProvi = ref.watch(promotionProvider);
-    final appThemeState = ref.watch(appThemeStateNotifier);
+    final appThemeState = ref.watch(themeNotifierProvider);
     var size = MediaQuery.of(context).size;
     return ScaffoldMessenger(
       key: promoProvi.ScaffoldKey,
@@ -83,7 +83,7 @@ class PromotionScreen extends ConsumerWidget {
                     InformationFields(type: "name", text: 'Start Date'),
                     Container(
                       decoration: BoxDecoration(
-                        color: appThemeState.isDarkModeEnabled
+                        color: appThemeState == ThemeMode.dark
                             ? const Color(0xff93b1a7)
                             : const Color(0xff93b1a7),
                         borderRadius: BorderRadius.circular(16.0),
@@ -118,7 +118,7 @@ class PromotionScreen extends ConsumerWidget {
                     InformationFields(type: "name", text: 'End Date'),
                     Container(
                       decoration: BoxDecoration(
-                        color: appThemeState.isDarkModeEnabled
+                        color: appThemeState == ThemeMode.dark
                             ? const Color(0xff93b1a7)
                             : const Color(0xff93b1a7),
                         borderRadius: BorderRadius.circular(16.0),

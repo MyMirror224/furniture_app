@@ -34,17 +34,21 @@ class Authenticator {
       await FirebaseAuth.instance.sendPasswordResetEmail(
         email: toEmail,
       );
-      return AuthResult.reset;
+      //FirebaseAuth.instance.verifyPasswordResetCode(code)
+      return AuthResult.aborted;
     } catch (e) {
       return AuthResult.failure;
     }
   }
 
-  Future<AuthResult> updatePassword({
+  Future<void> updatePassword({
     required String newPassword,
-  }) {
-    return FirebaseAuth.instance.currentUser?.updatePassword(newPassword)
-        as Future<AuthResult>;
+  }) async {
+    try {
+      await FirebaseAuth.instance.currentUser?.updatePassword(newPassword);
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<AuthResult> signInAnonymously() async {

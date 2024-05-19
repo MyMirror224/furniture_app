@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:furniture_app/components/cartbottomnarbar.dart';
 import 'package:furniture_app/model/cart_model.dart';
+import 'package:furniture_app/model/order_model.dart';
 import 'package:furniture_app/model/product_model.dart';
 import 'package:furniture_app/state/cart/cart_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -34,6 +34,13 @@ class CartNotifier extends ChangeNotifier {
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   String? messageController = '';
+  bool get setAsDefault => _setAsDefault;
+  bool _setAsDefault = false;
+
+  get paymentMethod => null;
+  void setDefault(bool value) {
+    _setAsDefault = value;
+  }
 
   void saveInfo(String name, String phone, String address, String? message) {
     nameController.text = name;
@@ -80,9 +87,11 @@ class CartNotifier extends ChangeNotifier {
   }
 
   Future<void> fetchCart(String uid) async {
+    _discount = 0;
     try {
       final response = await CartApi.getCart(uid);
       _carts = response;
+      total();
       totalnotDiscount();
       _discount = _totalBefore - _carts.products!.total!;
       notifyListeners();
@@ -124,11 +133,17 @@ class CartNotifier extends ChangeNotifier {
   Future<void> changQuantity(int index, int quantity, String uid) async {
     try {
       if (quantity == -1 && _carts.products!.items![index].quantity == 1) {
+      } else if (quantity == -1 &&
+          _carts.products!.items![index].quantity == 0) {
       } else {
-        _carts.products!.items![index].quantity =
-            _carts.products!.items![index].quantity! + quantity;
-        await CartApi.update(uid, _carts.products!.items![index].quantity!,
+        final respone = await CartApi.update(
+            uid,
+            _carts.products!.items![index].quantity! + quantity,
             _carts.products!.items![index].id!);
+        if (respone != 'false') {
+          _carts.products!.items![index].quantity =
+              _carts.products!.items![index].quantity! + quantity;
+        }
         total();
         totalnotDiscount();
         _discount = _totalBefore - _carts.products!.total!;
@@ -140,6 +155,7 @@ class CartNotifier extends ChangeNotifier {
   }
 
   Future<void> changSelect(int index, bool select) async {
+    _discount = 0;
     try {
       _carts.products!.items![index].isSelected = select;
       total();
@@ -162,7 +178,8 @@ class CartNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> sendItemBuy() async {
+  OrderModel? order;
+  Future<void> sendItemBuy(String uid) async {
     int type;
     url = '';
     if (isSelectDirect) {
@@ -176,7 +193,7 @@ class CartNotifier extends ChangeNotifier {
     }
 
     final respone = await CartApi.sendItemBuy(
-        _carts.uid!.toString(),
+        uid,
         _cartItems,
         totalSendBuy,
         nameController.text,
@@ -184,11 +201,16 @@ class CartNotifier extends ChangeNotifier {
         addressController.text,
         messageController,
         type);
-    url = respone;
+    if (type == 1) {
+      order = respone;
+    } else {
+      url = respone;
+    }
     notifyListeners();
   }
 
   void saveCartItem() {
+    totalSendBuy = 0;
     _cartItemsShow = [];
     _cartItems = [];
     for (var item in _carts.products!.items!) {
@@ -206,16 +228,17 @@ class CartNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> buyNowItem(ProductModel productModel, String quantity, double promotion, double total)  async {
+  Future<void> buyNowItem(ProductModel productModel, String quantity,
+      double promotion, double total) async {
     _cartItemsShow = [];
     _cartItems = [];
     print(total);
     int quantitySend = int.parse(quantity);
-    final price =productModel.price!- productModel.price! * promotion/100;
+    final price = productModel.price! - productModel.price! * promotion / 100;
     CartItemsSendOrder cartItemsSendOrder = CartItemsSendOrder(
       id: productModel.id.toString(),
       quantity: quantitySend,
-      price: price ,
+      price: price,
     );
     _cartItems.add(cartItemsSendOrder);
     CartItems cartItems = CartItems(
@@ -225,7 +248,7 @@ class CartNotifier extends ChangeNotifier {
       discountPrice: price,
     );
     _cartItemsShow.add(cartItems);
-    totalSendBuy= total;
+    totalSendBuy = total;
     notifyListeners();
   }
 }

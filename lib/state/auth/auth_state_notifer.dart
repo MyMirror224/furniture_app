@@ -30,6 +30,27 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = const AuthState.unknown();
   }
 
+  Future<void> forgotPassword(String email) async {
+    state = state.copiedWithIsLoading(true);
+    final result = await _authenticator.sendPasswordReset(
+      toEmail: email,
+    );
+    if (result == AuthResult.failure) {
+      state = AuthState(
+        isLoading: false,
+        authResult: result,
+        userId: _authenticator.userId,
+        errorMessage: 'Have error when send email',
+      );
+    }
+    state = AuthState(
+      isLoading: false,
+      authResult: result,
+      userId: _authenticator.userId,
+      errorMessage: '',
+    );
+  }
+
   Future<void> loginWithGoogle() async {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.loginWithGoogle();
@@ -88,6 +109,14 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     );
   }
 
+  Future<void> updatePassword(String newPassword) async {
+    state = state.copiedWithIsLoading(true);
+    await _authenticator.updatePassword(
+      newPassword: newPassword,
+    );
+    state = state.copiedWithIsLoading(false);
+  }
+
   Future<void> loginWithEmailandPassword(String email, String password) async {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.logInWithEmailPassword(
@@ -103,10 +132,14 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
 
     if (result == AuthResult.sussess) {
+      await _authenticator.createUserInDatabase(
+          password: password, name: _authenticator.displayName.toString());
+
       final response =
           await UserAPI.getProfile(_authenticator.userId.toString());
       await Global.storageService.setProfile(
           _authenticator.userId.toString(), response.data as UserInfoModel);
+      
 
       state = AuthState(
         isLoading: false,
@@ -123,6 +156,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       errorMessage: _authenticator.errorMessage,
     );
   }
+  
 
   Future<void> registerWithEmailandPassword(
       String email, String password, String name) async {

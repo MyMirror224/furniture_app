@@ -2,20 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/personal_button.dart';
 import 'package:furniture_app/constant/appconstant.dart';
-import 'package:furniture_app/pages/user_information/user_information.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
+import 'package:furniture_app/pages/Invoice_history_page.dart';
+import 'package:furniture_app/pages/change_language.dart';
+import 'package:furniture_app/pages/notification_page.dart';
+import 'package:furniture_app/pages/user_information/detail_information.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:furniture_app/state/user_info/user_info_provider.dart';
 import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:gap/gap.dart';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class PersonalPage extends ConsumerWidget {
-  const PersonalPage({super.key});
+class PersonalPage extends ConsumerStatefulWidget {
+  const PersonalPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _PersonalPageState();
+}
+
+class _PersonalPageState extends ConsumerState<PersonalPage> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
     final userId = ref.watch(userIdProvider);
     final user = ref.watch(userInfoModelProvider(userId.toString()));
     String userName = user.hasValue ? user.value!.name.toString() : "User";
@@ -23,7 +38,7 @@ class PersonalPage extends ConsumerWidget {
         ? user.value!.avatar.toString()
         : 'storage/avatars/default.png';
     String avatarPath = '${AppConstants.SERVER_API_URL}$avatar';
-    final appThemeState = ref.watch(appThemeStateNotifier);
+    final appThemeState = ref.watch(themeNotifierProvider);
     // ignore: unused_local_variable
 
     Size size = MediaQuery.of(context).size;
@@ -66,7 +81,8 @@ class PersonalPage extends ConsumerWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => UserInformation(),
+                    builder: (context) =>
+                        DeteilInformationPage(userId.toString()),
                   ),
                 );
               },
@@ -77,18 +93,18 @@ class PersonalPage extends ConsumerWidget {
                 ),
               ),
               child: SizedBox(
-                width: size.width * 0.8,
                 height: size.height * 0.07,
-                child: const Row(
+                width: size.width * 0.8,
+                child: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       FontAwesomeIcons.user,
                       color: Colors.black45,
                     ),
-                    Gap(20),
+                    const Gap(20),
                     Text(
-                      "Personal Information",
-                      style: TextStyle(
+                      context.loc.psnal,
+                      style: const TextStyle(
                         fontSize: 20,
                         color: Colors.white,
                       ),
@@ -104,28 +120,54 @@ class PersonalPage extends ConsumerWidget {
               endIndent: 15,
               color: Colors.grey,
             ),
-            PersonalButton(
-              text: "My Cards",
-              onTap: () {},
-              icon: FontAwesomeIcons.wallet,
-            ),
-            Gap(10),
-            PersonalButton(
-              text: "My Orders",
-              onTap: () {},
-              icon: FontAwesomeIcons.listCheck,
+            Container(
+              height: size.height * 0.07,
+              width: size.width * 0.9,
+              child: PersonalButton(
+                text: context.loc.myOrders,
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            HistoryInvoicePage(uid: userId.toString()),
+                      ));
+                },
+                icon: FontAwesomeIcons.listCheck,
+              ),
             ),
             const Gap(10),
-            PersonalButton(
-              text: "Language",
-              onTap: () {},
-              icon: FontAwesomeIcons.language,
+            Container(
+              height: size.height * 0.07,
+              width: size.width * 0.9,
+              child: PersonalButton(
+                text: context.loc.language,
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LanguagePage(),
+                      ));
+                },
+                icon: FontAwesomeIcons.language,
+              ),
             ),
             const Gap(10),
-            PersonalButton(
-              text: "Notification",
-              onTap: () {},
-              icon: FontAwesomeIcons.bell,
+            Container(
+              height: size.height * 0.07,
+              width: size.width * 0.9,
+              child: PersonalButton(
+                text: context.loc.notification,
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            NotificationPage(userId.toString()),
+                      ));
+                },
+                icon: FontAwesomeIcons.bell,
+              ),
             ),
             // const Gap(10),
             // PersonalButton(
@@ -136,30 +178,38 @@ class PersonalPage extends ConsumerWidget {
             const Gap(10),
             Container(
               height: size.height * 0.07,
-              width: size.width * 0.88,
+              width: size.width * 0.9,
               decoration: BoxDecoration(
-                color: appThemeState.isDarkModeEnabled
+                color: appThemeState == ThemeMode.dark
                     ? const Color(0xff93b1a7)
                     : const Color(0xff93b1a7),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Row(
                 children: [
-                  const Gap(20),
-                  const Icon(Icons.contrast, color: Colors.black45),
-                  const Gap(20),
-                  const Text("Theme",
-                      style: TextStyle(fontSize: 20, color: Colors.black87)),
-                  Gap(size.width * 0.4),
-                  const DarkModeSwitch(),
+                  Gap(20),
+                  Icon(Icons.contrast, color: Colors.black45),
+                  Gap(20),
+                  Expanded(
+                    child: Text(context.loc.theme,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        )),
+                  ),
+                  DarkModeSwitch(),
                 ],
               ),
             ),
             const Gap(10),
-            PersonalButton(
-              text: "Logout",
-              onTap: () => ref.read(authStateProvider.notifier).logOut(),
-              icon: FontAwesomeIcons.signOutAlt,
+            Container(
+              height: size.height * 0.07,
+              width: size.width * 0.9,
+              child: PersonalButton(
+                text: context.loc.logout,
+                onTap: () => ref.read(authStateProvider.notifier).logOut(),
+                icon: FontAwesomeIcons.signOutAlt,
+              ),
             ),
           ],
         ),
@@ -173,15 +223,12 @@ class DarkModeSwitch extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appThemeState = ref.watch(appThemeStateNotifier);
+    final themeMode = ref.watch(themeNotifierProvider);
     return Switch(
-      value: appThemeState.isDarkModeEnabled,
+      value: themeMode == ThemeMode.dark,
+      activeColor: Color.fromARGB(255, 2, 31, 21),
       onChanged: (enabled) {
-        if (enabled) {
-          appThemeState.setDarkTheme();
-        } else {
-          appThemeState.setLightTheme();
-        }
+        ref.read(themeNotifierProvider.notifier).toggleTheme();
       },
     );
   }

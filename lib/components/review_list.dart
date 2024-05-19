@@ -1,19 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/state/review/review_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ProductReviewList extends ConsumerWidget {
-
-  const ProductReviewList({Key? key, }) : super(key: key);
+class ProductReviewListPage extends ConsumerWidget {
+  const ProductReviewListPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final reviews = ref.watch(productReviewsProvider);
-    return Expanded(
-      child: ListView.builder(
-        itemCount: reviews.reviewList.length,
+    final reviews = ref.watch(productReviewsProvider).reviewList;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Product Reviews'),
+        centerTitle: true,
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          }
+        )
+      ),
+      body: ListView.builder(
+        itemCount: reviews.length,
         itemBuilder: (context, index) {
-          final review = reviews.reviewList[index];
+          final review = reviews[index];
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Card(
@@ -25,14 +40,16 @@ class ProductReviewList extends ConsumerWidget {
                     Row(
                       children: [
                         CircleAvatar(
-                          backgroundImage: NetworkImage(review.userImageUrl),
+                          backgroundImage: NetworkImage(
+                              AppConstants.SERVER_API_URL +
+                                  review.user.avatar!),
                         ),
                         const SizedBox(width: 8.0),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              review.userName,
+                              review.user.name!,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -54,7 +71,7 @@ class ProductReviewList extends ConsumerWidget {
                       ],
                     ),
                     const SizedBox(height: 8.0),
-                    Text(review.reviewText),
+                    Text(review.comment),
                   ],
                 ),
               ),
@@ -65,4 +82,3 @@ class ProductReviewList extends ConsumerWidget {
     );
   }
 }
-

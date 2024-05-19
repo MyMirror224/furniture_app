@@ -19,6 +19,23 @@ class ProductAPI {
       throw Exception('Failed to load product');
     }
   }
+  static Future<List<ProductModel>> newProduct() async {
+    try {
+      final response = await HttpUtil().post(
+        'api/products/newproduct',
+      );
+
+      var productJson = response['data'];
+      print('new product');
+      final List<ProductModel> products = List<ProductModel>.from(
+          productJson.map((x) => ProductModel.fromJson(x)));
+
+      return products;
+    } catch (e) {
+      print(e);
+      throw Exception('Failed to load product');
+    }
+  }
   static Future<List<ProductModel>> getProductwithIdCategory(int? id, String? name, double? rating, double? minPrice, double? maxPrice, String? type) async {
     try {
       

@@ -30,6 +30,9 @@ class ProductNotifier extends ChangeNotifier {
 
   int get productLength => _products.length;
 
+  
+  List<ProductModel?> newProducts = [];
+  
   List<ProductModel?> get products => _products;
 
   List<ProductModel?> get productCate => _productsCate;
@@ -48,6 +51,19 @@ class ProductNotifier extends ChangeNotifier {
         cateID!, null, null, null, null, null);
 
     _productsforIDCate = respone;
+    notifyListeners();
+  }
+   
+  
+  Future<void> newProduct() async {
+    try {
+      final respone = await ProductAPI.newProduct();
+    newProducts =respone;
+    
+    } catch (e) {
+      print(e);
+    }
+    
     notifyListeners();
   }
 

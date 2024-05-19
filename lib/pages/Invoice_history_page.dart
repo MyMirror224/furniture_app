@@ -1,122 +1,126 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/Invoicehistory.dart';
 import 'package:furniture_app/components/listhistory.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
+import 'package:furniture_app/state/order/order_provider.dart';
 
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-// ignore: camel_case_types
-class historyPage extends StatefulWidget {
-  const historyPage({Key? key}) : super(key: key);
+// ignore: must_be_immutable
+class HistoryInvoicePage extends ConsumerStatefulWidget {
+  final String uid;
+  const HistoryInvoicePage({super.key, required this.uid});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _historyPageState createState() => _historyPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _HistoryOrderPageState();
 }
 
-// ignore: camel_case_types
-class _historyPageState extends State<historyPage>
-    with SingleTickerProviderStateMixin {
+class _HistoryOrderPageState extends ConsumerState<HistoryInvoicePage>
+    with TickerProviderStateMixin {
   late TabController _tabController;
-
-  String currentFilter =
-      'All'; // Thay đổi kiểu dữ liệu của currentFilter và khởi tạo giá trị
-
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
     _tabController = TabController(length: 6, vsync: this);
-  }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(orderProvider).fetchOrder(widget.uid);
+    });
+
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    int currentFilter = ref.watch(orderProvider).currentFilter;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.only(top: 10),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(35),
-              topRight: Radius.circular(35),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(35),
+                topRight: Radius.circular(35),
+              ),
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Invhistory(),
-              TabBar(
-                controller: _tabController,
-                isScrollable: true,
-                labelColor: const Color(0xff193d3d),
-                unselectedLabelColor: Colors.black54,
-                indicatorColor: const Color(0xff193d3d),
-                indicatorPadding:
-                    const EdgeInsets.only(left: 0, top: 0, bottom: 0),
-                tabs: const [
-                  Tab(text: 'All(8)'),
-                  Tab(text: 'Pending(3)'),
-                  Tab(text: 'In Progress(4)'),
-                  Tab(text: 'Completed(1)'),
-                  Tab(text: 'Cancelled'),
-                  Tab(text: 'Returned'),
-                ],
-                labelStyle: const TextStyle(fontSize: 16), // Tăng kích thước chữ cho Tab đã chọn
-                unselectedLabelStyle: const TextStyle(fontSize: 14),
-                onTap: (index) {
-                  setState(() {
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Invhistory(),
+                TabBar(
+                  controller: _tabController,
+                  isScrollable: true,
+                  labelColor: const Color(0xff193d3d),
+                  unselectedLabelColor: Colors.black54,
+                  indicatorColor: const Color(0xff193d3d),
+                  indicatorPadding:
+                      const EdgeInsets.only(left: 0, top: 0, bottom: 0),
+                  tabs:  [
+                    Tab(text: context.loc.all),
+                    Tab(text: context.loc.pending),
+                    Tab(text: context.loc.delivering),
+                    Tab(text:  context.loc.delivered),
+                    Tab(text: context.loc.returned),
+                    Tab(text: context.loc.cancelled),
+                  ],
+                  labelStyle: const TextStyle(
+                      fontSize: 16), // Tăng kích thước chữ cho Tab đã chọn
+                  unselectedLabelStyle: const TextStyle(fontSize: 14),
+                  onTap: (index) {
                     switch (index) {
                       case 0:
-                        currentFilter = 'All';
+                        ref.read(orderProvider.notifier).setCurrentFilter(0);
                         break;
                       case 1:
-                        currentFilter = 'Pending';
+                        ref.read(orderProvider.notifier).setCurrentFilter(1);
                         break;
                       case 2:
-                        currentFilter = 'In Progress';
+                        ref.read(orderProvider.notifier).setCurrentFilter(2);
                         break;
                       case 3:
-                        currentFilter = 'Completed';
+                        ref.read(orderProvider.notifier).setCurrentFilter(3);
                         break;
                       case 4:
-                        currentFilter = 'Cancelled';
+                        ref.read(orderProvider.notifier).setCurrentFilter(4);
+
                         break;
                       case 5:
-                        currentFilter = 'Returned';
+                        ref.read(orderProvider.notifier).setCurrentFilter(-1);
+
                         break;
                       default:
-                        currentFilter = 'All';
+                        ref.read(orderProvider.notifier).setCurrentFilter(0);
                     }
-                  });
-                },
-              ),
-              SizedBox(
-                height: 520,
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    listhistorypage(
-                        filter: 'All', currentFilter: currentFilter),
-                    listhistorypage(
-                        filter: 'Pending', currentFilter: currentFilter),
-                    listhistorypage(
-                        filter: 'In Progress', currentFilter: currentFilter),
-                    listhistorypage(
-                        filter: 'Completed', currentFilter: currentFilter),
-                    listhistorypage(
-                        filter: 'Cancelled', currentFilter: currentFilter),
-                    listhistorypage(
-                        filter: 'Returned', currentFilter: currentFilter),
-                  ],
+                  },
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: height * 0.9,
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      listhistorypage(
+                          filter: 'All', currentFilter: currentFilter),
+                      listhistorypage(
+                          filter: 'Pending', currentFilter: currentFilter),
+                      listhistorypage(
+                          filter: 'Delivering', currentFilter: currentFilter),
+                      listhistorypage(
+                          filter: 'Goods delivered',
+                          currentFilter: currentFilter),
+                      listhistorypage(
+                          filter: 'Returned', currentFilter: currentFilter),
+                      listhistorypage(
+                          filter: 'Cancelled', currentFilter: currentFilter),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
+// ignore: camel_case_types

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_app/pages/cart_page.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
+import 'package:furniture_app/model/order_model.dart';
 import 'package:furniture_app/pages/Invoice_history_page.dart';
 import 'package:furniture_app/pages/navigator_bar.dart';
+import 'package:furniture_app/provider/user_id_provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class OrderResults extends StatefulWidget {
+class OrderResults extends HookConsumerWidget {
+  final OrderModel order;
   final bool isSuccess; // Biến isSuccess xác định thành công hay thất bại
+  const OrderResults({required this.isSuccess, required this.order, Key? key})
+      : super(key: key);
 
-  OrderResults({required this.isSuccess});
   @override
-  _OrderResults createState() =>  _OrderResults();
-}
-
-class  _OrderResults extends State<OrderResults> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userId = ref.watch(userIdProvider);
     return Scaffold(
       // backgroundColor: Colors.green,oderfail
       body: ListView(
@@ -26,7 +27,7 @@ class  _OrderResults extends State<OrderResults> {
                 topRight: Radius.circular(35),
               ),
             ),
-            child: widget.isSuccess
+            child: isSuccess
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -45,7 +46,7 @@ class  _OrderResults extends State<OrderResults> {
                       Container(
                         padding: EdgeInsets.only(left: 15, top: 0),
                         child: Text(
-                          "Thank you for your order",
+                          context.loc.thankYouForShopping,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -73,7 +74,7 @@ class  _OrderResults extends State<OrderResults> {
                         ),
                       ),
                       Text(
-                        'Sorry! The order has failed,',
+                        context.loc.sorryFailed,
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -81,7 +82,7 @@ class  _OrderResults extends State<OrderResults> {
                         ),
                       ),
                       Text(
-                        'please try again.',
+                        context.loc.pleaseTryAgain,
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -98,7 +99,7 @@ class  _OrderResults extends State<OrderResults> {
             topLeft: Radius.circular(20.0),
             topRight: Radius.circular(20.0),
           ),
-          child: widget.isSuccess
+          child: isSuccess
               ? Container(
                   padding:
                       EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
@@ -114,7 +115,7 @@ class  _OrderResults extends State<OrderResults> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Name",
+                                  context.loc.name,
                                   style: TextStyle(
                                     fontSize: 10,
                                     color: Colors.black,
@@ -122,7 +123,7 @@ class  _OrderResults extends State<OrderResults> {
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  "Traking id",
+                                  context.loc.orderid,
                                   style: TextStyle(
                                     fontSize: 10,
                                     color: Colors.black,
@@ -130,28 +131,13 @@ class  _OrderResults extends State<OrderResults> {
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  "Payment code",
+                                  context.loc.address,
                                   style: TextStyle(
                                     fontSize: 10,
                                     color: Colors.black,
                                   ),
                                 ),
                                 SizedBox(height: 5),
-                                Text(
-                                  "Address",
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                Text(
-                                  "Date",
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.black,
-                                  ),
-                                ),
                               ],
                             ),
                             Container(
@@ -174,7 +160,7 @@ class  _OrderResults extends State<OrderResults> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Dungvo",
+                                    order.name,
                                     style: TextStyle(
                                       fontSize: 10,
                                       color: const Color(0xff193d3d),
@@ -182,7 +168,7 @@ class  _OrderResults extends State<OrderResults> {
                                   ),
                                   SizedBox(height: 5),
                                   Text(
-                                    "999-155-200",
+                                    order.id.toString(),
                                     style: TextStyle(
                                       fontSize: 10,
                                       color: const Color(0xff193d3d),
@@ -190,28 +176,13 @@ class  _OrderResults extends State<OrderResults> {
                                   ),
                                   SizedBox(height: 5),
                                   Text(
-                                    "Pay-150520",
+                                    order.address.toString(),
                                     style: TextStyle(
                                       fontSize: 10,
                                       color: const Color(0xff193d3d),
                                     ),
                                   ),
                                   SizedBox(height: 5),
-                                  Text(
-                                    "254 Nguyễn Tất Thành, Đà Nẵng",
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: const Color(0xff193d3d),
-                                    ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    "05/04/2024",
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: const Color(0xff193d3d),
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -227,18 +198,19 @@ class  _OrderResults extends State<OrderResults> {
                             print('Back Home button pressed!');
 
                             // Chuyển về trang chủ
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomeScreen()),
-                            );
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomeScreen(),
+                                ),
+                                (route) => false);
                           },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: const Color(0xff193d3d),
                             backgroundColor: Colors.white,
                             elevation: 8.0,
                           ),
-                          child: Text('Back Home'),
+                          child: Text(context.loc.backHome),
                         ),
                       ),
                       SizedBox(height: 10), // Khoảng cách giữa hai nút
@@ -248,20 +220,23 @@ class  _OrderResults extends State<OrderResults> {
                           onPressed: () {
                             // Xử lý sự kiện khi nút "Track your order" được nhấn
                             print('Track your order button pressed!');
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HistoryInvoicePage(
+                                    uid: userId.toString(),
+                                  ),
+                                ),
+                                (route) => false);
 
                             // Chuyển sang trang mới
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => historyPage()),
-                            );
                           },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Colors.white,
                             backgroundColor: const Color(0xff193d3d),
                             elevation: 8.0,
                           ),
-                          child: Text('Track your order'),
+                          child: Text(context.loc.trackOrder),
                         ),
                       ),
                     ],
@@ -342,7 +317,7 @@ class  _OrderResults extends State<OrderResults> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Error! The action is faulty or the order has not been updated",
+                                    context.loc.errormessenger,
                                     style: TextStyle(
                                       fontSize: 10,
                                       color: const Color(0xff193d3d),
@@ -350,7 +325,7 @@ class  _OrderResults extends State<OrderResults> {
                                   ),
                                   SizedBox(height: 5),
                                   Text(
-                                    "soft 404 error!",
+                                    context.loc.errormessenger2,
                                     style: TextStyle(
                                       fontSize: 10,
                                       color: const Color(0xff193d3d),
@@ -395,18 +370,18 @@ class  _OrderResults extends State<OrderResults> {
                             print('Back Home button pressed!');
 
                             // Chuyển về trang chủ
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomeScreen()),
-                            );
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()),
+                                (route) => false);
                           },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: const Color(0xff193d3d),
                             backgroundColor: Colors.white,
                             elevation: 8.0,
                           ),
-                          child: Text('Back Home'),
+                          child: Text(context.loc.backHome),
                         ),
                       ),
                       SizedBox(height: 10), // Khoảng cách giữa hai nút
@@ -416,21 +391,27 @@ class  _OrderResults extends State<OrderResults> {
                           onPressed: () {
                             // Xử lý sự kiện khi nút "Track your order" được nhấn
                             print('Track your order button pressed!');
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()),
+                                (route) => false);
 
-                            // Chuyển sang trang mới
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) =>  CartPage(),
-                            //   ),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HistoryInvoicePage(
+                                  uid: userId.toString(),
+                                ),
+                              ),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Colors.white,
                             backgroundColor: const Color(0xff193d3d),
                             elevation: 8.0,
                           ),
-                          child: Text('payment again'),
+                          child: Text(context.loc.paymentAgain),
                         ),
                       ),
                     ],

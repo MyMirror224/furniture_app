@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/model/product_model.dart';
+import 'package:furniture_app/pages/product_detail_page.dart';
+import 'package:furniture_app/state/product/product_provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SlideHome extends ConsumerWidget {
+class SlideHome extends HookConsumerWidget {
   SlideHome({
     super.key,
     double? viewportFraction,
@@ -9,6 +14,7 @@ class SlideHome extends ConsumerWidget {
   final double viewportFraction;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final products = ref.watch(productProvider).newProducts;
     final PageController pageController =
         PageController(viewportFraction: viewportFraction);
 
@@ -20,17 +26,31 @@ class SlideHome extends ConsumerWidget {
       height: 230,
       child: PageView.builder(
         controller: pageController,
-        itemCount: 5,
+        itemCount: products.length,
         itemBuilder: (context, index) {
-          return _buiderPageItem(index, ref, viewportFraction);
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductDetailPage(
+                    products[index]!,
+                  ),
+                ),
+              );
+            },
+            child: _buiderPageItem(
+                index, ref, viewportFraction, products[index]!, context),
+          );
         },
       ),
     );
   }
 
-  Widget _buiderPageItem(int index, WidgetRef ref, double scaleFactor) {
+  Widget _buiderPageItem(int index, WidgetRef ref, double scaleFactor,
+      ProductModel product, BuildContext context) {
     double currPageValue = ref.watch(slideHomeProvider).currPageValue;
-
+    final width = MediaQuery.of(context).size.width;
     const double height = 220;
     Matrix4 matrix = Matrix4.identity();
     if (index == currPageValue.floor()) {
@@ -67,12 +87,37 @@ class SlideHome extends ConsumerWidget {
               color: index.isEven
                   ? const Color(0xFF69c5df)
                   : const Color(0xFF9294cc),
-              image: const DecorationImage(
+              image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/images/background1.jpg'),
+                image: NetworkImage(
+                  "${AppConstants.SERVER_API_URL}storage/" +
+                      product.image!.first.toString(),
+                ),
               ),
             ),
           ),
+          Positioned(
+              right: width * 0.05,
+              top: width * 0.05,
+              child: Transform.rotate(
+                angle: 45 * 3.14 / 180, // Góc xoay (đơn vị radian)
+                child: Container(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(3.0),
+                    color: Colors.redAccent.withOpacity(0.7),
+                  ),
+                  child: Text(
+                    'New',
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.roboto().fontFamily,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.yellow,
+                    ),
+                  ),
+                ),
+              )),
         ],
       ),
     );
