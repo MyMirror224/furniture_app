@@ -3,7 +3,7 @@ import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/cart/cart_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../state/product/product_provider.dart';
+
 
 class MainView extends ConsumerStatefulWidget {
   const MainView({Key? key}) : super(key: key);

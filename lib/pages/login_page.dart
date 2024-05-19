@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/login_signup/button_login.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/pages/forgot_password/forgot_password.dart';
 import 'package:furniture_app/pages/signup_page.dart';
-import 'package:furniture_app/services/constain.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:furniture_app/state/user_info/user_info_provider.dart';
 import 'package:gap/gap.dart';
@@ -55,7 +55,7 @@ class Login extends ConsumerWidget {
                     ),
                     const Gap(20),
                     Text(
-                      signIn,
+                      context.loc.login,
                       style: GoogleFonts.roboto(
                         fontWeight: FontWeight.bold,
                         fontSize: 40,
@@ -69,10 +69,10 @@ class Login extends ConsumerWidget {
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return enterEmail;
+                            return context.loc.enterEmail;
                           }
                           if (!emailRegex.hasMatch(value)) {
-                            return invalidEmail;
+                            return context.loc.invalidEmail;
                           }
                           return null;
                         },
@@ -83,7 +83,7 @@ class Login extends ConsumerWidget {
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         controller: emailController,
                         decoration:  InputDecoration(
-                          labelText: email,
+                          labelText: context.loc.email,
                           labelStyle: TextStyle(color: Colors.black),
                           enabledBorder: OutlineInputBorder(
                             borderRadius:
@@ -119,7 +119,7 @@ class Login extends ConsumerWidget {
                       child: TextFormField(
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return enterPassword;
+                            return context.loc.enterPassword;
                           }
                           return null;
                         },
@@ -131,7 +131,7 @@ class Login extends ConsumerWidget {
                         ),
                         obscureText: loginNotifier.isObscure,
                         decoration: InputDecoration(
-                          labelText: password,
+                          labelText: context.loc.password,
                           labelStyle: const TextStyle(color: Colors.black),
                           focusColor: Colors.blueAccent,
                           enabledBorder: const OutlineInputBorder(
@@ -181,7 +181,7 @@ class Login extends ConsumerWidget {
                           ),
                         ),
                         child:  Text(
-                          forgotPassword,
+                          context.loc.forgotPassword,
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 15,
@@ -191,7 +191,7 @@ class Login extends ConsumerWidget {
                     ),
                     const Gap(15),
                     buttonLogin(
-                        login, Colors.grey, (deviceWidth * 0.3).toInt(), 50,
+                        context.loc.login, Colors.grey, (deviceWidth * 0.3).toInt(), 50,
                         onpressed: () async {
                       if (_formKey.currentState!.validate()) {
                         await ref
@@ -206,7 +206,7 @@ class Login extends ConsumerWidget {
                     const Gap(15),
                      Center(
                       child: Text(
-                        or,
+                        context.loc.or,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ),
                     ),
@@ -238,7 +238,7 @@ class Login extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                          Text(
-                          dontHaveAccount,
+                          context.loc.dontHaveAccount,
                           style: TextStyle(color: Colors.grey, fontSize: 15),
                         ),
                         GestureDetector(
@@ -249,7 +249,7 @@ class Login extends ConsumerWidget {
                                         builder: (context) => SignUp(),
                                       )),
                                 },
-                            child: const Text(" Sign Up",
+                            child:  Text(context.loc.signUp,
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 15,

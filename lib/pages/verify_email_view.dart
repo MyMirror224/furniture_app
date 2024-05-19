@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_app/pages/home_page.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
+
 import 'package:furniture_app/pages/login_page.dart';
-import 'package:furniture_app/services/constain.dart';
 
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 
@@ -12,6 +12,7 @@ class VerifyEmailView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    
     return Scaffold(
       backgroundColor: Color(0xff193d3d).withOpacity(0.9),
       body: Center(
@@ -21,7 +22,7 @@ class VerifyEmailView extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
                Text(
-                emailSent,
+                context.loc.emailSent,
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
@@ -30,7 +31,7 @@ class VerifyEmailView extends ConsumerWidget {
               ),
               const SizedBox(height: 16.0),
                Text(
-                emailSent2,
+                context.loc.emailSent2,
                 style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.white,
@@ -38,7 +39,7 @@ class VerifyEmailView extends ConsumerWidget {
                 textAlign: TextAlign.center,
               ),
                Text(
-                resendEmail,
+                context.loc.resendEmail,
                 style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.white,
@@ -47,21 +48,23 @@ class VerifyEmailView extends ConsumerWidget {
               ),
               const SizedBox(height: 32.0),
               Container(
-                width: MediaQuery.of(context).size.width*0.6,
+                width: MediaQuery.of(context).size.width * 0.6,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                   ),
                   onPressed: () {
-                    ref.read(authStateProvider.notifier).sendEmailVerification();
+                    ref
+                        .read(authStateProvider.notifier)
+                        .sendEmailVerification();
                   },
-                  child:  Text(resendEmail2,
+                  child:  Text(context.loc.resendEmail2,
                       style: TextStyle(color: Colors.black)),
                 ),
               ),
               const SizedBox(height: 16.0),
               Container(
-                width: MediaQuery.of(context).size.width*0.6,
+                width: MediaQuery.of(context).size.width * 0.6,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
@@ -69,10 +72,10 @@ class VerifyEmailView extends ConsumerWidget {
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) =>  Login()),
+                        MaterialPageRoute(builder: (context) => Login()),
                         (route) => false);
                   },
-                  child:  Text(verified,
+                  child:  Text(context.loc.verified,
                       style: TextStyle(color: Colors.black)),
                 ),
               ),

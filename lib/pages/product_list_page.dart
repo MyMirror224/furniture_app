@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/grip_view_search.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/model/product_model.dart';
 import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/pages/product_detail_page.dart';
 import 'package:furniture_app/pages/search%20page/searchPage.dart';
 import 'package:furniture_app/pages/search%20page/searchingItem.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
-import 'package:furniture_app/services/constain.dart';
 import 'package:furniture_app/services/shared%20preferences/sharedPreferences.dart';
 import 'package:furniture_app/state/product/product_provider.dart';
 import 'package:gap/gap.dart';
@@ -128,7 +128,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                 contentPadding: EdgeInsets.zero,
                                 isCollapsed: true,
                                 // focusColor: Colors.transparent,
-                                hintText: searchHint,
+                                hintText: context.loc.searchHint,
                               ),
 
                               onChanged: (v) {
@@ -185,7 +185,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                     children: [
                                       Text(
                                         // "search".tr(),
-                                        search,
+                                        context.loc.search,
                                         style: TextStyle(
                                           color: Colors.white,
                                         ),
@@ -218,7 +218,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                       Text(historySearch),
+                                       Text(context.loc.historySearch),
                                       InkWell(
                                         onTap: () {
                                           ref
@@ -230,7 +230,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                         },
                                         child: Row(
                                           children:  [
-                                            Text(removeAll),
+                                            Text(context.loc.removeAll),
                                             Icon(Icons.close_rounded),
                                           ],
                                         ),
@@ -264,11 +264,11 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                   children: [
                     ChoiceChip(
                       selectedColor: Color(0xFF93B1A6),
-                      label: Text(priceLowToHigh),
-                      selected: _selectedType == priceLowToHigh,
+                      label: Text(context.loc.priceLowToHigh),
+                      selected: _selectedType == context.loc.priceLowToHigh,
                       onSelected: (bool selected) {
                         setState(() {
-                          _selectedType = selected ? priceLowToHigh: null;
+                          _selectedType = selected ? context.loc.priceLowToHigh: null;
                           if (_selectedType != null) {
                             type = 'asc';
                           } else {
@@ -289,11 +289,11 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                     ),
                     ChoiceChip(
                       selectedColor: Color(0xFF93B1A6),
-                      label: Text(priceHighToLow),
-                      selected: _selectedType == priceHighToLow,
+                      label: Text(context.loc.priceHighToLow),
+                      selected: _selectedType == context.loc.priceHighToLow,
                       onSelected: (bool selected) {
                         setState(() {
-                          _selectedType = selected ? priceHighToLow : null;
+                          _selectedType = selected ? context.loc.priceHighToLow : null;
                           // Lọc danh sách sản phẩm theo giá giảm dần
                           if (_selectedType != null) {
                             type = 'desc';
@@ -397,12 +397,12 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                     Row(
                       children: [
                         ChoiceChip(
-                          label: Text(price),
+                          label: Text(context.loc.price),
                           selectedColor: Color(0xFF93B1A6),
-                          selected: _selectedPrice == price,
+                          selected: _selectedPrice == context.loc.price,
                           onSelected: (bool selected) {
                             setState(() {
-                              _selectedPrice = selected ? price : null;
+                              _selectedPrice = selected ? context.loc.price : null;
                               if (_selectedPrice == null) {
                                 _maxPrice = null;
                                 _minPrice = 0;
@@ -419,7 +419,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                             });
                           },
                         ),
-                        if (_selectedPrice == price)
+                        if (_selectedPrice == context.loc.price)
                           Expanded(
                             child: Row(
                               children: [
@@ -427,7 +427,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                 Expanded(
                                   child: TextField(
                                     decoration: InputDecoration(
-                                      labelText: minimumPrice,
+                                      labelText: context.loc.minimumPrice,
                                     ),
                                     keyboardType: TextInputType.number,
                                     onChanged: (value) {
@@ -439,7 +439,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                 Expanded(
                                     child: TextField(
                                   decoration: InputDecoration(
-                                    labelText: maximumPrice,
+                                    labelText: context.loc.maximumPrice,
                                   ),
                                   keyboardType: TextInputType.number,
                                   onChanged: (value) {
@@ -450,12 +450,12 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                 Expanded(
                                   child: ChoiceChip(
                                     selectedColor: Color(0xFF93B1A6),
-                                    label: Text(apply),
-                                    selected: _selectedFilter == apply,
+                                    label: Text(context.loc.apply),
+                                    selected: _selectedFilter == context.loc.apply,
                                     onSelected: (bool selected) {
                                       setState(() {
                                         _selectedFilter =
-                                            selected ? apply : null;
+                                            selected ? context.loc.apply : null;
                                         if (_selectedFilter == null) {
                                           _minPrice = 0;
                                           _maxPrice = null;

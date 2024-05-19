@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:furniture_app/components/HomeAppBar.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/pages/payment_page.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/cart/cart_provider.dart';
@@ -79,8 +80,8 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                             ),
                           ),
                           const SizedBox(height: 5),
-                          const Text(
-                            "Cart",
+                           Text(
+                            context.loc.cart,
                             style: TextStyle(
                               fontSize: 10,
                               color: Color(0xff193d3d),
@@ -133,7 +134,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                           ),
                           SizedBox(height: 5),
                           Text(
-                            "Address",
+                           context.loc.address,
                             style: TextStyle(
                               fontSize: 10,
                               color: Color(0xff193d3d),
@@ -186,7 +187,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                           ),
                           SizedBox(height: 5),
                           Text(
-                            "Pay",
+                            context.loc.pay,
                             style: TextStyle(
                               fontSize: 10,
                               color: Color(0xff193d3d).withOpacity(0.5),
@@ -199,7 +200,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                   Container(
                     padding: EdgeInsets.only(left: 15, top: 10),
                     child: Text(
-                      "Define data",
+                      context.loc.defineInfor,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -215,7 +216,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Your name",
+                          context.loc.yourName ,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.normal,
@@ -228,7 +229,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                           child: TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter your name';
+                                return context.loc.pleaseInputName;
                               }
                               return null;
                             },
@@ -272,7 +273,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Phone Number",
+                          context.loc.phoneNumber,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.normal,
@@ -285,7 +286,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                           child: TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter your phone number';
+                                return context.loc.pleaseEnterYourPhoneNumber;
                               }
                               return null;
                             },
@@ -331,7 +332,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Delivery address",
+                          context.loc.address,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.normal,
@@ -344,7 +345,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                           child: TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter your address';
+                                return context.loc.pleaseInputAddress;
                               }
                               return null;
                             },
@@ -391,7 +392,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                       children: [
                         Expanded(
                           child: Text(
-                            "Set as Default",
+                            context.loc.setDefault,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.normal,
@@ -423,7 +424,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Message:",
+                          context.loc.message,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.normal,
@@ -520,7 +521,7 @@ class _AddressPageState extends ConsumerState<AddressPage> {
               backgroundColor: const Color(0xff193d3d),
               elevation: 8.0,
             ),
-            child: Text('Continue'),
+            child: Text(context.loc.continuee),
           ),
         ),
       ),

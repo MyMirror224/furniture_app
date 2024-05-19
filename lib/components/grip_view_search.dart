@@ -98,6 +98,7 @@ class ItemCard extends HookConsumerWidget {
     print(product);
     final title =
         product!.productName!.substring(product!.productName!.indexOf(' '));
+    final priceItem = product!.price! - product!.price! * product!.promotion! / 100;
     return Card(
         child: Column(children: [
       Expanded(
@@ -136,7 +137,7 @@ class ItemCard extends HookConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text(
-            '${product!.price}\$',
+            '${priceItem}\$',
           ),
           Container(
             height: 30,

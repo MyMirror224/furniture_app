@@ -5,6 +5,7 @@ import 'package:furniture_app/components/HomeAppBar.dart';
 import 'package:furniture_app/components/information_user_field.dart';
 import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/helper/image_picker_helper.dart';
 import 'package:furniture_app/pages/user_information/change_password.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
@@ -36,7 +37,7 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final appThemeState = ref.watch(appThemeStateNotifier);
+    final appThemeState = ref.watch(themeNotifierProvider);
     final userId = ref.watch(userIdProvider);
     final user = ref.watch(userInfoModelProvider(userId.toString()));
     String userName = user.hasValue ? user.value!.name.toString() : "";
@@ -139,7 +140,7 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Your name",
+                        context.loc.yourName,
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.normal,
@@ -152,7 +153,7 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                         child: TextFormField(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your name';
+                              return context.loc.pleaseInputName;
                             }
                             return null;
                           },
@@ -198,7 +199,7 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Phone Number",
+                        context.loc.phoneNumber,
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.normal,
@@ -211,7 +212,7 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                         child: TextFormField(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your phone number';
+                              return context.loc.pleaseEnterYourPhoneNumber;
                             }
                             return null;
                           },
@@ -261,7 +262,7 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Delivery address",
+                        context.loc.address,
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.normal,
@@ -274,7 +275,7 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                         child: TextFormField(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your address';
+                              return context.loc.pleaseInputAddress;
                             }
                             return null;
                           },
@@ -315,10 +316,10 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                     ],
                   ),
                 ),
-                InformationFields(type: "name", text: "Password"),
+                InformationFields(type: "name", text: context.loc.password),
                 Container(
                   decoration: BoxDecoration(
-                    color: appThemeState.isDarkModeEnabled
+                    color: appThemeState == ThemeMode.dark
                         ? const Color(0xff93b1a7)
                         : const Color(0xff93b1a7),
                     borderRadius: BorderRadius.circular(16.0),
@@ -352,13 +353,13 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     buttonLogin(
-                        "Cancel", Colors.black, (size.width * 0.3).toInt(), 50,
+                        context.loc.cancel, Colors.black, (size.width * 0.3).toInt(), 50,
                         onpressed: () {
                       Navigator.pop(context);
                     }),
                     const Gap(20),
                     buttonLogin(
-                      "Save",
+                      context.loc.save,
                       Colors.black,
                       (size.width * 0.3).toInt(),
                       50,
@@ -373,7 +374,7 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                               null,
                             );
                         Fluttertoast.showToast(
-                          msg: "Save Suscess",
+                          msg: context.loc.saveSuccess,
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
                           timeInSecForIosWeb: 1,

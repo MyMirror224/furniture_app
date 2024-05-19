@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/login_signup/button_login.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/pages/login_page.dart';
 import 'package:furniture_app/pages/verify_email_view.dart';
-import 'package:furniture_app/services/constain.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,48 +16,48 @@ class SignUp extends HookConsumerWidget {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String? validatePassword(String password) {
+  String? validatePassword(String password,BuildContext _) {
     final passwordRegex = RegExp(
         r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
-
+    
     if (!passwordRegex.hasMatch(password)) {
-      return _getPasswordErrorMessage(password);
+      return _getPasswordErrorMessage(password, _);
     }
 
     return null; // Mật khẩu hợp lệ
   }
 
-  String? validateEmail(String email) {
+  String? validateEmail(String email, BuildContext _) {
     final RegExp emailRegex = RegExp(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
     if (!emailRegex.hasMatch(email)) {
-      return _getEmailErrorMessage(email);
+      return _getEmailErrorMessage(email , _);
     }
     return null;
   }
 
-  String? _getEmailErrorMessage(String email) {
+  String? _getEmailErrorMessage(String email , BuildContext _) {
     final RegExp emailRegex = RegExp(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 
     if (!emailRegex.hasMatch(email)) {
       // Check for common email validation errors using regular expressions
       if (!email.contains('@')) {
-        return emailErrorMessage;
+        return _.loc.emailErrorMessage;
       } else if (!email.contains('.')) {
-        return emailErrorMessage2;
+        return _.loc.emailErrorMessage2;
       } else if (email.startsWith('.') || email.endsWith('.')) {
-        return emailErrorMessage3;
+        return _.loc.emailErrorMessage3;
       } else if (email.contains(' ')) {
-        return emailErrorMessage4;
+        return _.loc.emailErrorMessage4;
       }
       // Add more checks for specific use cases as needed
-      return emailErrorMessage5;
+      return _.loc.emailErrorMessage5;
     }
     return null;
   }
 
-  String? _getPasswordErrorMessage(String password) {
+  String? _getPasswordErrorMessage(String password,BuildContext _) {
     final hasLowercase = password.contains(RegExp(r'[a-z]'));
     final hasUppercase = password.contains(RegExp(r'[A-Z]'));
     final hasDigit = password.contains(RegExp(r'\d'));
@@ -65,23 +65,23 @@ class SignUp extends HookConsumerWidget {
     final hasMinLength = password.length >= 8;
 
     if (!hasLowercase) {
-      return passwordErrorMessage;
+      return _.loc.passwordErrorMessage;
     }
 
     if (!hasUppercase) {
-      return passwordErrorMessage2;
+      return _.loc.passwordErrorMessage2;
     }
 
     if (!hasDigit) {
-      return passwordErrorMessage3;
+      return _.loc.passwordErrorMessage3;
     }
 
     if (!hasSpecialChar) {
-      return passwordErrorMessage4;
+      return _.loc.passwordErrorMessage4;
     }
 
     if (!hasMinLength) {
-      return passwordErrorMessage5;
+      return _.loc.passwordErrorMessage5;
     }
     return null;
   }
@@ -150,7 +150,7 @@ class SignUp extends HookConsumerWidget {
                       ],
                     ),
                     Text(
-                      createNewAccount,
+                      context.loc.createNewAccount,
                       style: GoogleFonts.roboto(
                         fontWeight: FontWeight.bold,
                         fontSize: 30,
@@ -168,13 +168,13 @@ class SignUp extends HookConsumerWidget {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return enterName;
+                            return context.loc.enterName;
                           }
                           return null;
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration:  InputDecoration(
-                          labelText: name,
+                          labelText: context.loc.name,
                           labelStyle: TextStyle(color: Colors.black),
                           enabledBorder: OutlineInputBorder(
                             borderRadius:
@@ -216,14 +216,14 @@ class SignUp extends HookConsumerWidget {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return enterEmail;
+                            return context.loc.enterEmail;
                           } else {
-                            return validateEmail(value);
+                            return validateEmail(value,context);
                           }
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration:  InputDecoration(
-                          labelText: email,
+                          labelText: context.loc.email,
                           labelStyle: TextStyle(color: Colors.black),
                           enabledBorder: OutlineInputBorder(
                             borderRadius:
@@ -265,14 +265,14 @@ class SignUp extends HookConsumerWidget {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return enterPassword;
+                            return context.loc.enterPassword;
                           } else {
-                            return validatePassword(value);
+                            return validatePassword(value,context);
                           }
                         },
                         obscureText: loginNotifier.isObscure,
                         decoration: InputDecoration(
-                          labelText: password,
+                          labelText: context.loc.password,
                           labelStyle: const TextStyle(color: Colors.black),
                           focusColor: Colors.blueAccent,
                           enabledBorder: const OutlineInputBorder(
@@ -322,16 +322,16 @@ class SignUp extends HookConsumerWidget {
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return enterPassword;
+                            return context.loc.enterPassword;
                           } else {
                             if (value != passwordController.text) {
-                              return passwordNotMatch;
+                              return context.loc.passwordNotMatch;
                             }
                           }
                           return null;
                         },
                         decoration: InputDecoration(
-                          labelText: confirmPassword,
+                          labelText: context.loc.confirmPassword,
                           labelStyle: const TextStyle(color: Colors.black),
                           focusColor: Colors.blueAccent,
                           enabledBorder: const OutlineInputBorder(
@@ -372,7 +372,7 @@ class SignUp extends HookConsumerWidget {
 
                     const Gap(15),
 
-                    buttonLogin(signUp, Colors.grey,
+                    buttonLogin(context.loc.signUp, Colors.grey,
                         (deviceHeight * 0.3).toInt(), 50, onpressed: () async {
                       if (_formKey.currentState!.validate()) {
                         ref
@@ -389,7 +389,7 @@ class SignUp extends HookConsumerWidget {
                     const Gap(15),
                      Center(
                       child: Text(
-                        or,
+                        context.loc.or,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ),
                     ),
@@ -420,7 +420,7 @@ class SignUp extends HookConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                          Text(
-                          alreadyHaveAccount,
+                          context.loc.alreadyHaveAccount,
                           style: TextStyle(color: Colors.grey, fontSize: 15),
                         ),
                         GestureDetector(
@@ -428,7 +428,7 @@ class SignUp extends HookConsumerWidget {
                             Navigator.pop(context);
                           },
                           child:  Text(
-                            loginNow,
+                            context.loc.loginNow,
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 15,

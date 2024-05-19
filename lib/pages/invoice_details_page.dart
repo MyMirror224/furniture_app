@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:furniture_app/components/details.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/model/order_model.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/pages/order_required_page.dart';
@@ -128,8 +129,8 @@ class _InvoicedetailsNotCofirmPageState
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Shipping information',
+                        Text(
+                          context.loc.shipInfor,
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 14.0,
@@ -137,7 +138,7 @@ class _InvoicedetailsNotCofirmPageState
                         ),
                         const SizedBox(height: 4.0),
                         Text(
-                          'Express',
+                          context.loc.express,
                           style: TextStyle(
                             color: Colors.black.withOpacity(0.6),
                             fontSize: 10.0,
@@ -178,8 +179,8 @@ class _InvoicedetailsNotCofirmPageState
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Information of delivery',
+                           Text(
+                            context.loc.inforDelivery,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 14.0,
@@ -187,21 +188,21 @@ class _InvoicedetailsNotCofirmPageState
                           ),
                           const SizedBox(height: 4.0),
                           Text(
-                            'Name: ${widget.order.name}',
+                            '${context.loc.name}: ${widget.order.name}',
                             style: TextStyle(
                               color: Colors.black.withOpacity(0.6),
                               fontSize: 14.0,
                             ),
                           ),
                           Text(
-                            'Phone: ${widget.order.phone_number}',
+                            '${context.loc.phone}: ${widget.order.phone_number}',
                             style: TextStyle(
                               color: Colors.black.withOpacity(0.6),
                               fontSize: 14.0,
                             ),
                           ),
                           Text(
-                            'Address: ${widget.order.address}',
+                            '${context.loc.address}: ${widget.order.address}',
                             style: TextStyle(
                               color: Colors.black.withOpacity(0.6),
                               fontSize: 14.0,
@@ -214,9 +215,9 @@ class _InvoicedetailsNotCofirmPageState
                       onTap: () {
                         Clipboard.setData(ClipboardData(
                             text:
-                                'Name : ${widget.order.name}\nPhone: ${widget.order.phone_number}\nAddress: ${widget.order.address}'));
+                                '${context.loc.name} : ${widget.order.name}\${context.loc.phone}: ${widget.order.phone_number}\nAddress: ${widget.order.address}'));
                         Fluttertoast.showToast(
-                          msg: "Copied",
+                          msg: context.loc.copy,
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
                           timeInSecForIosWeb: 1,
@@ -229,7 +230,7 @@ class _InvoicedetailsNotCofirmPageState
                         icon: const Icon(Icons.copy),
                         onPressed: () {
                           Fluttertoast.showToast(
-                            msg: "Copied",
+                            msg:  context.loc.copy,
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.BOTTOM,
                             timeInSecForIosWeb: 1,
@@ -293,7 +294,7 @@ class _InvoicedetailsNotCofirmPageState
                                     ),
                                     const SizedBox(height: 4.0),
                                     Text(
-                                      'Quantity: ${product.quantity.toString()}', // Số lượng sản phẩm
+                                      '${context.loc.quantity}: ${product.quantity.toString()}', // Số lượng sản phẩm
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 14.0,
@@ -306,7 +307,7 @@ class _InvoicedetailsNotCofirmPageState
                                   ],
                                 ),
                               ),
-                              widget.is_done == 'Goods delivered'
+                              widget.is_done == context.loc.goodDelivered
                                   ? GestureDetector(
                                       onTap: () {
                                         Navigator.push(
@@ -407,8 +408,8 @@ class _InvoicedetailsNotCofirmPageState
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Payment method',
+                         Text(
+                          context.loc.paymentType,
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 14.0,
@@ -560,7 +561,7 @@ class _InvoicedetailsNotCofirmPageState
                                 icon: stringButton == 'Tracking Order'
                                     ? Icon(Icons.track_changes)
                                     : Icon(Icons.cancel),
-                                label: stringButton == 'Refund Order' ? Text('Cancel Order') : Text(stringButton),
+                                label: stringButton == 'Refund Order' ? Text(context.loc.cancelOrder) : Text(stringButton),
                                 style: TextButton.styleFrom(
                                   foregroundColor: const Color(0xff193d3d),
                                   backgroundColor:

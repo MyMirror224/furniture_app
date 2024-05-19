@@ -4,6 +4,7 @@ import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/startupcontainer.dart';
 import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/model/chat_entity_model.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/services/laravel_echo.dart';
@@ -88,7 +89,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
         child: Scaffold(
             appBar: AppBar(
               title: Center(
-                  child: Text('Support',
+                  child: Text(context.loc.supporter,
                       style: TextStyle(
                           color: Color(0xff193d3d),
                           fontSize: 24,

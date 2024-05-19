@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/model/product_model.dart';
 import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/pages/detail_category_page.dart';
@@ -46,7 +47,7 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Categories",
+                    Text(context.loc.categories,
                         style: GoogleFonts.roboto(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
@@ -107,8 +108,8 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                                               DetailCategoryPage(
                                                   cateName: product.key)));
                                 },
-                                child: const Text(
-                                  "View all",
+                                child:  Text(
+                                  context.loc.viewall,
                                   style: TextStyle(
                                     color: Colors.black,
                                   ),

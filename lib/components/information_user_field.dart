@@ -14,11 +14,11 @@ class InformationFields extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appThemeState = ref.watch(appThemeStateNotifier);
+    final appThemeState = ref.watch(themeNotifierProvider);
     if (type == 'field') {
       return Container(
         decoration: BoxDecoration(
-          color: appThemeState.isDarkModeEnabled
+          color: appThemeState == ThemeMode.dark
               ? const Color(0xff93b1a7)
               : const Color(0xff93b1a7),
           borderRadius: BorderRadius.circular(16.0),

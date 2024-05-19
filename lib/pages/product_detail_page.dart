@@ -6,11 +6,11 @@ import 'package:furniture_app/components/dialog/dialog_auth.dart';
 import 'package:furniture_app/components/dialog/dialog_model.dart';
 import 'package:furniture_app/components/review_list.dart';
 import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/model/product_model.dart';
 import 'package:furniture_app/pages/address_page.dart';
 import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
-import 'package:furniture_app/services/constain.dart';
 import 'package:furniture_app/state/cart/cart_provider.dart';
 import 'package:furniture_app/state/review/review_provider.dart';
 import 'package:gap/gap.dart';
@@ -158,12 +158,12 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("$solded${widget.product.solded}",
+                          Text("${context.loc.solded}${widget.product.solded}",
                               style: GoogleFonts.roboto(
                                 fontSize: 16,
                               )),
                           Row(children: [
-                            Text(color),
+                            Text(context.loc.color),
                             Container(
                                 height: 20,
                                 width: 20,
@@ -176,7 +176,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                         ],
                       ),
                       const Gap(10),
-                      Text(description,
+                      Text(context.loc.description,
                           style: GoogleFonts.roboto(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -225,7 +225,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                                   ));
                             },
                             child: Text(
-                              seeAllReviews,
+                              context.loc.seeAllReviews,
                               style: GoogleFonts.roboto(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -444,7 +444,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                                     builder: (context) => AddressPage(),
                                   ));
                             } else {
-                              await AuthDialog(errorMessage: outOfStock)
+                              await AuthDialog(errorMessage: context.loc.outOfStock)
                                   .present(context)
                                   .then((shouldDelete) => shouldDelete ?? true);
                             }
@@ -453,7 +453,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(buyNow,
+                                Text(context.loc.buyNow,
                                     style: GoogleFonts.roboto(
                                         color: Colors.white)),
                                 const Gap(10),
@@ -484,7 +484,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                                     widget.product.id!,
                                   );
                               Fluttertoast.showToast(
-                                msg: addedToCart,
+                                msg: context.loc.addedToCart,
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.CENTER,
                                 timeInSecForIosWeb: 1,
@@ -493,7 +493,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                                 fontSize: 16.0,
                               );
                             } else {
-                              await AuthDialog(errorMessage: outOfStock)
+                              await AuthDialog(errorMessage: context.loc.outOfStock)
                                   .present(context)
                                   .then((shouldDelete) => shouldDelete ?? true);
                             }
@@ -503,7 +503,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  addToCart,
+                                  context.loc.addToCart,
                                   style:
                                       GoogleFonts.roboto(color: Colors.white),
                                 ),
@@ -618,7 +618,7 @@ class ExpandableTextWidget extends ConsumerWidget {
                   child: Row(
                     children: [
                       Text(
-                        showmore,
+                        context.loc.showmore,
                         style: GoogleFonts.roboto(
                             fontSize: 12, color: const Color(0xFF183D3D)),
                       ),

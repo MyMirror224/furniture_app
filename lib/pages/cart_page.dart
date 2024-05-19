@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:furniture_app/components/CartItemSampLes.dart';
 import 'package:furniture_app/components/HomeAppBar.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/pages/address_page.dart';
 import 'package:furniture_app/state/cart/cart_provider.dart';
 import 'package:gap/gap.dart';
@@ -79,8 +80,8 @@ class _CartPageState extends ConsumerState<CartPage> {
                           ),
                         ),
                         const SizedBox(height: 5),
-                        const Text(
-                          "Cart",
+                         Text(
+                          context.loc.cart,
                           style: TextStyle(
                             fontSize: 10,
                             color: Color(0xff193d3d),
@@ -133,7 +134,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          "Address",
+                          context.loc.address,
                           style: TextStyle(
                             fontSize: 10,
                             color: const Color(0xff193d3d).withOpacity(0.5),
@@ -186,7 +187,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          "Pay",
+                          context.loc.pay,
                           style: TextStyle(
                             fontSize: 10,
                             color: const Color(0xff193d3d).withOpacity(0.5),
@@ -198,8 +199,8 @@ class _CartPageState extends ConsumerState<CartPage> {
                 ),
                 Container(
                   padding: const EdgeInsets.only(left: 15, top: 10),
-                  child: const Text(
-                    "My Cart",
+                  child:  Text(
+                    context.loc.myCart,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -299,8 +300,8 @@ class _CartPageState extends ConsumerState<CartPage> {
               children: [
                 Container(
                   padding: const EdgeInsets.only(left: 15, top: 5),
-                  child: const Text(
-                    "Order details",
+                  child:  Text(
+                    context.loc.orderdetails,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -325,11 +326,11 @@ class _CartPageState extends ConsumerState<CartPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Column(
+                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Total before",
+                        context.loc.totalBefore,
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.black,
@@ -337,7 +338,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        "Discount",
+                        context.loc.discount,
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.black,
@@ -345,7 +346,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        "Shopping",
+                        context.loc.shopping,
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.black,
@@ -353,7 +354,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        "Total price",
+                        context.loc.totalPrice,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.black,
@@ -381,8 +382,8 @@ class _CartPageState extends ConsumerState<CartPage> {
                         ),
                       ),
                       const SizedBox(height: 5),
-                      const Text(
-                        "Free",
+                       Text(
+                        context.loc.free,
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.black,
@@ -406,6 +407,7 @@ class _CartPageState extends ConsumerState<CartPage> {
             Container(
               padding: EdgeInsets.only(bottom: 10, left: 20, right: 20),
               width: MediaQuery.of(context).size.width*0.9,
+             
               child: ElevatedButton(
                 onPressed: () {
                   if (isContinue) {
@@ -430,7 +432,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                     );
                   } else {
                     Fluttertoast.showToast(
-                      msg: "Please choose product",
+                      msg: context.loc.pleaseChoiceProduct,
                       toastLength: Toast.LENGTH_LONG,
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 1,
@@ -446,7 +448,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                       isContinue ? Color(0xff193d3d) : Colors.grey,
                   
                 ),
-                child: Text('Continue'),
+                child: Text(context.loc.continuee),
               ),
             ),
           ],

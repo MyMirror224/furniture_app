@@ -5,6 +5,7 @@ import 'package:furniture_app/components/grip_view_search.dart';
 import 'package:furniture_app/components/notify_view.dart';
 import 'package:furniture_app/components/slide_home_view.dart';
 import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/global.dart';
 import 'package:furniture_app/model/product_model.dart';
 import 'package:furniture_app/pages/cart_page.dart';
@@ -13,7 +14,6 @@ import 'package:furniture_app/pages/search%20page/searchPage.dart';
 import 'package:furniture_app/pages/user_information/user_information.dart';
 import 'package:furniture_app/provider/isLockUser.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
-import 'package:furniture_app/services/constain.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:furniture_app/state/category/categogies_provider.dart';
 import 'package:furniture_app/state/notify/notify_provider.dart';
@@ -25,8 +25,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 class HomePage extends ConsumerStatefulWidget {
- 
-  const HomePage({ Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
@@ -34,31 +33,27 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   int index = 2;
-   String userId=""; 
+  String userId = "";
   @override
   void didChangeDependencies() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      
       ref.read(productProvider).newProduct();
       ref.read(productProvider).fetchCategories();
       ref.read(categoryProvider).fetchCategories();
       ref.read(productProvider).fetchProduct();
-      
-       userId =   ref.watch(userIdProvider).toString();
+
+      userId = ref.watch(userIdProvider).toString();
       ref.read(notifyProvider).fetchNotification(userId);
       ref.read(lockUserProvider).checkLock(userId);
-      
     });
     // WidgetsBinding.instance.addPostFrameCallback((_)  {
-      
-    
+
     // });
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    
     final searchProvi = ref.watch(searchProvider);
     final itemProducts = ref.watch(productProvider).products;
     final userId = ref.watch(userIdProvider);
@@ -71,7 +66,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     final catelogiesProvider = ref.watch(categoryProvider).categories;
     bool isShownotify = ref.watch(notifyProvider).isShow;
     final listNotify = ref.watch(notifyProvider).notifications;
-    
+
     return KeyboardDismisser(
       child: Scaffold(
         body: Stack(children: [
@@ -117,6 +112,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 ),
                               ),
                               const Gap(10),
+                             
                               Text(
                                 // longText.length > 15
                                 //     ? "Hi, "
@@ -124,9 +120,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 //     : "Hi, $longText",
                                 // with vn language
                                 longText.length > 15
-                                    ? "$hi"
-                                        "...${longText.substring(4, longText.length)}"
-                                    : "$hi$longText",
+                                    ? "${context.loc.hi}...${longText.substring(4, longText.length)}"
+                                    : "${context.loc.hi}$longText",
                                 maxLines: 1,
                                 overflow: TextOverflow.fade,
                                 style: GoogleFonts.roboto(
@@ -206,7 +201,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                           icon: const Icon(Icons.search),
                           color: Colors.black87,
                           onPressed: () {
-                            if (searchProvi.controllerTextField.text.isNotEmpty) {
+                            if (searchProvi
+                                .controllerTextField.text.isNotEmpty) {
                               searchProvi.saveSearchingHistory(
                                   searchProvi.controllerTextField.text);
                               ref.read(productProvider.notifier).setHeight(400);
@@ -221,7 +217,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           },
                         ),
                         border: InputBorder.none,
-                        hintText: 'Search',
+                        hintText: context.loc.search,
                         hintStyle: GoogleFonts.roboto(
                           fontSize: 22,
                         ),
@@ -229,16 +225,16 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                   ),
                   const Gap(20),
-                  const Row(
+                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      TitleOfPage(name: "Categories"),
+                      TitleOfPage( name: context.loc.categories),
                     ],
                   ),
                   const Gap(20),
                   Container(
-                    margin:
-                        const EdgeInsets.only(bottom: 15.0, left: 20, right: 20),
+                    margin: const EdgeInsets.only(
+                        bottom: 15.0, left: 20, right: 20),
                     height: 40,
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
@@ -276,7 +272,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                       TitleOfPage(name: '$popular'),
+                      TitleOfPage(name: context.loc.popular),
                       TextButton(
                         onPressed: () {
                           Navigator.push(
@@ -288,7 +284,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           );
                         },
                         child: Text(
-                          seeAll,
+                          context.loc.seeAll,
                           style: GoogleFonts.roboto(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -367,7 +363,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 child: NotifyView(lists: listNotify),
               ),
             ),
-    
+
           // if (isShownotify)
           //   Positioned(
           //     top: 55, // Điều chỉnh vị trí top

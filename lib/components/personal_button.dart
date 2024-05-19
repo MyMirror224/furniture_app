@@ -12,12 +12,12 @@ class PersonalButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appThemeState = ref.watch(appThemeStateNotifier);
+    final appThemeState = ref.watch(themeNotifierProvider);
    
     return ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
-        backgroundColor: appThemeState.isDarkModeEnabled
+        backgroundColor: appThemeState == ThemeMode.dark
             ? const Color(0xff93b1a7)
             : const Color(0xff93b1a7),
         shape: RoundedRectangleBorder(
