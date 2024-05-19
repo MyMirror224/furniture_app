@@ -131,7 +131,7 @@ class CartItemSampLess extends HookConsumerWidget {
                       child: Icon(
                         Icons.close,
                         color: Color(0xff193d3d), // Thay đổi màu sắc của Icon
-                        size: height * 0.01, // Thay đổi kích thước của Icon
+                        size: height * 0.03, // Thay đổi kích thước của Icon
                       ),
                     ),
                     // Align(

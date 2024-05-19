@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:furniture_app/components/dialog/dialog_auth.dart';
 import 'package:furniture_app/components/dialog/dialog_model.dart';
 import 'package:furniture_app/components/loading/loading_screen.dart';
 import 'package:furniture_app/global.dart';
+import 'package:furniture_app/l10n/l10n.dart';
 import 'package:furniture_app/pages/login_page.dart';
 import 'package:furniture_app/pages/navigator_bar.dart';
 import 'package:furniture_app/pages/verify_email_view.dart';
@@ -12,10 +14,12 @@ import 'package:furniture_app/provider/is_failure.dart';
 import 'package:furniture_app/provider/is_loading_provider.dart';
 import 'package:furniture_app/provider/is_logged_in_provider.dart';
 import 'package:furniture_app/provider/is_not_verify_provider.dart';
+import 'package:furniture_app/provider/region_provider.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:furniture_app/themes/app_theme.dart';
 import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   await Global.init();
@@ -30,15 +34,11 @@ class DarkModeSwitch extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appThemeState = ref.watch(appThemeStateNotifier);
+    final appThemeState = ref.watch(themeNotifierProvider);
     return Switch(
-      value: appThemeState.isDarkModeEnabled,
+      value: appThemeState == ThemeMode.dark ? true : false,
       onChanged: (enabled) {
-        if (enabled) {
-          appThemeState.setDarkTheme();
-        } else {
-          appThemeState.setLightTheme();
-        }
+        ref.read(themeNotifierProvider.notifier).toggleTheme();
       },
     );
   }
@@ -51,13 +51,18 @@ class App extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appThemeState = ref.watch(appThemeStateNotifier);
+    final appThemeState = ref.watch(themeNotifierProvider);
+    final locale = ref.watch(localeProvider);
+
     var errorText = ref.watch(errorMessageProvider);
     return MaterialApp(
+      supportedLocales: L10n.all,
+      locale: locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       darkTheme: AppTheme.darkTheme,
       theme: AppTheme.lightTheme,
       themeMode:
-          appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+          appThemeState == ThemeMode.dark ? ThemeMode.dark : ThemeMode.light,
       debugShowCheckedModeBanner: false,
 
       home: Consumer(
@@ -95,9 +100,10 @@ class App extends ConsumerWidget {
               }
             }
             if (isLockUser) {
-              final dialogBool2 = await AuthDialog(errorMessage: "Account locked")
-                  .present(context)
-                  .then((shouldDelete) => shouldDelete ?? true);
+              final dialogBool2 =
+                  await AuthDialog(errorMessage: "Account locked")
+                      .present(context)
+                      .then((shouldDelete) => shouldDelete ?? true);
               if (dialogBool2) {
                 ref.read(authStateProvider.notifier).logOut();
                 ref.read(lockUserProvider.notifier).setLock();
@@ -105,10 +111,7 @@ class App extends ConsumerWidget {
             }
           });
 
-          //return MainView();
-
           if (isLoggedIn) {
-           
             return HomeScreen();
           } else if (isNotVerify) {
             return const VerifyEmailView();

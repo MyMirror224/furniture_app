@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/forgot_password/fogot_button.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -10,32 +11,32 @@ class ForgotPassword extends ConsumerWidget {
   const ForgotPassword({super.key});
 
   get child => null;
-  String? validateEmail(String email) {
+  String? validateEmail(String email, BuildContext context) {
     final RegExp emailRegex = RegExp(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
     if (!emailRegex.hasMatch(email)) {
-      return _getEmailErrorMessage(email);
+      return _getEmailErrorMessage(email, context);
     }
     return null;
   }
 
-  String? _getEmailErrorMessage(String email) {
+  String? _getEmailErrorMessage(String email, BuildContext context) {
     final RegExp emailRegex = RegExp(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 
     if (!emailRegex.hasMatch(email)) {
       // Check for common email validation errors using regular expressions
       if (!email.contains('@')) {
-        return 'Missing "@" symbol';
+        return context.loc.emailErrorMessage;
       } else if (!email.contains('.')) {
-        return 'Missing "." after domain name';
+        return context.loc.emailErrorMessage2;
       } else if (email.startsWith('.') || email.endsWith('.')) {
-        return 'Email cannot start or end with "."';
+        return context.loc.emailErrorMessage3 ;
       } else if (email.contains(' ')) {
-        return 'Email cannot contain spaces';
+        return context.loc.emailErrorMessage4;
       }
       // Add more checks for specific use cases as needed
-      return 'Invalid email format';
+      return context.loc.emailErrorMessage5;
     }
     return null;
   }
@@ -50,8 +51,8 @@ class ForgotPassword extends ConsumerWidget {
         elevation: 0,
         backgroundColor: Colors.deepOrangeAccent,
         toolbarHeight: 150,
-        title: const Text(
-          'Forgot Password',
+        title:  Text(
+          context.loc.forgotPassword,
           style: TextStyle(
             color: Colors.black, // chinh mau
             fontSize: 25,
@@ -100,10 +101,10 @@ class ForgotPassword extends ConsumerWidget {
                     margin: const EdgeInsets.only(left: 15, right: 15),
                     padding: const EdgeInsets.only(left: 20),
                     child: RichText(
-                      text: const TextSpan(
+                      text:  TextSpan(
                         children: [
                           TextSpan(
-                            text: 'Oh no! ',
+                            text: context.loc.ohno,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 35,
@@ -111,7 +112,7 @@ class ForgotPassword extends ConsumerWidget {
                             ),
                           ),
                           TextSpan(
-                            text: ' You forgot your password ?',
+                            text: context.loc.forgotPassword2,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 25,
@@ -130,17 +131,16 @@ class ForgotPassword extends ConsumerWidget {
                         padding: const EdgeInsets.only(left: 25),
                         margin: const EdgeInsets.only(left: 15, right: 25),
                         child: RichText(
-                            text: const TextSpan(children: [
+                            text:  TextSpan(children: [
                           TextSpan(
-                              text: "Don't Worry!\n",
+                              text: context.loc.dontworry,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               )),
                           TextSpan(
-                            text:
-                                "Please enter your email address. You will receive a link to create a new password via email.",
+                            text: context.loc.pleaseInput,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 16,
@@ -162,9 +162,9 @@ class ForgotPassword extends ConsumerWidget {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "please enter your email";
+                              return context.loc.pleaseEnterYourEmail;
                             } else {
-                              return validateEmail(value);
+                              return validateEmail(value,context);
                             }
                           },
                           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -203,7 +203,7 @@ class ForgotPassword extends ConsumerWidget {
                       ForgotButton(
                         text: "Recover Password",
                         onTap: () async {
-                          if (validateEmail(_emailController.text) == null) {
+                          if (validateEmail(_emailController.text, context) == null) {
                             await ref
                                 .read(authStateProvider.notifier)
                                 .forgotPassword(_emailController.text);

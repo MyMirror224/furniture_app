@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_app/pages/home_page.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
+
 import 'package:furniture_app/pages/login_page.dart';
 
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
@@ -11,6 +12,7 @@ class VerifyEmailView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    
     return Scaffold(
       backgroundColor: Color(0xff193d3d).withOpacity(0.9),
       body: Center(
@@ -19,8 +21,8 @@ class VerifyEmailView extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Email has been sent!',
+               Text(
+                context.loc.emailSent,
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
@@ -28,16 +30,16 @@ class VerifyEmailView extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 16.0),
-              const Text(
-                'Please check your email and click on the link to verify your account.',
+               Text(
+                context.loc.emailSent2,
                 style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.white,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const Text(
-                'If you have not received a verification email, please click on the button below to resend it.',
+               Text(
+                context.loc.resendEmail,
                 style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.white,
@@ -56,7 +58,7 @@ class VerifyEmailView extends ConsumerWidget {
                         .read(authStateProvider.notifier)
                         .sendEmailVerification();
                   },
-                  child: const Text('Resend Email',
+                  child:  Text(context.loc.resendEmail2,
                       style: TextStyle(color: Colors.black)),
                 ),
               ),
@@ -73,7 +75,7 @@ class VerifyEmailView extends ConsumerWidget {
                         MaterialPageRoute(builder: (context) => Login()),
                         (route) => false);
                   },
-                  child: const Text('I am verified',
+                  child:  Text(context.loc.verified,
                       style: TextStyle(color: Colors.black)),
                 ),
               ),

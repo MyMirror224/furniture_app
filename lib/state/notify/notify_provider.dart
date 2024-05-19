@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/model/notify_model.dart';
-
 import 'package:furniture_app/services/logger.dart';
-import 'package:furniture_app/services/onesign/onesign.dart';
 import 'package:furniture_app/state/notify/notify_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class NotifyNotifier extends ChangeNotifier {
   bool isShow = false;
   List<NotificationModel> notifications = [];
-  
-  Future<void> changeShow(bool value) async {
 
+  Future<void> changeShow(bool value) async {
     isShow = value;
     notifyListeners();
   }
@@ -95,13 +91,14 @@ class NotifyNotifier extends ChangeNotifier {
   // }
   Future<void> fetchNotification(String userId) async {
     try {
-      final  notify = await NotifyApi.getNotify( userId);
+      final notify = await NotifyApi.getNotify(userId);
       notifications = notify;
       notifyListeners();
     } catch (_) {
       eLog(_);
     }
   }
+
   Future<void> updateNotification(int id, String userId, int type) async {
     try {
       final notify = await NotifyApi.update(id, userId, type);
@@ -112,6 +109,10 @@ class NotifyNotifier extends ChangeNotifier {
     }
   }
 
+  void addNewNotification(NotificationModel notify) {
+    notifications.insert(0, notify);
+    notifyListeners();
+  }
 }
 
 final notifyProvider = ChangeNotifierProvider((ref) => NotifyNotifier());

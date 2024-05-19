@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/personal_button.dart';
 import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/pages/Invoice_history_page.dart';
+import 'package:furniture_app/pages/change_language.dart';
 import 'package:furniture_app/pages/notification_page.dart';
 import 'package:furniture_app/pages/user_information/detail_information.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
@@ -36,7 +38,7 @@ class _PersonalPageState extends ConsumerState<PersonalPage> {
         ? user.value!.avatar.toString()
         : 'storage/avatars/default.png';
     String avatarPath = '${AppConstants.SERVER_API_URL}$avatar';
-    final appThemeState = ref.watch(appThemeStateNotifier);
+    final appThemeState = ref.watch(themeNotifierProvider);
     // ignore: unused_local_variable
 
     Size size = MediaQuery.of(context).size;
@@ -93,16 +95,16 @@ class _PersonalPageState extends ConsumerState<PersonalPage> {
               child: SizedBox(
                 height: size.height * 0.07,
                 width: size.width * 0.8,
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       FontAwesomeIcons.user,
                       color: Colors.black45,
                     ),
-                    Gap(20),
+                    const Gap(20),
                     Text(
-                      "Personal Information",
-                      style: TextStyle(
+                      context.loc.psnal,
+                      style: const TextStyle(
                         fontSize: 20,
                         color: Colors.white,
                       ),
@@ -122,7 +124,7 @@ class _PersonalPageState extends ConsumerState<PersonalPage> {
               height: size.height * 0.07,
               width: size.width * 0.9,
               child: PersonalButton(
-                text: "My Orders",
+                text: context.loc.myOrders,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -139,8 +141,14 @@ class _PersonalPageState extends ConsumerState<PersonalPage> {
               height: size.height * 0.07,
               width: size.width * 0.9,
               child: PersonalButton(
-                text: "Language",
-                onTap: () {},
+                text: context.loc.language,
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LanguagePage(),
+                      ));
+                },
                 icon: FontAwesomeIcons.language,
               ),
             ),
@@ -149,7 +157,7 @@ class _PersonalPageState extends ConsumerState<PersonalPage> {
               height: size.height * 0.07,
               width: size.width * 0.9,
               child: PersonalButton(
-                text: "Notification",
+                text: context.loc.notification,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -172,18 +180,18 @@ class _PersonalPageState extends ConsumerState<PersonalPage> {
               height: size.height * 0.07,
               width: size.width * 0.9,
               decoration: BoxDecoration(
-                color: appThemeState.isDarkModeEnabled
+                color: appThemeState == ThemeMode.dark
                     ? const Color(0xff93b1a7)
                     : const Color(0xff93b1a7),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: const Row(
+              child: Row(
                 children: [
                   Gap(20),
                   Icon(Icons.contrast, color: Colors.black45),
                   Gap(20),
                   Expanded(
-                    child: Text("Theme",
+                    child: Text(context.loc.theme,
                         style: TextStyle(
                           fontSize: 20,
                           color: Color.fromARGB(255, 0, 0, 0),
@@ -198,7 +206,7 @@ class _PersonalPageState extends ConsumerState<PersonalPage> {
               height: size.height * 0.07,
               width: size.width * 0.9,
               child: PersonalButton(
-                text: "Logout",
+                text: context.loc.logout,
                 onTap: () => ref.read(authStateProvider.notifier).logOut(),
                 icon: FontAwesomeIcons.signOutAlt,
               ),
@@ -215,15 +223,12 @@ class DarkModeSwitch extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appThemeState = ref.watch(appThemeStateNotifier);
+    final themeMode = ref.watch(themeNotifierProvider);
     return Switch(
-      value: appThemeState.isDarkModeEnabled,
+      value: themeMode == ThemeMode.dark,
+      activeColor: Color.fromARGB(255, 2, 31, 21),
       onChanged: (enabled) {
-        if (enabled) {
-          appThemeState.setDarkTheme();
-        } else {
-          appThemeState.setLightTheme();
-        }
+        ref.read(themeNotifierProvider.notifier).toggleTheme();
       },
     );
   }

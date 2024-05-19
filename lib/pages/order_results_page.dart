@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/model/order_model.dart';
 import 'package:furniture_app/pages/Invoice_history_page.dart';
 import 'package:furniture_app/pages/navigator_bar.dart';
@@ -45,7 +46,7 @@ class OrderResults extends HookConsumerWidget {
                       Container(
                         padding: EdgeInsets.only(left: 15, top: 0),
                         child: Text(
-                          "Thank you for your order",
+                          context.loc.thankYouForShopping,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -73,7 +74,7 @@ class OrderResults extends HookConsumerWidget {
                         ),
                       ),
                       Text(
-                        'Sorry! The order has failed,',
+                        context.loc.sorryFailed,
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -81,7 +82,7 @@ class OrderResults extends HookConsumerWidget {
                         ),
                       ),
                       Text(
-                        'please try again.',
+                        context.loc.pleaseTryAgain,
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -114,7 +115,7 @@ class OrderResults extends HookConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Name",
+                                  context.loc.name,
                                   style: TextStyle(
                                     fontSize: 10,
                                     color: Colors.black,
@@ -122,7 +123,7 @@ class OrderResults extends HookConsumerWidget {
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  "Order Id",
+                                  context.loc.orderid,
                                   style: TextStyle(
                                     fontSize: 10,
                                     color: Colors.black,
@@ -130,7 +131,7 @@ class OrderResults extends HookConsumerWidget {
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  "Address",
+                                  context.loc.address,
                                   style: TextStyle(
                                     fontSize: 10,
                                     color: Colors.black,
@@ -209,7 +210,7 @@ class OrderResults extends HookConsumerWidget {
                             backgroundColor: Colors.white,
                             elevation: 8.0,
                           ),
-                          child: Text('Back Home'),
+                          child: Text(context.loc.backHome),
                         ),
                       ),
                       SizedBox(height: 10), // Khoảng cách giữa hai nút
@@ -235,7 +236,7 @@ class OrderResults extends HookConsumerWidget {
                             backgroundColor: const Color(0xff193d3d),
                             elevation: 8.0,
                           ),
-                          child: Text('Track your order'),
+                          child: Text(context.loc.trackOrder),
                         ),
                       ),
                     ],
@@ -316,7 +317,7 @@ class OrderResults extends HookConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Error! The action is faulty or the order has not been updated",
+                                    context.loc.errormessenger,
                                     style: TextStyle(
                                       fontSize: 10,
                                       color: const Color(0xff193d3d),
@@ -324,7 +325,7 @@ class OrderResults extends HookConsumerWidget {
                                   ),
                                   SizedBox(height: 5),
                                   Text(
-                                    "soft 404 error!",
+                                    context.loc.errormessenger2,
                                     style: TextStyle(
                                       fontSize: 10,
                                       color: const Color(0xff193d3d),
@@ -380,7 +381,7 @@ class OrderResults extends HookConsumerWidget {
                             backgroundColor: Colors.white,
                             elevation: 8.0,
                           ),
-                          child: Text('Back Home'),
+                          child: Text(context.loc.backHome),
                         ),
                       ),
                       SizedBox(height: 10), // Khoảng cách giữa hai nút
@@ -410,7 +411,7 @@ class OrderResults extends HookConsumerWidget {
                             backgroundColor: const Color(0xff193d3d),
                             elevation: 8.0,
                           ),
-                          child: Text('payment again'),
+                          child: Text(context.loc.paymentAgain),
                         ),
                       ),
                     ],

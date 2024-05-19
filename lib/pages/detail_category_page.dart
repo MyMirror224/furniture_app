@@ -21,8 +21,7 @@ class _DetailCategoryPageState extends ConsumerState<DetailCategoryPage> {
   void didChangeDependencies() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(productProvider.notifier).fetchProductForIDCate(widget.cateName);
-      debugPrint('cateName: ${widget.cateName} ');
-      debugPrint("nhận: " + widget.cateName);
+      
     });
     super.didChangeDependencies();
   }

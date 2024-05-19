@@ -5,6 +5,7 @@ import 'package:furniture_app/components/HomeAppBar.dart';
 import 'package:furniture_app/components/information_user_field.dart';
 import 'package:furniture_app/components/login_signup/button_login.dart';
 import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/helper/image_picker_helper.dart';
 import 'package:furniture_app/pages/user_information/change_password.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
@@ -36,7 +37,7 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final appThemeState = ref.watch(appThemeStateNotifier);
+    final appThemeState = ref.watch(themeNotifierProvider);
     final userId = ref.watch(userIdProvider);
     final user = ref.watch(userInfoModelProvider(userId.toString()));
     String userName = user.hasValue ? user.value!.name.toString() : "";
@@ -67,7 +68,7 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                 child: Column(
               children: [
                 HomeAppBar(),
-                Gap(10),
+                const Gap(10),
                 Column(
                   children: [
                     Stack(
@@ -130,38 +131,36 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                     )
                   ],
                 ),
-                Gap(10),
+                const Gap(10),
                 Text('$email1****$email2',
                     style: const TextStyle(fontSize: 20)),
                 Container(
-                  padding: EdgeInsets.only(left: 15, top: 15, right: 15),
+                  padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Your name",
-                        style: TextStyle(
+                        context.loc.yourName,
+                        style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.normal,
-                          color: Colors.black,
+                          color: Color(0xff193d3d),
                         ),
                         textAlign: TextAlign.left,
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Container(
                         child: TextFormField(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your name';
+                              return context.loc.pleaseInputName;
                             }
                             return null;
                           },
                           keyboardType: TextInputType.name,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           textAlign: TextAlign.start,
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
+                          style: const TextStyle(color: Color(0xff193d3d)),
                           controller:
                               ref.watch(InforUserNotifer).nameController,
                           onChanged: (value) {
@@ -169,17 +168,17 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                                 .read(InforUserNotifer.notifier)
                                 .changeInfoName(value);
                           },
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             focusColor: Colors.blueAccent,
-                            enabledBorder: const OutlineInputBorder(
+                            enabledBorder: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
-                            focusedBorder: const OutlineInputBorder(
+                            focusedBorder: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10.0)),
                               borderSide: BorderSide(color: Colors.blue),
                             ),
-                            errorBorder: const OutlineInputBorder(
+                            errorBorder: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10.0)),
                               borderSide: BorderSide(
@@ -193,13 +192,13 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 15, top: 15, right: 15),
+                  padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Phone Number",
-                        style: TextStyle(
+                        context.loc.phoneNumber,
+                        style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.normal,
                           color: Colors.black,
@@ -211,7 +210,7 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                         child: TextFormField(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your phone number';
+                              return context.loc.pleaseEnterYourPhoneNumber;
                             }
                             return null;
                           },
@@ -231,18 +230,18 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                                 .read(InforUserNotifer.notifier)
                                 .changeInfoPhone(value);
                           },
-                          decoration: InputDecoration(
-                            labelStyle: const TextStyle(color: Colors.black),
+                          decoration: const InputDecoration(
+                            labelStyle: TextStyle(color: Colors.black),
                             focusColor: Colors.blueAccent,
-                            enabledBorder: const OutlineInputBorder(
+                            enabledBorder: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
-                            focusedBorder: const OutlineInputBorder(
+                            focusedBorder: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10.0)),
                               borderSide: BorderSide(color: Colors.blue),
                             ),
-                            errorBorder: const OutlineInputBorder(
+                            errorBorder: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10.0)),
                               borderSide: BorderSide(
@@ -256,25 +255,25 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 15, top: 15, right: 15),
+                  padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Delivery address",
-                        style: TextStyle(
+                        context.loc.address,
+                        style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.normal,
                           color: Colors.black,
                         ),
                         textAlign: TextAlign.left,
                       ),
-                      Gap(8),
+                      const Gap(8),
                       Container(
                         child: TextFormField(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your address';
+                              return context.loc.pleaseInputAddress;
                             }
                             return null;
                           },
@@ -291,18 +290,18 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                                 .read(InforUserNotifer.notifier)
                                 .changeInfoAddress(value);
                           },
-                          decoration: InputDecoration(
-                            labelStyle: const TextStyle(color: Colors.black),
+                          decoration: const InputDecoration(
+                            labelStyle: TextStyle(color: Colors.black),
                             focusColor: Colors.blueAccent,
-                            enabledBorder: const OutlineInputBorder(
+                            enabledBorder: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
-                            focusedBorder: const OutlineInputBorder(
+                            focusedBorder: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10.0)),
                               borderSide: BorderSide(color: Colors.blue),
                             ),
-                            errorBorder: const OutlineInputBorder(
+                            errorBorder: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10.0)),
                               borderSide: BorderSide(
@@ -315,10 +314,10 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                     ],
                   ),
                 ),
-                InformationFields(type: "name", text: "Password"),
+                InformationFields(type: "name", text: context.loc.password),
                 Container(
                   decoration: BoxDecoration(
-                    color: appThemeState.isDarkModeEnabled
+                    color: appThemeState == ThemeMode.dark
                         ? const Color(0xff93b1a7)
                         : const Color(0xff93b1a7),
                     borderRadius: BorderRadius.circular(16.0),
@@ -347,18 +346,17 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                     ],
                   ),
                 ),
-                Gap(20),
+                const Gap(20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    buttonLogin(
-                        "Cancel", Colors.black, (size.width * 0.3).toInt(), 50,
-                        onpressed: () {
+                    buttonLogin(context.loc.cancel, Colors.black,
+                        (size.width * 0.3).toInt(), 50, onpressed: () {
                       Navigator.pop(context);
                     }),
                     const Gap(20),
                     buttonLogin(
-                      "Save",
+                      context.loc.save,
                       Colors.black,
                       (size.width * 0.3).toInt(),
                       50,
@@ -373,7 +371,7 @@ class _DeteilInformationPageState extends ConsumerState<DeteilInformationPage> {
                               null,
                             );
                         Fluttertoast.showToast(
-                          msg: "Save Suscess",
+                          msg: context.loc.saveSuccess,
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
                           timeInSecForIosWeb: 1,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/state/review/review_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -26,7 +27,7 @@ class _WriteReviewPageState extends ConsumerState<WriteReviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Write a Review'),
+        title: Text(context.loc.writeReview),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -34,7 +35,7 @@ class _WriteReviewPageState extends ConsumerState<WriteReviewPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Rating',
+              context.loc.rating,
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
@@ -59,7 +60,7 @@ class _WriteReviewPageState extends ConsumerState<WriteReviewPage> {
             ),
             SizedBox(height: 16.0),
             Text(
-              'Message',
+              context.loc.message,
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
@@ -70,7 +71,7 @@ class _WriteReviewPageState extends ConsumerState<WriteReviewPage> {
               controller: _messageController,
               maxLines: 5,
               decoration: InputDecoration(
-                hintText: 'Write your review here...',
+                hintText: context.loc.writeYourReview,
                 border: OutlineInputBorder(),
               ),
             ),
@@ -88,7 +89,7 @@ class _WriteReviewPageState extends ConsumerState<WriteReviewPage> {
                     await ref.watch(productReviewsProvider).message;
                 if (message2 == 'success') {
                   await Fluttertoast.showToast(
-                    msg: "Review submitted successfully",
+                    msg: context.loc.reviewSuccess,
                     toastLength: Toast.LENGTH_LONG,
                     gravity: ToastGravity.CENTER,
                     timeInSecForIosWeb: 1,
@@ -99,7 +100,7 @@ class _WriteReviewPageState extends ConsumerState<WriteReviewPage> {
                   Navigator.pop(context);
                 } else {
                   await Fluttertoast.showToast(
-                    msg: "Review failed to submit",
+                    msg: context.loc.reviewFailed,
                     toastLength: Toast.LENGTH_LONG,
                     gravity: ToastGravity.CENTER,
                     timeInSecForIosWeb: 1,
@@ -109,7 +110,7 @@ class _WriteReviewPageState extends ConsumerState<WriteReviewPage> {
                   );
                 }
               },
-              child: Text('Submit Review'),
+              child: Text(context.loc.submitReview),
             ),
           ],
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:furniture_app/components/login_signup/button_login.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/pages/login_page.dart';
 import 'package:furniture_app/pages/verify_email_view.dart';
 import 'package:furniture_app/state/auth/auth_state_provider.dart';
@@ -15,48 +16,48 @@ class SignUp extends HookConsumerWidget {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String? validatePassword(String password) {
+  String? validatePassword(String password,BuildContext _) {
     final passwordRegex = RegExp(
         r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
-
+    
     if (!passwordRegex.hasMatch(password)) {
-      return _getPasswordErrorMessage(password);
+      return _getPasswordErrorMessage(password, _);
     }
 
     return null; // Mật khẩu hợp lệ
   }
 
-  String? validateEmail(String email) {
+  String? validateEmail(String email, BuildContext _) {
     final RegExp emailRegex = RegExp(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
     if (!emailRegex.hasMatch(email)) {
-      return _getEmailErrorMessage(email);
+      return _getEmailErrorMessage(email , _);
     }
     return null;
   }
 
-  String? _getEmailErrorMessage(String email) {
+  String? _getEmailErrorMessage(String email , BuildContext _) {
     final RegExp emailRegex = RegExp(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 
     if (!emailRegex.hasMatch(email)) {
       // Check for common email validation errors using regular expressions
       if (!email.contains('@')) {
-        return 'Missing "@" symbol';
+        return _.loc.emailErrorMessage;
       } else if (!email.contains('.')) {
-        return 'Missing "." after domain name';
+        return _.loc.emailErrorMessage2;
       } else if (email.startsWith('.') || email.endsWith('.')) {
-        return 'Email cannot start or end with "."';
+        return _.loc.emailErrorMessage3;
       } else if (email.contains(' ')) {
-        return 'Email cannot contain spaces';
+        return _.loc.emailErrorMessage4;
       }
       // Add more checks for specific use cases as needed
-      return 'Invalid email format';
+      return _.loc.emailErrorMessage5;
     }
     return null;
   }
 
-  String? _getPasswordErrorMessage(String password) {
+  String? _getPasswordErrorMessage(String password,BuildContext _) {
     final hasLowercase = password.contains(RegExp(r'[a-z]'));
     final hasUppercase = password.contains(RegExp(r'[A-Z]'));
     final hasDigit = password.contains(RegExp(r'\d'));
@@ -64,23 +65,23 @@ class SignUp extends HookConsumerWidget {
     final hasMinLength = password.length >= 8;
 
     if (!hasLowercase) {
-      return 'Must have at least one regular character (a-z)';
+      return _.loc.passwordErrorMessage;
     }
 
     if (!hasUppercase) {
-      return 'Must have at least one uppercase character (A-Z)';
+      return _.loc.passwordErrorMessage2;
     }
 
     if (!hasDigit) {
-      return 'Must have at least one number (0-9)';
+      return _.loc.passwordErrorMessage3;
     }
 
     if (!hasSpecialChar) {
-      return 'Must have at least one special character (@\$!%*?&)';
+      return _.loc.passwordErrorMessage4;
     }
 
     if (!hasMinLength) {
-      return 'Must be at least 8 characters long';
+      return _.loc.passwordErrorMessage5;
     }
     return null;
   }
@@ -149,7 +150,7 @@ class SignUp extends HookConsumerWidget {
                       ],
                     ),
                     Text(
-                      'Create new Account',
+                      context.loc.createNewAccount,
                       style: GoogleFonts.roboto(
                         fontWeight: FontWeight.bold,
                         fontSize: 30,
@@ -167,13 +168,13 @@ class SignUp extends HookConsumerWidget {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "please enter your name";
+                            return context.loc.enterName;
                           }
                           return null;
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: const InputDecoration(
-                          labelText: "Name",
+                        decoration:  InputDecoration(
+                          labelText: context.loc.name,
                           labelStyle: TextStyle(color: Colors.black),
                           enabledBorder: OutlineInputBorder(
                             borderRadius:
@@ -215,14 +216,14 @@ class SignUp extends HookConsumerWidget {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "please enter your email";
+                            return context.loc.enterEmail;
                           } else {
-                            return validateEmail(value);
+                            return validateEmail(value,context);
                           }
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: const InputDecoration(
-                          labelText: "Email Address",
+                        decoration:  InputDecoration(
+                          labelText: context.loc.email,
                           labelStyle: TextStyle(color: Colors.black),
                           enabledBorder: OutlineInputBorder(
                             borderRadius:
@@ -264,14 +265,14 @@ class SignUp extends HookConsumerWidget {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "please enter your password";
+                            return context.loc.enterPassword;
                           } else {
-                            return validatePassword(value);
+                            return validatePassword(value,context);
                           }
                         },
                         obscureText: loginNotifier.isObscure,
                         decoration: InputDecoration(
-                          labelText: "Password",
+                          labelText: context.loc.password,
                           labelStyle: const TextStyle(color: Colors.black),
                           focusColor: Colors.blueAccent,
                           enabledBorder: const OutlineInputBorder(
@@ -321,16 +322,16 @@ class SignUp extends HookConsumerWidget {
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "please enter your password";
+                            return context.loc.enterPassword;
                           } else {
                             if (value != passwordController.text) {
-                              return "passwords do not match";
+                              return context.loc.passwordNotMatch;
                             }
                           }
                           return null;
                         },
                         decoration: InputDecoration(
-                          labelText: "Confirm Password",
+                          labelText: context.loc.confirmPassword,
                           labelStyle: const TextStyle(color: Colors.black),
                           focusColor: Colors.blueAccent,
                           enabledBorder: const OutlineInputBorder(
@@ -371,7 +372,7 @@ class SignUp extends HookConsumerWidget {
 
                     const Gap(15),
 
-                    buttonLogin("Sign up", Colors.grey,
+                    buttonLogin(context.loc.signUp, Colors.grey,
                         (deviceHeight * 0.3).toInt(), 50, onpressed: () async {
                       if (_formKey.currentState!.validate()) {
                         ref
@@ -386,9 +387,9 @@ class SignUp extends HookConsumerWidget {
                       }
                     }),
                     const Gap(15),
-                    const Center(
+                     Center(
                       child: Text(
-                        "_________OR _________",
+                        context.loc.or,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ),
                     ),
@@ -418,16 +419,16 @@ class SignUp extends HookConsumerWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Already have an account?",
+                         Text(
+                          context.loc.alreadyHaveAccount,
                           style: TextStyle(color: Colors.grey, fontSize: 15),
                         ),
                         GestureDetector(
                           onTap: () {
                             Navigator.pop(context);
                           },
-                          child: const Text(
-                            " Login now",
+                          child:  Text(
+                            context.loc.loginNow,
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 15,

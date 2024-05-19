@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/HomeAppBar.dart';
 import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/model/order_model.dart';
 import 'package:furniture_app/pages/order_results_page.dart';
 import 'package:furniture_app/pages/pay_online_page.dart';
@@ -62,8 +63,8 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                       ),
                     ),
                     const SizedBox(height: 5),
-                    const Text(
-                      "Cart",
+                    Text(
+                      context.loc.cart,
                       style: TextStyle(
                         fontSize: 10,
                         color: Color(0xff193d3d),
@@ -116,7 +117,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      "Address",
+                      context.loc.address,
                       style: TextStyle(
                         fontSize: 10,
                         color: Color(0xff193d3d),
@@ -169,7 +170,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      "Pay",
+                      context.loc.pay,
                       style: TextStyle(
                         fontSize: 10,
                         color: Color(0xff193d3d),
@@ -182,7 +183,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
             Gap(10),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 15),
-              child: const Text('Infomation Order',
+              child:  Text(context.loc.inforOrder,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),
             Gap(10),
@@ -203,28 +204,28 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Name: ${_cart.nameController.text}',
+                        '${context.loc.name}: ${_cart.nameController.text}',
                         style: TextStyle(
                           fontSize: 15,
                         ),
                       ),
                       Gap(5),
                       Text(
-                        'Phone: ${_cart.phoneController.text}',
+                        '${context.loc.phone}: ${_cart.phoneController.text}',
                         style: TextStyle(
                           fontSize: 15,
                         ),
                       ),
                       Gap(5),
                       Text(
-                        'Address: ${_cart.addressController.text}',
+                        '${context.loc.address}: ${_cart.addressController.text}',
                         style: TextStyle(
                           fontSize: 15,
                         ),
                       ),
                       Gap(5),
                       Text(
-                        'Message: ${_cart.messageController}',
+                        '${context.loc.message}: ${_cart.messageController}',
                         style: TextStyle(
                           fontSize: 15,
                         ),
@@ -256,13 +257,13 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    'Name: ${_cart.cartItemsShow[index].name.toString().substring(_cart.cartItemsShow[index].name!.indexOf(' '))}'),
+                                    '${context.loc.name}: ${_cart.cartItemsShow[index].name.toString().substring(_cart.cartItemsShow[index].name!.indexOf(' '))}'),
                                 Gap(5),
                                 Text(
-                                    'Quantity: ${_cart.cartItemsShow[index].quantity}'),
+                                    '${context.loc.quantity}: ${_cart.cartItemsShow[index].quantity}'),
                                 Gap(5),
                                 Text(
-                                    'Price: \$${_cart.cartItemsShow[index].discountPrice}'),
+                                    '${context.loc.price}: \$${_cart.cartItemsShow[index].discountPrice}'),
                               ])
                         ]),
                   );
@@ -279,7 +280,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Total price",
+                    context.loc.totalPrice,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -303,7 +304,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Payment methods",
+                    context.loc.paymentType,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -391,7 +392,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                       ),
                       Gap(10),
                       Text(
-                        "Direct payment",
+                        context.loc.direct,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -436,7 +437,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
             backgroundColor: const Color(0xff193d3d),
             elevation: 8.0,
           ),
-          child: Text('Pay Now'),
+          child: Text(context.loc.paynow),
         ),
       ),
     );

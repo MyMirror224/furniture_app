@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/HomeAppBar.dart';
 import 'package:furniture_app/components/notify_view.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/state/notify/notify_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -36,7 +37,7 @@ class _NotificationPageState extends ConsumerState<NotificationPage> {
                 HomeAppBar(),
                 Gap(20),
                 Text(
-                  "Notification",
+                  context.loc.notification,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ],

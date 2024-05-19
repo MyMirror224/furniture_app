@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod/riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-final appThemeStateNotifier =
-    ChangeNotifierProvider<AppThemeState>((ref) => AppThemeState());
+final themeNotifierProvider = StateNotifierProvider<ThemeNotifier, ThemeMode>((ref) {
+  return ThemeNotifier();
+});
 
-class AppThemeState extends ChangeNotifier {
-  var isDarkModeEnabled = false;
-
-  void setLightTheme() {
-    isDarkModeEnabled = false;
-    notifyListeners();
+class ThemeNotifier extends StateNotifier<ThemeMode> {
+  ThemeNotifier() : super(ThemeMode.light) {
+    _loadThemeFromPreferences();
   }
 
-  void setDarkTheme() {
-    isDarkModeEnabled = true;
-    notifyListeners();
+  late SharedPreferences _sharedPreferences;
+
+  Future<void> _loadThemeFromPreferences() async {
+    _sharedPreferences = await SharedPreferences.getInstance();
+    final isDarkMode = _sharedPreferences.getBool('isDarkMode') ?? false;
+    state = isDarkMode ? ThemeMode.dark : ThemeMode.light;
+  }
+
+  void toggleTheme() async {
+    state = state == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    await _sharedPreferences.setBool('isDarkMode', state == ThemeMode.dark);
   }
 }

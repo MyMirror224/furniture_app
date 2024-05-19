@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/constant/appconstant.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/model/product_model.dart';
 import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/pages/detail_category_page.dart';
@@ -34,7 +35,7 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
     final catelogiesProvider = ref.watch(categoryProvider).categories;
     final Map<String, List<ProductModel?>> products =
         ref.watch(productProvider).productsForCateloryId;
-    final appThemeState = ref.watch(appThemeStateNotifier);
+    final appThemeState = ref.watch(themeNotifierProvider);
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
@@ -48,7 +49,7 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Categories",
+                    Text(context.loc.categories,
                         style: GoogleFonts.roboto(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
@@ -110,9 +111,9 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                                                   cateName: product.key)));
                                 },
                                 child: Text(
-                                  "View all",
+                                  context.loc.seeAll,
                                   style: TextStyle(
-                                      color: appThemeState.isDarkModeEnabled
+                                      color: appThemeState == ThemeMode.dark
                                           ? Colors.white
                                           : Color(0xff193d3d),
                                       fontSize: 16),
@@ -129,7 +130,8 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                               itemCount: product.value.length,
                               itemBuilder: (context, index) {
                                 final item = product.value[index];
-
+                                final priceItem = item!.price! -
+                                    item!.price! * item!.promotion! / 100;
                                 print(item);
 
                                 return GestureDetector(
@@ -146,7 +148,6 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                                     ),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white,
                                     ),
                                     child: Column(
                                       children: [
@@ -156,7 +157,7 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                                             height: 130,
                                             decoration: BoxDecoration(
                                                 borderRadius:
-                                                    BorderRadius.circular(30.0),
+                                                    BorderRadius.circular(8.0),
                                                 image: DecorationImage(
                                                   image: NetworkImage(
                                                     "${AppConstants.SERVER_API_URL}storage/${item!.image!.first}",
@@ -176,7 +177,6 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                                               style: GoogleFonts.roboto(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black,
                                               ),
                                               maxLines: 3,
                                             ),
@@ -188,11 +188,11 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                                               MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              '${item!.price}\$',
+                                              '${priceItem}\$',
                                               style: GoogleFonts.roboto(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ],
                                         ),

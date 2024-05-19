@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/Invoicehistory.dart';
 import 'package:furniture_app/components/listhistory.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/state/order/order_provider.dart';
-import 'package:gap/gap.dart';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // ignore: must_be_immutable
@@ -55,13 +56,13 @@ class _HistoryOrderPageState extends ConsumerState<HistoryInvoicePage>
                   indicatorColor: const Color(0xff193d3d),
                   indicatorPadding:
                       const EdgeInsets.only(left: 0, top: 0, bottom: 0),
-                  tabs: const [
-                    Tab(text: 'All'),
-                    Tab(text: 'Pending'),
-                    Tab(text: 'Delivering'),
-                    Tab(text: 'Goods delivered'),
-                    Tab(text: 'Returned'),
-                    Tab(text: 'Cancelled'),
+                  tabs:  [
+                    Tab(text: context.loc.all),
+                    Tab(text: context.loc.pending),
+                    Tab(text: context.loc.delivering),
+                    Tab(text:  context.loc.delivered),
+                    Tab(text: context.loc.returned),
+                    Tab(text: context.loc.cancelled),
                   ],
                   labelStyle: const TextStyle(
                       fontSize: 16), // Tăng kích thước chữ cho Tab đã chọn

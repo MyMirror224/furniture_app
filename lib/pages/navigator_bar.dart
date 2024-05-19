@@ -18,11 +18,11 @@ class HomeScreen extends ConsumerWidget {
     final userId = ref.watch(userIdProvider);
     final co = ref.watch(inforProvider);
     final height = MediaQuery.of(context).size.height;
-    final appThemeState = ref.watch(appThemeStateNotifier);
+    final appThemeState = ref.watch(themeNotifierProvider);
     return Scaffold(
       bottomNavigationBar: CurvedNavigationBar(
         height: height * 0.07,
-        backgroundColor: appThemeState.isDarkModeEnabled
+        backgroundColor: appThemeState == ThemeMode.dark
             ? Colors.black
             : const Color.fromARGB(
                 255, 255, 255, 255), // nền dưới thanh navigation

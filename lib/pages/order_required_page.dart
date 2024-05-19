@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/state/order/order_provider.dart';
-import 'package:furniture_app/state/review/review_provider.dart';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OrderCancelPage extends ConsumerStatefulWidget {
@@ -24,7 +25,7 @@ class _OrderCancelPageState extends ConsumerState<OrderCancelPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Write a Reason'),
+        title: Text(context.loc.writeReason),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -32,7 +33,7 @@ class _OrderCancelPageState extends ConsumerState<OrderCancelPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Reason',
+              context.loc.reason,
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
@@ -43,7 +44,7 @@ class _OrderCancelPageState extends ConsumerState<OrderCancelPage> {
               controller: _messageController,
               maxLines: 5,
               decoration: InputDecoration(
-                hintText: 'Write your reason here...',
+                hintText: context.loc.pleaseWriteReason,
                 border: OutlineInputBorder(),
               ),
             ),
@@ -54,7 +55,7 @@ class _OrderCancelPageState extends ConsumerState<OrderCancelPage> {
 
                 if (message.isEmpty) {
                   await Fluttertoast.showToast(
-                    msg: "Please write your reason",
+                    msg: context.loc.pleaseWriteReason,
                     toastLength: Toast.LENGTH_LONG,
                     gravity: ToastGravity.CENTER,
                     timeInSecForIosWeb: 1,
@@ -84,7 +85,7 @@ class _OrderCancelPageState extends ConsumerState<OrderCancelPage> {
 
                   if (message2 == 'Cancel success') {
                     await Fluttertoast.showToast(
-                      msg: "Request sent successfully ",
+                      msg: context.loc.requestSent,
                       toastLength: Toast.LENGTH_LONG,
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 1,
@@ -94,7 +95,7 @@ class _OrderCancelPageState extends ConsumerState<OrderCancelPage> {
                     );
                   } else {
                     await Fluttertoast.showToast(
-                      msg: "Request sent failed",
+                      msg: context.loc.requestFailed,
                       toastLength: Toast.LENGTH_LONG,
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 1,
@@ -106,7 +107,7 @@ class _OrderCancelPageState extends ConsumerState<OrderCancelPage> {
                   Navigator.pop(context);
                 }
               },
-              child: Text('Submit Request'),
+              child: Text(context.loc.submitRequest),
             ),
           ],
         ),

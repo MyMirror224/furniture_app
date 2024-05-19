@@ -30,7 +30,7 @@ class _UserInformationState extends ConsumerState<UserInformation> {
 
   @override
   Widget build(BuildContext context) {
-    final appThemeState = ref.watch(appThemeStateNotifier);
+    final appThemeState = ref.watch(themeNotifierProvider);
     final userId = ref.watch(userIdProvider);
     final user = ref.watch(userInfoModelProvider(userId.toString()));
 
@@ -145,7 +145,7 @@ class _UserInformationState extends ConsumerState<UserInformation> {
                 InformationFields(type: "name", text: 'Phone Number'),
                 Container(
                   decoration: BoxDecoration(
-                    color: appThemeState.isDarkModeEnabled
+                    color: appThemeState == ThemeMode.dark
                         ? const Color(0xff93b1a7)
                         : const Color(0xff93b1a7),
                     borderRadius: BorderRadius.circular(16.0),
@@ -181,7 +181,7 @@ class _UserInformationState extends ConsumerState<UserInformation> {
                 InformationFields(type: "name", text: "Password"),
                 Container(
                   decoration: BoxDecoration(
-                    color: appThemeState.isDarkModeEnabled
+                    color: appThemeState == ThemeMode.dark
                         ? const Color(0xff93b1a7)
                         : const Color(0xff93b1a7),
                     borderRadius: BorderRadius.circular(16.0),

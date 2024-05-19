@@ -5,6 +5,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/model/product_model.dart';
 import 'package:furniture_app/pages/product_detail_page.dart';
+import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -98,78 +99,84 @@ class ItemCard extends HookConsumerWidget {
     print(product);
     final title =
         product!.productName!.substring(product!.productName!.indexOf(' '));
+    final priceItem =
+        product!.price! - product!.price! * product!.promotion! / 100;
+    final appThemeState = ref.watch(themeNotifierProvider);
     return Card(
+        color: appThemeState == ThemeMode.dark
+            ? Color.fromARGB(194, 248, 240, 240)
+            : Colors.white,
         child: Column(children: [
-      Expanded(
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30.0),
-              image: DecorationImage(
-                image: NetworkImage(
-                  image,
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      image,
+                    ),
+                    fit: BoxFit.fill,
+                  )),
+            ),
+          ),
+          const Gap(10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Gap(5),
+              Flexible(
+                child: Text(
+                  title,
+                  style: GoogleFonts.roboto(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  maxLines: 3,
                 ),
-                fit: BoxFit.fill,
-              )),
-        ),
-      ),
-      const Gap(10),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Gap(5),
-          Flexible(
-            child: Text(
-              title,
-              style: GoogleFonts.roboto(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
               ),
-              maxLines: 3,
-            ),
+              Gap(5),
+            ],
           ),
-          Gap(5),
-        ],
-      ),
-      const Gap(10),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text(
-            '${product!.price}\$',
-            style: GoogleFonts.roboto(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          Container(
-            height: 30,
-            width: 30,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: const Color(0xff183D3D),
-            ),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProductDetailPage(
-                        product!,
-                      ),
-                    ));
-              },
-              child: const Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.white,
-                size: 16,
+          const Gap(10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                '${priceItem}\$',
+                style: GoogleFonts.roboto(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
-            ),
+              Container(
+                height: 30,
+                width: 30,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: const Color(0xff183D3D),
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductDetailPage(
+                            product!,
+                          ),
+                        ));
+                  },
+                  child: const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-      const Gap(10),
-    ]));
+          const Gap(10),
+        ]));
   }
 }
