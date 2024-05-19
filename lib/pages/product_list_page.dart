@@ -129,7 +129,6 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                                 // focusColor: Colors.transparent,
                                 hintText: 'Input search here...',
                               ),
-
                               onChanged: (v) {
                                 //request to get autocomplete searching value
                                 //check to can click to clear or not
@@ -148,52 +147,47 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
                               },
                             ),
                           ),
-                          Row(
-                            children: [
-                              InkWell(
-                                onTap: () async {
-                                  if (searchProvi
-                                      .controllerTextField.text.isNotEmpty) {
-                                    searchProvi.saveSearchingHistory(
-                                        searchProvi.controllerTextField.text);
-                                    ref
-                                        .read(productProvider.notifier)
-                                        .setHeight(400);
-                                    ref
-                                        .read(productProvider.notifier)
-                                        .filterCategory(
-                                            widget.index,
-                                            searchProvi
-                                                .controllerTextField.text,
-                                            rating,
-                                            _minPrice,
-                                            _maxPrice,
-                                            type);
-                                  }
-                                },
-                                child: Container(
-                                  height: size.height * 0.05,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff193d3d),
-                                    borderRadius: BorderRadius.circular(20),
+                          InkWell(
+                            onTap: () async {
+                              if (searchProvi
+                                  .controllerTextField.text.isNotEmpty) {
+                                searchProvi.saveSearchingHistory(
+                                    searchProvi.controllerTextField.text);
+                                ref
+                                    .read(productProvider.notifier)
+                                    .setHeight(400);
+                                ref
+                                    .read(productProvider.notifier)
+                                    .filterCategory(
+                                        widget.index,
+                                        searchProvi.controllerTextField.text,
+                                        rating,
+                                        _minPrice,
+                                        _maxPrice,
+                                        type);
+                              }
+                            },
+                            child: Container(
+                              height: size.height * 0.05,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: Color(0xff193d3d),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    // "search".tr(),
+                                    "Search",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                  child: const Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        // "search".tr(),
-                                        "Search",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),

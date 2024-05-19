@@ -36,6 +36,8 @@ class CartNotifier extends ChangeNotifier {
   String? messageController = '';
   bool get setAsDefault => _setAsDefault;
   bool _setAsDefault = false;
+
+  get paymentMethod => null;
   void setDefault(bool value) {
     _setAsDefault = value;
   }
@@ -130,8 +132,9 @@ class CartNotifier extends ChangeNotifier {
 
   Future<void> changQuantity(int index, int quantity, String uid) async {
     try {
-      if (quantity == -1 && _carts.products!.items![index].quantity == 1) {}
-      if (quantity == -1 && _carts.products!.items![index].quantity == 0) {
+      if (quantity == -1 && _carts.products!.items![index].quantity == 1) {
+      } else if (quantity == -1 &&
+          _carts.products!.items![index].quantity == 0) {
       } else {
         final respone = await CartApi.update(
             uid,

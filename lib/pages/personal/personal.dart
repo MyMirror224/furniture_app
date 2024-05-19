@@ -91,8 +91,8 @@ class _PersonalPageState extends ConsumerState<PersonalPage> {
                 ),
               ),
               child: SizedBox(
-                width: size.width * 0.8,
                 height: size.height * 0.07,
+                width: size.width * 0.8,
                 child: const Row(
                   children: [
                     Icon(
@@ -177,16 +177,19 @@ class _PersonalPageState extends ConsumerState<PersonalPage> {
                     : const Color(0xff93b1a7),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Row(
+              child: const Row(
                 children: [
-                  const Gap(20),
-                  const Icon(Icons.contrast, color: Colors.black45),
-                  const Gap(20),
+                  Gap(20),
+                  Icon(Icons.contrast, color: Colors.black45),
+                  Gap(20),
                   Expanded(
                     child: Text("Theme",
-                        style: TextStyle(fontSize: 20, color: Colors.black87)),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        )),
                   ),
-                  const DarkModeSwitch(),
+                  DarkModeSwitch(),
                 ],
               ),
             ),

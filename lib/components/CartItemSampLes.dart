@@ -14,7 +14,8 @@ class CartItemSampLess extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userId = ref.watch(userIdProvider);
-
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return ListView.builder(
         itemCount: items.length,
         itemBuilder: (context, index) {
@@ -24,7 +25,7 @@ class CartItemSampLess extends HookConsumerWidget {
             return const Center(child: Text('No Item in cart'));
           }
           return Container(
-            height: 120,
+            height: height * 0.16,
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             padding: const EdgeInsets.only(top: 10, bottom: 10),
             decoration: BoxDecoration(
@@ -72,7 +73,8 @@ class CartItemSampLess extends HookConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: MediaQuery.of(context).size.width / 3.2,
+                      width: width / 3.2,
+                      height: height * 0.06,
                       child: Text(
                         item.name.toString().substring(item.name!.indexOf(' ')),
                         style: TextStyle(
@@ -90,7 +92,7 @@ class CartItemSampLess extends HookConsumerWidget {
                         Text(
                           ("\$${item.price}"),
                           style: GoogleFonts.roboto(
-                            fontSize: isPromote ? 12.0 : 14.0,
+                            fontSize: isPromote ? 11.0 : 13.0,
                             fontWeight:
                                 isPromote ? FontWeight.w400 : FontWeight.bold,
                             decoration: isPromote
@@ -126,10 +128,10 @@ class CartItemSampLess extends HookConsumerWidget {
                             .read(cartProvider.notifier)
                             .delete(userId.toString(), item.id!);
                       },
-                      child: const Icon(
+                      child: Icon(
                         Icons.close,
                         color: Color(0xff193d3d), // Thay đổi màu sắc của Icon
-                        size: 16, // Thay đổi kích thước của Icon
+                        size: height * 0.01, // Thay đổi kích thước của Icon
                       ),
                     ),
                     // Align(
@@ -157,7 +159,7 @@ class CartItemSampLess extends HookConsumerWidget {
                       child: Row(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 10),
+                            padding: const EdgeInsets.only(left: 4),
                             child: GestureDetector(
                               onTap: () {
                                 ref.read(cartProvider.notifier).changQuantity(
@@ -196,7 +198,7 @@ class CartItemSampLess extends HookConsumerWidget {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.only(right: 4),
                             child: GestureDetector(
                               onTap: () {
                                 ref

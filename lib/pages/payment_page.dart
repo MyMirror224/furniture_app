@@ -314,11 +314,16 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                   SizedBox(height: 10),
                   Row(
                     children: [
-                      Checkbox(
-                        value: _cart.isSelectPayPal,
-                        onChanged: (value) {
-                          ref.read(cartProvider).changSelectPayPal();
-                        },
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Checkbox(
+                          value: _cart.isSelectPayPal,
+                          onChanged: (value) {
+                            ref.read(cartProvider).changSelectPayPal();
+                          },
+                        ),
                       ),
                       Gap(10),
                       Container(

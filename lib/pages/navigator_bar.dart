@@ -6,6 +6,7 @@ import 'package:furniture_app/pages/chat_page.dart';
 import 'package:furniture_app/pages/home_page.dart';
 import 'package:furniture_app/pages/personal/personal.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
+import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // ignore: must_be_immutable
@@ -16,11 +17,15 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userId = ref.watch(userIdProvider);
     final co = ref.watch(inforProvider);
+    final height = MediaQuery.of(context).size.height;
+    final appThemeState = ref.watch(appThemeStateNotifier);
     return Scaffold(
       bottomNavigationBar: CurvedNavigationBar(
-        height: 60,
-        backgroundColor: const Color.fromARGB(
-            255, 255, 255, 255), // nền dưới thanh navigation
+        height: height * 0.07,
+        backgroundColor: appThemeState.isDarkModeEnabled
+            ? Colors.black
+            : const Color.fromARGB(
+                255, 255, 255, 255), // nền dưới thanh navigation
         color: const Color(0xff5d8374), // màu nền trên của navigation
         buttonBackgroundColor: const Color(0xff193d3d), // nền của nút
 
@@ -32,12 +37,12 @@ class HomeScreen extends ConsumerWidget {
           index = selectIndex;
           co.setIndex(selectIndex);
         },
-        items: const [
-          Icon(Icons.category, size: 30, color: Colors.white),
-          Icon(Icons.chat, size: 30, color: Colors.white),
-          Icon(Icons.home, size: 30, color: Colors.white),
-          Icon(Icons.shopping_cart, size: 30, color: Colors.white),
-          Icon(Icons.person, size: 30, color: Colors.white),
+        items: [
+          Icon(Icons.category, size: height * 0.03, color: Colors.white),
+          Icon(Icons.chat, size: height * 0.03, color: Colors.white),
+          Icon(Icons.home, size: height * 0.03, color: Colors.white),
+          Icon(Icons.shopping_cart, size: height * 0.03, color: Colors.white),
+          Icon(Icons.person, size: height * 0.03, color: Colors.white),
         ],
       ),
       body: Container(

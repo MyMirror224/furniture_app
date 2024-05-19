@@ -63,10 +63,9 @@ class AppTheme {
       ));
 
   static final darkTheme = ThemeData(
-      scaffoldBackgroundColor:
-          Color.fromARGB(255, 49, 78, 67), // background app
+      scaffoldBackgroundColor: Colors.black, // background app
       appBarTheme: const AppBarTheme(
-          color: Color.fromARGB(255, 49, 78, 67),
+          color: Color.fromARGB(255, 17, 26, 22),
           iconTheme: IconThemeData(
             color: Color(0xff93B1A6), // chinh mau cua icon appbar
           ),

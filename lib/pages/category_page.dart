@@ -7,6 +7,7 @@ import 'package:furniture_app/pages/product_detail_page.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/category/categogies_provider.dart';
 import 'package:furniture_app/state/product/product_provider.dart';
+import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -33,7 +34,8 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
     final catelogiesProvider = ref.watch(categoryProvider).categories;
     final Map<String, List<ProductModel?>> products =
         ref.watch(productProvider).productsForCateloryId;
-
+    final appThemeState = ref.watch(appThemeStateNotifier);
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -52,8 +54,8 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                           fontWeight: FontWeight.bold,
                         )),
                     Container(
-                      height: 40,
-                      width: 40,
+                      height: width * .1,
+                      width: width * .1,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(30)),
                         color: Color(0xFF183D3D),
@@ -107,11 +109,13 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                                               DetailCategoryPage(
                                                   cateName: product.key)));
                                 },
-                                child: const Text(
+                                child: Text(
                                   "View all",
                                   style: TextStyle(
-                                    color: Colors.black,
-                                  ),
+                                      color: appThemeState.isDarkModeEnabled
+                                          ? Colors.white
+                                          : Color(0xff193d3d),
+                                      fontSize: 16),
                                 ),
                               ),
                             ],
@@ -185,6 +189,10 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                                           children: [
                                             Text(
                                               '${item!.price}\$',
+                                              style: GoogleFonts.roboto(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black),
                                             ),
                                           ],
                                         ),

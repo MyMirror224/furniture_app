@@ -137,6 +137,11 @@ class ItemCard extends HookConsumerWidget {
         children: [
           Text(
             '${product!.price}\$',
+            style: GoogleFonts.roboto(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
           Container(
             height: 30,

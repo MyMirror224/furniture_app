@@ -33,7 +33,7 @@ class SearchPage extends ConsumerWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    const Text("Lịch sử tìm "),
+                                    const Text("History searching "),
                                     InkWell(
                                       onTap: () {
                                         SharedPreferencesObject()
@@ -42,7 +42,7 @@ class SearchPage extends ConsumerWidget {
                                       },
                                       child: Row(
                                         children: const [
-                                          Text("Xóa tất cả"),
+                                          Text("Delete all"),
                                           Icon(Icons.close_rounded),
                                         ],
                                       ),

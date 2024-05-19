@@ -555,21 +555,25 @@ class ButtonBackIos extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final width = MediaQuery.of(context).size.width;
+
     return Container(
-      height: 40,
-      width: 40,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(30)),
+      height: width * .1,
+      width: width * .1,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(
+          width * .08,
+        )),
         color: Color(0xFF183D3D),
       ),
       child: IconButton(
         onPressed: () {
           Navigator.pop(context);
         },
-        icon: const Icon(
+        icon: Icon(
           Icons.arrow_back_ios_sharp,
           color: Colors.white,
-          size: 15,
+          size: width * .1 / 2.66,
         ),
       ),
     );
