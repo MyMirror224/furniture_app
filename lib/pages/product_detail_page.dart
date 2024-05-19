@@ -38,7 +38,10 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
 
   @override
   void didChangeDependencies() {
-    Future.delayed(Duration(seconds: 1), () {
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("Day la ");
+      print(widget.product.promotion);
       ref
           .read(countProvider.notifier)
           .totalPrice(widget.product.price!.toDouble());
@@ -74,6 +77,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
     final List<Widget> imageWidgets =
         ImageWidgets.getImageWidgets(widget.product);
 
+
     return KeyboardDismisser(
       child: Scaffold(
         body: CustomScrollView(
@@ -105,6 +109,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                         Icons.shopping_cart,
                         color: Colors.white,
                         size: 15,
+
                       ),
                     ),
                   ),
@@ -197,6 +202,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                   onPageChanged: (index) => print('Page changed to: $index'),
                   children: imageWidgets),
             ),
+
             SliverToBoxAdapter(
               child: Column(children: [
                 const Gap(20),
@@ -236,7 +242,6 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
             ),
 
             //           SliverPadding(
-
             //             padding: const EdgeInsets.only(left: 20, right: 20),
             //             sliver: SliverList(
             //               delegate: SliverChildBuilderDelegate((context, index) =>
@@ -291,6 +296,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                         children: [
                           Text(
                             ("\$$price"),
+
                             style: GoogleFonts.roboto(
                               fontSize: isPromote ? 16.0 : 20.0,
                               fontWeight:
@@ -534,11 +540,19 @@ class ImageWidgets {
     return product.image!.map((path) {
       path = "${AppConstants.SERVER_API_URL}storage/$path";
       return Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: Offset(0, 3),
+            ),
+          ],
         ),
         child: Image(
           image: NetworkImage(

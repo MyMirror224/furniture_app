@@ -14,6 +14,7 @@ class SearchPage extends ConsumerWidget {
         body: SafeArea(
             child: Column(
       children: [
+
         SingleChildScrollView(
           child: Expanded(
             child: Padding(
@@ -57,16 +58,68 @@ class SearchPage extends ConsumerWidget {
                                       searchingItem(i)
                                   ],
                                 ),
-                              ]);
-                        } else {
-                          return Container();
-                        }
-                      }),
-                  const SizedBox(
-                    height: 10,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              )
+            ],
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: Column(
+              children: [
+                FutureBuilder(
+                    future:
+                        SharedPreferencesObject().futureGetSearchingHistory(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<String>?> snapshot) {
+                      if (snapshot.hasData) {
+                        return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text("Lịch sử tìm kiếm"),
+                                  InkWell(
+                                    onTap: () {
+                                      SharedPreferencesObject()
+                                          .clearSearchingHistory();
+                                      searchProvi.changeTemp();
+                                    },
+                                    child: Row(
+                                      children: const [
+                                        Text("Xóa tất cả"),
+                                        Icon(Icons.close_rounded),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Wrap(
+                                spacing: 5,
+                                runSpacing: 5,
+                                children: [
+                                  for (var i in snapshot.data!) searchingItem(i)
+                                ],
+                              ),
+                            ]);
+                      } else {
+                        return Container();
+                      }
+                    }),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
             ),
           ),
         ),
