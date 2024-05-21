@@ -13,6 +13,7 @@ import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/state/cart/cart_provider.dart';
 import 'package:furniture_app/state/review/review_provider.dart';
+import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -73,188 +74,191 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
     bool isPromote = pricePromote != price;
     final List<Widget> imageWidgets =
         ImageWidgets.getImageWidgets(widget.product);
+    final appThemeState = ref.watch(themeNotifierProvider);
+    final height = MediaQuery.of(context).size.height;
+    var slivers2 = [
+      SliverAppBar(
+        toolbarHeight: 90,
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ButtonBackIos(),
+            Container(
+              height: width * .1,
+              width: width * .1,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+                color: Color(0xFF183D3D),
+              ),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CartPage(userId!.toString()),
+                      ));
+                },
+                icon: Icon(
+                  Icons.shopping_cart,
+                  color: Colors.white,
+                  size: width * .1 / 2.66,
+                ),
+              ),
+            ),
+          ],
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(height * 0.1),
+          child: Container(
+            width: double.maxFinite,
+            decoration: BoxDecoration(
+                color: appThemeState == ThemeMode.dark
+                    ? Colors.black
+                    : Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                )),
+            padding:
+                const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Gap(15),
+                SizedBox(
+                  child: Text(
+                    title,
+                    style: GoogleFonts.roboto(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.left,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const Gap(10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(rating.toString(),
+                        style: GoogleFonts.roboto(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    Icon(
+                      Icons.star,
+                      color: Colors.amber[400],
+                      size: 26,
+                    ),
+                  ],
+                ),
+                const Gap(10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("${context.loc.solded}${widget.product.solded}",
+                        style: GoogleFonts.roboto(
+                          fontSize: 16,
+                        )),
+                    Row(children: [
+                      Text(context.loc.color),
+                      Container(
+                          height: 20,
+                          width: 20,
+                          decoration: BoxDecoration(
+                            color: Color(
+                                int.parse(widget.product.color!, radix: 16) +
+                                    0xFF000000),
+                          ))
+                    ])
+                  ],
+                ),
+                const Gap(10),
+                Text(context.loc.description,
+                    style: GoogleFonts.roboto(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
+          ),
+        ),
+        pinned: true,
+        expandedHeight: height * 0.498,
+        flexibleSpace: ImageSlideshow(
+            indicatorBottomPadding: 30,
+            height: height * 0.498,
+            initialPage: 0,
+            autoPlayInterval: 3000,
+            isLoop:
+                true, // Optional: Set autoplay interval // Optional: Customize indicator position
+            onPageChanged: (index) => print('Page changed to: $index'),
+            children: imageWidgets),
+      ),
+      SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => Column(children: [
+            const Gap(20),
+            Container(
+              margin: const EdgeInsets.only(left: 20, right: 20),
+              child: IntrinsicHeight(
+                child: ExpandableTextWidget(
+                  text: widget.product.description!,
+                ),
+              ),
+            ),
+          ]),
+          childCount: 1,
+        ),
+      ),
+      SliverToBoxAdapter(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Container(
+              margin: const EdgeInsets.only(left: 20, right: 20),
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ProductReviewListPage(),
+                        ));
+                  },
+                  child: Text(
+                    context.loc.seeAllReviews,
+                    style: GoogleFonts.roboto(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ))),
+        ]),
+      ),
 
+      //           SliverPadding(
+
+      //             padding: const EdgeInsets.only(left: 20, right: 20),
+      //             sliver: SliverList(
+      //               delegate: SliverChildBuilderDelegate((context, index) =>
+      // ProductReviewList(
+      //                 reviews: [
+      //                   Review(
+      //                     userName: 'John Doe',
+      //                     userImageUrl:
+      //                         'http://172.21.0.204:8000/avatar.jpg/storage/avatars/default.png',
+      //                     rating: 4,
+      //                     reviewText: 'Great product! Highly recommended.',
+      //                   ),
+      //                 ],
+      //               ),
+      //               ),
+      //             )
+      //           ),
+    ];
     return KeyboardDismisser(
       child: Scaffold(
         body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              toolbarHeight: 90,
-              automaticallyImplyLeading: false,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ButtonBackIos(),
-                  Container(
-                    height: 40,
-                    width: 40,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                      color: Color(0xFF183D3D),
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  CartPage(userId!.toString()),
-                            ));
-                      },
-                      icon: const Icon(
-                        Icons.shopping_cart,
-                        color: Colors.white,
-                        size: 15,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(90),
-                child: Container(
-                  width: double.maxFinite,
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      )),
-                  padding: const EdgeInsets.only(
-                      top: 10, bottom: 10, left: 20, right: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Gap(15),
-                      SizedBox(
-                        child: Text(
-                          title,
-                          style: GoogleFonts.roboto(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.left,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const Gap(10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(rating.toString(),
-                              style: GoogleFonts.roboto(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              )),
-                          Icon(
-                            Icons.star,
-                            color: Colors.amber[400],
-                            size: 26,
-                          ),
-                        ],
-                      ),
-                      const Gap(10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("${context.loc.solded}${widget.product.solded}",
-                              style: GoogleFonts.roboto(
-                                fontSize: 16,
-                              )),
-                          Row(children: [
-                            Text(context.loc.color),
-                            Container(
-                                height: 20,
-                                width: 20,
-                                decoration: BoxDecoration(
-                                  color: Color(int.parse(widget.product.color!,
-                                          radix: 16) +
-                                      0xFF000000),
-                                ))
-                          ])
-                        ],
-                      ),
-                      const Gap(10),
-                      Text(context.loc.description,
-                          style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ],
-                  ),
-                ),
-              ),
-              pinned: true,
-              expandedHeight: 300,
-              flexibleSpace: ImageSlideshow(
-                  indicatorBottomPadding: 30,
-                  height: 240,
-                  initialPage: 0,
-                  autoPlayInterval: 3000,
-                  isLoop:
-                      true, // Optional: Set autoplay interval // Optional: Customize indicator position
-                  onPageChanged: (index) => print('Page changed to: $index'),
-                  children: imageWidgets),
-            ),
-            SliverToBoxAdapter(
-              child: Column(children: [
-                const Gap(20),
-                Container(
-                  margin: const EdgeInsets.only(left: 20, right: 20),
-                  child: ExpandableTextWidget(
-                    text: widget.product.description!,
-                  ),
-                ),
-              ]),
-            ),
-            SliverToBoxAdapter(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Gap(20),
-                    Container(
-                        margin: const EdgeInsets.only(left: 20, right: 20),
-                        child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ProductReviewListPage(),
-                                  ));
-                            },
-                            child: Text(
-                              context.loc.seeAllReviews,
-                              style: GoogleFonts.roboto(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ))),
-                    Gap(10),
-                  ]),
-            ),
-
-            //           SliverPadding(
-
-            //             padding: const EdgeInsets.only(left: 20, right: 20),
-            //             sliver: SliverList(
-            //               delegate: SliverChildBuilderDelegate((context, index) =>
-            // ProductReviewList(
-            //                 reviews: [
-            //                   Review(
-            //                     userName: 'John Doe',
-            //                     userImageUrl:
-            //                         'http://172.21.0.204:8000/avatar.jpg/storage/avatars/default.png',
-            //                     rating: 4,
-            //                     reviewText: 'Great product! Highly recommended.',
-            //                   ),
-            //                 ],
-            //               ),
-            //               ),
-            //             )
-            //           ),
-          ],
+          slivers: slivers2,
         ),
         bottomNavigationBar: Column(
           mainAxisSize: MainAxisSize.min,
@@ -277,9 +281,9 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      padding: const EdgeInsets.only(
-                        top: 20,
-                        bottom: 20,
+                      padding: EdgeInsets.only(
+                        top: width * 0.02,
+                        bottom: width * 0.02,
                         left: 10,
                         right: 10,
                       ),
@@ -350,7 +354,6 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                           ),
                         ),
                       ),
-                      const Gap(10),
                       SizedBox(
                         width: 35,
                         child: TextField(
@@ -379,7 +382,6 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                           ],
                         ),
                       ),
-                      const Gap(10),
                       Opacity(
                         opacity: isContainerInvisiblePlus ? 1 : 0.5,
                         child: Container(
@@ -420,9 +422,9 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                   children: [
                     Container(
                       width: width * 0.4,
-                      padding: const EdgeInsets.only(
-                        top: 20,
-                        bottom: 20,
+                      padding: EdgeInsets.only(
+                        top: width * 0.02,
+                        bottom: width * 0.02,
                         left: 10,
                         right: 10,
                       ),
@@ -444,7 +446,8 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                                     builder: (context) => AddressPage(),
                                   ));
                             } else {
-                              await AuthDialog(errorMessage: context.loc.outOfStock)
+                              await AuthDialog(
+                                      errorMessage: context.loc.outOfStock)
                                   .present(context)
                                   .then((shouldDelete) => shouldDelete ?? true);
                             }
@@ -457,17 +460,18 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                                     style: GoogleFonts.roboto(
                                         color: Colors.white)),
                                 const Gap(10),
-                                const Icon(
+                                Icon(
                                   Icons.shopping_bag,
                                   color: Colors.white,
+                                  size: width * 0.05,
                                 )
                               ])),
                     ),
                     Container(
                       width: width * 0.4,
-                      padding: const EdgeInsets.only(
-                        top: 20,
-                        bottom: 20,
+                      padding: EdgeInsets.only(
+                        top: width * 0.02,
+                        bottom: width * 0.02,
                         left: 10,
                         right: 10,
                       ),
@@ -493,7 +497,8 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                                 fontSize: 16.0,
                               );
                             } else {
-                              await AuthDialog(errorMessage: context.loc.outOfStock)
+                              await AuthDialog(
+                                      errorMessage: context.loc.outOfStock)
                                   .present(context)
                                   .then((shouldDelete) => shouldDelete ?? true);
                             }
@@ -508,9 +513,10 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                                       GoogleFonts.roboto(color: Colors.white),
                                 ),
                                 const Gap(10),
-                                const Icon(
+                                Icon(
                                   Icons.shopping_cart,
                                   color: Colors.white,
+                                  size: width * 0.05,
                                 )
                               ])),
                     )

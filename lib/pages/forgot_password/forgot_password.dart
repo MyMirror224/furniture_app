@@ -31,7 +31,7 @@ class ForgotPassword extends ConsumerWidget {
       } else if (!email.contains('.')) {
         return context.loc.emailErrorMessage2;
       } else if (email.startsWith('.') || email.endsWith('.')) {
-        return context.loc.emailErrorMessage3 ;
+        return context.loc.emailErrorMessage3;
       } else if (email.contains(' ')) {
         return context.loc.emailErrorMessage4;
       }
@@ -49,9 +49,9 @@ class ForgotPassword extends ConsumerWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.deepOrangeAccent,
-        toolbarHeight: 150,
-        title:  Text(
+        backgroundColor: Color(0xff193d3d),
+        toolbarHeight: 100,
+        title: Text(
           context.loc.forgotPassword,
           style: TextStyle(
             color: Colors.black, // chinh mau
@@ -72,7 +72,7 @@ class ForgotPassword extends ConsumerWidget {
                     child: ClipPath(
                       clipper: WaveClipper(),
                       child: Container(
-                        color: Colors.deepOrangeAccent,
+                        color: Color(0xff193d3d),
                         height: 100,
                       ),
                     ),
@@ -80,7 +80,7 @@ class ForgotPassword extends ConsumerWidget {
                   ClipPath(
                     clipper: WaveClipper(),
                     child: Container(
-                      color: Colors.deepOrangeAccent,
+                      color: Color(0xff193d3d),
                       height: 80,
                     ),
                   ),
@@ -101,7 +101,7 @@ class ForgotPassword extends ConsumerWidget {
                     margin: const EdgeInsets.only(left: 15, right: 15),
                     padding: const EdgeInsets.only(left: 20),
                     child: RichText(
-                      text:  TextSpan(
+                      text: TextSpan(
                         children: [
                           TextSpan(
                             text: context.loc.ohno,
@@ -131,7 +131,7 @@ class ForgotPassword extends ConsumerWidget {
                         padding: const EdgeInsets.only(left: 25),
                         margin: const EdgeInsets.only(left: 15, right: 25),
                         child: RichText(
-                            text:  TextSpan(children: [
+                            text: TextSpan(children: [
                           TextSpan(
                               text: context.loc.dontworry,
                               style: TextStyle(
@@ -164,7 +164,7 @@ class ForgotPassword extends ConsumerWidget {
                             if (value == null || value.isEmpty) {
                               return context.loc.pleaseEnterYourEmail;
                             } else {
-                              return validateEmail(value,context);
+                              return validateEmail(value, context);
                             }
                           },
                           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -203,7 +203,8 @@ class ForgotPassword extends ConsumerWidget {
                       ForgotButton(
                         text: "Recover Password",
                         onTap: () async {
-                          if (validateEmail(_emailController.text, context) == null) {
+                          if (validateEmail(_emailController.text, context) ==
+                              null) {
                             await ref
                                 .read(authStateProvider.notifier)
                                 .forgotPassword(_emailController.text);

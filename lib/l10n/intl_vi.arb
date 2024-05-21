@@ -54,7 +54,7 @@
     "outOfStock": "Hết hàng",
     "buyNow": "Mua ngay",
     "addedToCart": "Đã thêm vào giỏ hàng",
-    "addToCart": "Thêm vào giỏ hàng",
+    "addToCart": "Thêm vào giỏ",
     "showmore": "Hiển thị thêm",
     "color": "Màu: ",
     "categories": "Danh mục",
@@ -140,6 +140,8 @@
     "reviewFailed":"Đánh giá không gửi được",
     "submitReview":"Gửi đánh giá",
     "shipInfor":"Thông tin vận chuyển",
+    "invoiceDetail" : "Chi tiết hoá đơn",
+     "invoiceHistory" :   "Lịch sử đơn hàng",
 
     "end" : "Kết thúc"
     

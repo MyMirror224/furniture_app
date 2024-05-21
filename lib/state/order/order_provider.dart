@@ -17,6 +17,7 @@ class OrderNotifier extends ChangeNotifier {
   }
 
   Future<void> fetchOrder(String uid) async {
+    _orders = [];
     final response = await OrderApi.getModel(uid);
     for (var i = response.length - 1; i >= 0; i--) {
       _orders.add(response[i]);
@@ -49,8 +50,6 @@ class OrderNotifier extends ChangeNotifier {
     message = response;
     notifyListeners();
   }
-
-  
 }
 
 final orderProvider = ChangeNotifierProvider((ref) => OrderNotifier());

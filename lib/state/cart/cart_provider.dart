@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:furniture_app/global.dart';
 import 'package:furniture_app/model/cart_model.dart';
 import 'package:furniture_app/model/order_model.dart';
 import 'package:furniture_app/model/product_model.dart';
@@ -12,7 +13,8 @@ class CartNotifier extends ChangeNotifier {
   CartModel _carts = CartModel();
   double get totalBefore => _totalBefore;
   double _totalBefore = 0;
-
+  bool get isHome => _isHome;
+  bool _isHome = true;
   double get discount => _discount;
   double _discount = 0;
   String get message => _message;
@@ -23,6 +25,7 @@ class CartNotifier extends ChangeNotifier {
   List<CartItems> _cartItemsShow = [];
   String url = '';
   double totalSendBuy = 0;
+  bool isLoading = false;
 
   bool get isSelectPayPal => _isSelectPayPal;
   bool _isSelectPayPal = true;
@@ -33,9 +36,13 @@ class CartNotifier extends ChangeNotifier {
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  TextEditingController messageController2 = TextEditingController();
   String? messageController = '';
   bool get setAsDefault => _setAsDefault;
   bool _setAsDefault = false;
+  void setHome(bool value) {
+    _isHome = value;
+  }
 
   get paymentMethod => null;
   void setDefault(bool value) {
@@ -180,6 +187,8 @@ class CartNotifier extends ChangeNotifier {
 
   OrderModel? order;
   Future<void> sendItemBuy(String uid) async {
+    isLoading = true;
+    notifyListeners();
     int type;
     url = '';
     if (isSelectDirect) {
@@ -206,6 +215,7 @@ class CartNotifier extends ChangeNotifier {
     } else {
       url = respone;
     }
+    isLoading = false;
     notifyListeners();
   }
 
@@ -249,6 +259,14 @@ class CartNotifier extends ChangeNotifier {
     );
     _cartItemsShow.add(cartItems);
     totalSendBuy = total;
+    notifyListeners();
+  }
+
+  Future<void> setDetailInformation(String uid) async {
+    final sub = Global.storageService.getProfile(uid.toString());
+    nameController.text = sub!.name!;
+    phoneController.text = sub.phone_number!;
+    addressController.text = sub.address!;
     notifyListeners();
   }
 }

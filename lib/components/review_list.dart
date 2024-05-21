@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/state/review/review_provider.dart';
+import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ProductReviewListPage extends ConsumerWidget {
@@ -11,20 +12,19 @@ class ProductReviewListPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final reviews = ref.watch(productReviewsProvider).reviewList;
+    final themeMode = ref.watch(themeNotifierProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Product Reviews'),
-        centerTitle: true,
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          }
-        )
-      ),
+          title: Text('Product Reviews'),
+          centerTitle: true,
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              })),
       body: ListView.builder(
         itemCount: reviews.length,
         itemBuilder: (context, index) {
@@ -50,9 +50,9 @@ class ProductReviewListPage extends ConsumerWidget {
                           children: [
                             Text(
                               review.user.name!,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
                             ),
                             Row(
                               children: List.generate(
@@ -71,7 +71,12 @@ class ProductReviewListPage extends ConsumerWidget {
                       ],
                     ),
                     const SizedBox(height: 8.0),
-                    Text(review.comment),
+                    Text(
+                      review.comment,
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    )
                   ],
                 ),
               ),

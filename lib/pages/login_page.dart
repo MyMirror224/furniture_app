@@ -30,233 +30,235 @@ class Login extends ConsumerWidget {
         backgroundColor: Colors.white,
         body: SafeArea(
           child: SingleChildScrollView(
-            child: Center(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-                        ClipRRect(
-                          //ClipRRect làm tròn 4 góc
-                          borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(16),
-                              bottomRight: Radius.circular(16)),
+            child: Padding(
+              padding: EdgeInsets.all(deviceWidth * 0.05),
+              child: Center(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          ClipRRect(
+                            //ClipRRect làm tròn 4 góc
+                            borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(16),
+                                bottomRight: Radius.circular(16)),
 
-                          child: Image.asset(
-                            'assets/images/background.png',
-                            height: deviceHeight * 0.3,
-                            width: deviceWidth,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Gap(20),
-                    Text(
-                      context.loc.login,
-                      style: GoogleFonts.roboto(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 40,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const Gap(20),
-                    SizedBox(
-                      width: 350.0,
-                      child: TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return context.loc.enterEmail;
-                          }
-                          if (!emailRegex.hasMatch(value)) {
-                            return context.loc.invalidEmail;
-                          }
-                          return null;
-                        },
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.black,
-                        ),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        controller: emailController,
-                        decoration:  InputDecoration(
-                          labelText: context.loc.email,
-                          labelStyle: TextStyle(color: Colors.black),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10.0),
+                            child: Image.asset(
+                              'assets/images/background.png',
+                              height: deviceHeight * 0.3,
+                              width: deviceWidth,
+                              fit: BoxFit.cover,
                             ),
-                            borderSide: BorderSide(color: Colors.blue),
                           ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(
-                                color: Colors
-                                    .red), // Màu sắc của đường biên khi có lỗi
-                          ),
-                          prefixIcon: Icon(
-                            Icons.email,
-                            color: Colors.black,
-                            size: 30.0,
-                          ),
-                          suffixIcon:
-                              Padding(padding: EdgeInsets.only(left: 30.0)),
-                        ),
+                        ],
                       ),
-                    ), // icon cũng cần đổ màu
-                    const Gap(15),
-                    SizedBox(
-                      width: 350.0,
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return context.loc.enterPassword;
-                          }
-                          return null;
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        controller: passwordController,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
+                      const Gap(20),
+                      Text(
+                        context.loc.login,
+                        style: GoogleFonts.roboto(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 40,
                           color: Colors.black,
                         ),
-                        obscureText: loginNotifier.isObscure,
-                        decoration: InputDecoration(
-                          labelText: context.loc.password,
-                          labelStyle: const TextStyle(color: Colors.black),
-                          focusColor: Colors.blueAccent,
-                          enabledBorder: const OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0))),
-                          focusedBorder: const OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
-                          errorBorder: const OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(
-                                color: Colors
-                                    .red), // Màu sắc của đường biên khi có lỗi
-                          ),
-                          prefixIcon: const Icon(
-                            Icons.lock,
+                      ),
+                      const Gap(20),
+                      SizedBox(
+                        width: 350.0,
+                        child: TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return context.loc.enterEmail;
+                            }
+                            if (!emailRegex.hasMatch(value)) {
+                              return context.loc.invalidEmail;
+                            }
+                            return null;
+                          },
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
                             color: Colors.black,
-                            size: 30.0,
                           ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              loginNotifier.isObscure
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          controller: emailController,
+                          decoration: InputDecoration(
+                            labelText: context.loc.email,
+                            labelStyle: TextStyle(color: Colors.black),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(color: Colors.black),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.0),
+                              ),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                  color: Colors
+                                      .red), // Màu sắc của đường biên khi có lỗi
+                            ),
+                            prefixIcon: Icon(
+                              Icons.email,
                               color: Colors.black,
                               size: 30.0,
                             ),
-                            onPressed: () {
-                              loginNotifier.togglePasswordVisibility();
-                            },
+                            suffixIcon:
+                                Padding(padding: EdgeInsets.only(left: 30.0)),
+                          ),
+                        ),
+                      ), // icon cũng cần đổ màu
+                      const Gap(15),
+                      SizedBox(
+                        width: 350.0,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return context.loc.enterPassword;
+                            }
+                            return null;
+                          },
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          controller: passwordController,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.black,
+                          ),
+                          obscureText: loginNotifier.isObscure,
+                          decoration: InputDecoration(
+                            labelText: context.loc.password,
+                            labelStyle: const TextStyle(color: Colors.black),
+                            focusColor: Colors.blueAccent,
+                            enabledBorder: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0))),
+                            focusedBorder: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                            errorBorder: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                  color: Colors
+                                      .red), // Màu sắc của đường biên khi có lỗi
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.lock,
+                              color: Colors.black,
+                              size: 30.0,
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                loginNotifier.isObscure
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Colors.black,
+                                size: 30.0,
+                              ),
+                              onPressed: () {
+                                loginNotifier.togglePasswordVisibility();
+                              },
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const Gap(5),
-                    Container(
-                      padding: const EdgeInsets.only(right: 30),
-                      alignment: Alignment.centerRight,
-                      child: GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ForgotPassword(),
+                      const Gap(5),
+                      Container(
+                        padding: const EdgeInsets.only(right: 30),
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ForgotPassword(),
+                            ),
+                          ),
+                          child: Text(
+                            context.loc.forgotPassword,
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 15,
+                                fontStyle: FontStyle.italic),
                           ),
                         ),
-                        child:  Text(
-                          context.loc.forgotPassword,
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 15,
-                              fontStyle: FontStyle.italic),
+                      ),
+                      const Gap(15),
+                      buttonLogin(context.loc.login, Colors.grey,
+                          (deviceWidth * 0.3).toInt(), 50, onpressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          await ref
+                              .read(authStateProvider.notifier)
+                              .loginWithEmailandPassword(emailController.text,
+                                  passwordController.text);
+                          final userId = ref.watch(authStateProvider).userId;
+                          return ref.refresh(
+                              userInfoModelProvider(userId.toString()));
+                        }
+                      }),
+                      const Gap(15),
+                      Center(
+                        child: Text(
+                          context.loc.or,
+                          style: TextStyle(color: Colors.black, fontSize: 10),
                         ),
                       ),
-                    ),
-                    const Gap(15),
-                    buttonLogin(
-                        context.loc.login, Colors.grey, (deviceWidth * 0.3).toInt(), 50,
-                        onpressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        await ref
-                            .read(authStateProvider.notifier)
-                            .loginWithEmailandPassword(
-                                emailController.text, passwordController.text);
-                        final userId = ref.watch(authStateProvider).userId;
-                        return ref
-                            .refresh(userInfoModelProvider(userId.toString()));
-                      }
-                    }),
-                    const Gap(15),
-                     Center(
-                      child: Text(
-                        context.loc.or,
-                        style: TextStyle(color: Colors.black, fontSize: 10),
-                      ),
-                    ),
 
-                    const Gap(10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          onPressed: () => ref
-                              .read(authStateProvider.notifier)
-                              .loginWithFacebook(),
-                          icon: const FaIcon(
-                            FontAwesomeIcons.facebook,
-                            color: Colors.blue,
+                      const Gap(10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            onPressed: () => ref
+                                .read(authStateProvider.notifier)
+                                .loginWithFacebook(),
+                            icon: const FaIcon(
+                              FontAwesomeIcons.facebook,
+                              color: Colors.blue,
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          onPressed: () => ref
-                              .read(authStateProvider.notifier)
-                              .loginWithGoogle(),
-                          icon: const FaIcon(FontAwesomeIcons.google,
-                              color: Colors.red),
-                        ), // Use the correct named parameter 'data' and provide a positional argument.
-                      ],
-                    ),
-                    const Gap(10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                         Text(
-                          context.loc.dontHaveAccount,
-                          style: TextStyle(color: Colors.grey, fontSize: 15),
-                        ),
-                        GestureDetector(
-                            onTap: () => {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => SignUp(),
-                                      )),
-                                },
-                            child:  Text(context.loc.signUp,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                )))
-                      ],
-                    ),
-                  ],
+                          IconButton(
+                            onPressed: () => ref
+                                .read(authStateProvider.notifier)
+                                .loginWithGoogle(),
+                            icon: const FaIcon(FontAwesomeIcons.google,
+                                color: Colors.red),
+                          ), // Use the correct named parameter 'data' and provide a positional argument.
+                        ],
+                      ),
+                      const Gap(10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            context.loc.dontHaveAccount,
+                            style: TextStyle(color: Colors.grey, fontSize: 15),
+                          ),
+                          GestureDetector(
+                              onTap: () => {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => SignUp(),
+                                        )),
+                                  },
+                              child: Text(" " + context.loc.signUp,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                  )))
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

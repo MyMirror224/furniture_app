@@ -140,7 +140,8 @@
     "reviewFailed":"Review failed to submit",
     "submitReview":"Submit Review",
     "shipInfor":"Shipping information",
-
+    "invoiceDetail" : "Invoice details",
+      "invoiceHistory" :   "Invoice history",
     "end" : "End"
     
 

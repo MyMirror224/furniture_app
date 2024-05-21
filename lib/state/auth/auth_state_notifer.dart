@@ -139,7 +139,6 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
           await UserAPI.getProfile(_authenticator.userId.toString());
       await Global.storageService.setProfile(
           _authenticator.userId.toString(), response.data as UserInfoModel);
-      
 
       state = AuthState(
         isLoading: false,
@@ -156,7 +155,6 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       errorMessage: _authenticator.errorMessage,
     );
   }
-  
 
   Future<void> registerWithEmailandPassword(
       String email, String password, String name) async {

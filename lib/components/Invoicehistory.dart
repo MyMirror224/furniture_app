@@ -1,7 +1,7 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/pages/navigator_bar.dart';
-
 
 class Invhistory extends StatelessWidget {
   const Invhistory({super.key});
@@ -23,10 +23,10 @@ class Invhistory extends StatelessWidget {
               color: Color.fromARGB(255, 88, 145, 145),
             ),
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(left: 1),
             child: Text(
-              "Invoice history",
+              context.loc.invoiceHistory,
               style: TextStyle(
                 fontSize: 23,
                 fontWeight: FontWeight.bold,
@@ -45,9 +45,9 @@ class Invhistory extends StatelessWidget {
               // Xử lý khi nhấp vào biểu tượng "home" ở đây
               // Chuyển về trang chủ
               Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                    );
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen()),
+              );
             },
           ),
         ],

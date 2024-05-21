@@ -9,21 +9,24 @@ final localeProvider = StateNotifierProvider<LocaleNotifier, Locale>((ref) {
 });
 
 class LocaleNotifier extends StateNotifier<Locale> {
-  LocaleNotifier() : super(Locale('en', 'US')){
+  LocaleNotifier() : super(Locale('en', 'US')) {
     init();
   } // Đặt giá trị mặc định là 'en'
-  
- Future<void> init() async {
-    final prefs = await SharedPreferences.getInstance();
-    final languageCode = prefs.getString('languageCode') ?? 'en';
+  late SharedPreferences _sharedPreferences;
+
+  Future<void> init() async {
+    _sharedPreferences = await SharedPreferences.getInstance();
+    final languageCode = _sharedPreferences.getString('languageCode') ?? 'en';
     state = Locale(languageCode);
   }
+
   Future<void> setLocale(Locale locale) async {
     if (!supportedLocales.contains(locale)) return;
 
     state = locale;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('languageCode', locale.languageCode);
+
+    _sharedPreferences = await SharedPreferences.getInstance();
+    await _sharedPreferences.setString('languageCode', locale.languageCode);
   }
 
   static final List<Locale> supportedLocales = [

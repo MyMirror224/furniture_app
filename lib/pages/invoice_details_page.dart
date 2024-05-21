@@ -1,15 +1,15 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:furniture_app/components/details.dart';
+import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/model/order_model.dart';
-import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/pages/order_required_page.dart';
 import 'package:furniture_app/pages/write_review_page.dart';
 import 'package:furniture_app/state/order/order_provider.dart';
 import 'package:gap/gap.dart';
-import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 //import 'package:furniture_app/widgets/cartbottomnarbar.dart';
@@ -45,6 +45,7 @@ class _InvoicedetailsNotCofirmPageState
   Widget build(BuildContext context) {
     final stringButton = ref.watch(orderProvider).stringbutton;
     final reviewText = ref.watch(orderProvider).reviews;
+    final themeMode = Theme.of(context).brightness;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -64,7 +65,6 @@ class _InvoicedetailsNotCofirmPageState
                   color: const Color.fromARGB(255, 88, 145, 145),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
@@ -81,7 +81,6 @@ class _InvoicedetailsNotCofirmPageState
                           Text(
                             widget.is_done,
                             style: TextStyle(
-                              color: Colors.white,
                               fontSize: 16.0,
                             ),
                           ),
@@ -105,7 +104,6 @@ class _InvoicedetailsNotCofirmPageState
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                      color: Colors.grey.withOpacity(0.3),
                       width: 1.0,
                     ),
                   ),
@@ -115,14 +113,12 @@ class _InvoicedetailsNotCofirmPageState
                     Container(
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
-                        color: Colors.white,
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Image.asset(
                         'assets/images/xegiaohang.png',
                         width: 24.0,
                         height: 24.0,
-                        color: Colors.black,
                       ),
                     ),
                     const SizedBox(width: 8.0),
@@ -132,7 +128,6 @@ class _InvoicedetailsNotCofirmPageState
                         Text(
                           context.loc.shipInfor,
                           style: TextStyle(
-                            color: Colors.black,
                             fontSize: 14.0,
                           ),
                         ),
@@ -140,7 +135,6 @@ class _InvoicedetailsNotCofirmPageState
                         Text(
                           context.loc.express,
                           style: TextStyle(
-                            color: Colors.black.withOpacity(0.6),
                             fontSize: 10.0,
                             fontWeight: FontWeight.bold,
                           ),
@@ -165,7 +159,6 @@ class _InvoicedetailsNotCofirmPageState
                     Container(
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
-                        color: Colors.white,
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Image.asset(
@@ -179,10 +172,9 @@ class _InvoicedetailsNotCofirmPageState
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                           Text(
+                          Text(
                             context.loc.inforDelivery,
                             style: TextStyle(
-                              color: Colors.black,
                               fontSize: 14.0,
                             ),
                           ),
@@ -190,21 +182,18 @@ class _InvoicedetailsNotCofirmPageState
                           Text(
                             '${context.loc.name}: ${widget.order.name}',
                             style: TextStyle(
-                              color: Colors.black.withOpacity(0.6),
                               fontSize: 14.0,
                             ),
                           ),
                           Text(
                             '${context.loc.phone}: ${widget.order.phone_number}',
                             style: TextStyle(
-                              color: Colors.black.withOpacity(0.6),
                               fontSize: 14.0,
                             ),
                           ),
                           Text(
                             '${context.loc.address}: ${widget.order.address}',
                             style: TextStyle(
-                              color: Colors.black.withOpacity(0.6),
                               fontSize: 14.0,
                             ),
                           ),
@@ -222,7 +211,6 @@ class _InvoicedetailsNotCofirmPageState
                           gravity: ToastGravity.BOTTOM,
                           timeInSecForIosWeb: 1,
                           backgroundColor: const Color(0xff193d3d),
-                          textColor: Colors.white,
                           fontSize: 16.0,
                         );
                       },
@@ -230,12 +218,11 @@ class _InvoicedetailsNotCofirmPageState
                         icon: const Icon(Icons.copy),
                         onPressed: () {
                           Fluttertoast.showToast(
-                            msg:  context.loc.copy,
+                            msg: context.loc.copy,
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.BOTTOM,
                             timeInSecForIosWeb: 1,
                             backgroundColor: const Color(0xff193d3d),
-                            textColor: Colors.white,
                             fontSize: 16.0,
                           );
                         },
@@ -288,7 +275,6 @@ class _InvoicedetailsNotCofirmPageState
                                       product.name!.substring(
                                           product.name!.indexOf(' ')),
                                       style: TextStyle(
-                                        color: Colors.black,
                                         fontSize: 12.0,
                                       ),
                                     ),
@@ -296,7 +282,6 @@ class _InvoicedetailsNotCofirmPageState
                                     Text(
                                       '${context.loc.quantity}: ${product.quantity.toString()}', // Số lượng sản phẩm
                                       style: TextStyle(
-                                        color: Colors.black,
                                         fontSize: 14.0,
                                       ),
                                     ),
@@ -307,7 +292,7 @@ class _InvoicedetailsNotCofirmPageState
                                   ],
                                 ),
                               ),
-                              widget.is_done == context.loc.goodDelivered
+                              widget.is_done == 'Goods delivered'
                                   ? GestureDetector(
                                       onTap: () {
                                         Navigator.push(
@@ -330,9 +315,7 @@ class _InvoicedetailsNotCofirmPageState
                                           color: Color(0xff193d3d),
                                         ),
                                         child: Text(reviewText,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            )),
+                                            style: TextStyle()),
                                       ),
                                     )
                                   : Container(),
@@ -401,17 +384,16 @@ class _InvoicedetailsNotCofirmPageState
                     const Icon(
                       Icons
                           .credit_card, // Icon thẻ Visa (thay thế bằng biểu tượng Visa thực tế)
-                      color: Colors.black,
+
                       size: 24.0,
                     ),
                     const SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                         Text(
+                        Text(
                           context.loc.paymentType,
                           style: TextStyle(
-                            color: Colors.black,
                             fontSize: 14.0,
                             fontWeight: FontWeight.bold,
                           ),
@@ -419,7 +401,6 @@ class _InvoicedetailsNotCofirmPageState
                         Text(
                           widget.order.type,
                           style: TextStyle(
-                            color: Colors.black.withOpacity(0.6),
                             fontSize: 10.0,
                           ),
                         ),
@@ -550,18 +531,20 @@ class _InvoicedetailsNotCofirmPageState
                               TextButton.icon(
                                 onPressed: () async {
                                   Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => OrderCancelPage(
-                                                typeSend: stringButton,
-                                                order_id: widget.order.id,  )),
-                                    );
-                                  
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => OrderCancelPage(
+                                              typeSend: stringButton,
+                                              order_id: widget.order.id,
+                                            )),
+                                  );
                                 },
                                 icon: stringButton == 'Tracking Order'
                                     ? Icon(Icons.track_changes)
                                     : Icon(Icons.cancel),
-                                label: stringButton == 'Refund Order' ? Text(context.loc.cancelOrder) : Text(stringButton),
+                                label: stringButton == 'Refund Order'
+                                    ? Text(context.loc.cancelOrder)
+                                    : Text(stringButton),
                                 style: TextButton.styleFrom(
                                   foregroundColor: const Color(0xff193d3d),
                                   backgroundColor:

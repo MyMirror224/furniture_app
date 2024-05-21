@@ -171,9 +171,21 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                                           width: 120,
                                           child: Center(
                                             child: Text(
-                                              item.productName!.substring(item
-                                                  .productName!
-                                                  .indexOf(' ')),
+                                              item.productName!
+                                                          .substring(item
+                                                              .productName!
+                                                              .indexOf(' '))
+                                                          .length >
+                                                      11
+                                                  ? item.productName!
+                                                          .substring(item
+                                                              .productName!
+                                                              .indexOf(' '))
+                                                          .substring(0, 11) +
+                                                      '...'
+                                                  : item.productName!.substring(
+                                                      item.productName!
+                                                          .indexOf(' ')),
                                               style: GoogleFonts.roboto(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,

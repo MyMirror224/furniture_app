@@ -3,7 +3,7 @@ import 'package:furniture_app/components/Invoicehistory.dart';
 import 'package:furniture_app/components/listhistory.dart';
 import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/state/order/order_provider.dart';
-
+import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // ignore: must_be_immutable
@@ -34,11 +34,13 @@ class _HistoryOrderPageState extends ConsumerState<HistoryInvoicePage>
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     int currentFilter = ref.watch(orderProvider).currentFilter;
+    final themeMode = ref.watch(themeNotifierProvider);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
+              color: themeMode == ThemeMode.dark ? Colors.black : Colors.white,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(35),
                 topRight: Radius.circular(35),
@@ -51,16 +53,19 @@ class _HistoryOrderPageState extends ConsumerState<HistoryInvoicePage>
                 TabBar(
                   controller: _tabController,
                   isScrollable: true,
-                  labelColor: const Color(0xff193d3d),
-                  unselectedLabelColor: Colors.black54,
+                  labelColor:
+                      themeMode == ThemeMode.dark ? Colors.white : Colors.black,
+                  unselectedLabelColor: themeMode == ThemeMode.dark
+                      ? Colors.white70
+                      : Colors.black,
                   indicatorColor: const Color(0xff193d3d),
                   indicatorPadding:
                       const EdgeInsets.only(left: 0, top: 0, bottom: 0),
-                  tabs:  [
+                  tabs: [
                     Tab(text: context.loc.all),
                     Tab(text: context.loc.pending),
                     Tab(text: context.loc.delivering),
-                    Tab(text:  context.loc.delivered),
+                    Tab(text: context.loc.delivered),
                     Tab(text: context.loc.returned),
                     Tab(text: context.loc.cancelled),
                   ],
