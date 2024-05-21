@@ -540,11 +540,19 @@ class ImageWidgets {
     return product.image!.map((path) {
       path = "${AppConstants.SERVER_API_URL}storage/$path";
       return Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: Offset(0, 3),
+            ),
+          ],
         ),
         child: Image(
           image: NetworkImage(
