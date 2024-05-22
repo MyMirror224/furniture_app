@@ -107,11 +107,15 @@ class CartNotifier extends ChangeNotifier {
     }
   }
 
+  String get notifyAddtoCart => _notifyAddtoCart;
+  String _notifyAddtoCart = '';
   Future<void> addtoCart(String uid, int quantity, int product_id) async {
     try {
+      _notifyAddtoCart = '';
+
       final response = await CartApi.cartAdd(uid, quantity, product_id);
 
-      _message = response;
+      _notifyAddtoCart = response;
       notifyListeners();
     } catch (e) {
       print(e);
@@ -186,6 +190,8 @@ class CartNotifier extends ChangeNotifier {
   }
 
   OrderModel? order;
+  String get notifyBuy => _notifyBuy;
+  late String _notifyBuy;
   Future<void> sendItemBuy(String uid) async {
     isLoading = true;
     notifyListeners();
@@ -200,7 +206,7 @@ class CartNotifier extends ChangeNotifier {
         type = 3;
       }
     }
-
+    _notifyBuy = '';
     final respone = await CartApi.sendItemBuy(
         uid,
         _cartItems,
@@ -211,7 +217,13 @@ class CartNotifier extends ChangeNotifier {
         messageController,
         type);
     if (type == 1) {
-      order = respone;
+      // print(respone);
+      if (respone['message'] == 'success') {
+        _notifyBuy = respone['message'];
+        order = OrderModel.fromJson(respone['data']);
+      } else {
+        _notifyBuy = respone['message'];
+      }
     } else {
       url = respone;
     }

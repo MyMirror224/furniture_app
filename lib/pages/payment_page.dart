@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:furniture_app/components/HomeAppBar.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/extension/buildcontext/loc.dart';
@@ -431,14 +432,26 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
             await ref
                 .read(cartProvider.notifier)
                 .sendItemBuy(userId.toString());
-            if (_cart.isSelectDirect) {
+            final message = ref.watch(cartProvider).notifyBuy;
+            if (_cart.isSelectDirect && message == 'success') {
               final OrderModel? order = ref.watch(cartProvider.notifier).order;
+
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
                       OrderResults(order: order!, isSuccess: true),
                 ),
+              );
+            } else if (_cart.isSelectDirect && message != 'success') {
+              Fluttertoast.showToast(
+                msg: message,
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: const Color(0xff193d3d),
+                textColor: Colors.white,
+                fontSize: 16.0,
               );
             } else {
               Navigator.push(

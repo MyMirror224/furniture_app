@@ -137,7 +137,7 @@
     "rating": "Xếp hạng",
     "writeYourReview": "Viết đánh giá của bạn ở đây...",
     "reviewSuccess":"Đã gửi đánh giá thành công",
-    "reviewFailed":"Đánh giá không gửi được",
+    "reviewFailed":"Bạn đã thực hiện đánh giá rồi",
     "submitReview":"Gửi đánh giá",
     "shipInfor":"Thông tin vận chuyển",
     "invoiceDetail" : "Chi tiết hoá đơn",

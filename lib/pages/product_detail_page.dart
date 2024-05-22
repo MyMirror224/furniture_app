@@ -482,13 +482,14 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
                       child: InkWell(
                           onTap: () async {
                             if (widget.product.quantity! >= countController) {
-                              ref.read(cartProvider.notifier).addtoCart(
+                              await ref.read(cartProvider.notifier).addtoCart(
                                     userId.toString(),
                                     ref.watch(countProvider).count,
                                     widget.product.id!,
                                   );
+
                               Fluttertoast.showToast(
-                                msg: context.loc.addedToCart,
+                                msg: ref.watch(cartProvider).notifyAddtoCart,
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.CENTER,
                                 timeInSecForIosWeb: 1,

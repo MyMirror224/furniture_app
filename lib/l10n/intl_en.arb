@@ -137,7 +137,7 @@
     "rating": "Rating",
     "writeYourReview": "Write your review here...",
     "reviewSuccess":"Review submitted successfully",
-    "reviewFailed":"Review failed to submit",
+    "reviewFailed":"You have done a product review",
     "submitReview":"Submit Review",
     "shipInfor":"Shipping information",
     "invoiceDetail" : "Invoice details",

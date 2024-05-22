@@ -407,7 +407,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "\$$totalBefore",
+                        "\$${totalBefore.toStringAsFixed(2)}",
                         style: const TextStyle(
                           fontSize: 14,
                         ),
@@ -428,7 +428,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        '\$${total ?? 0}',
+                        '\$${total.toStringAsFixed(2)}',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

@@ -315,7 +315,9 @@ class _InvoicedetailsNotCofirmPageState
                                           color: Color(0xff193d3d),
                                         ),
                                         child: Text(reviewText,
-                                            style: TextStyle()),
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            )),
                                       ),
                                     )
                                   : Container(),

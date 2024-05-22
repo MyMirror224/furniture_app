@@ -11,120 +11,124 @@ class SearchPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final searchProvi = ref.watch(searchProvider);
     return Scaffold(
-        body: SafeArea(
-            child: Column(
-      children: [
-
-        SingleChildScrollView(
-          child: Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: Column(
-                children: [
-                  FutureBuilder(
-                      future:
-                          SharedPreferencesObject().futureGetSearchingHistory(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<String>?> snapshot) {
-                        if (snapshot.hasData) {
-                          return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+      body: SafeArea(
+        child: Column(
+          children: [
+            SingleChildScrollView(
+              child: Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: Column(
+                    children: [
+                      FutureBuilder(
+                          future: SharedPreferencesObject()
+                              .futureGetSearchingHistory(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<String>?> snapshot) {
+                            if (snapshot.hasData) {
+                              return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text("History searching "),
-                                    InkWell(
-                                      onTap: () {
-                                        SharedPreferencesObject()
-                                            .clearSearchingHistory();
-                                        searchProvi.changeTemp();
-                                      },
-                                      child: Row(
-                                        children: const [
-                                          Text("Delete all"),
-                                          Icon(Icons.close_rounded),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Wrap(
-                                  spacing: 5,
-                                  runSpacing: 5,
-                                  children: [
-                                    for (var i in snapshot.data!)
-                                      searchingItem(i)
-                                  ],
-                                ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text("History searching "),
+                                        InkWell(
+                                          onTap: () {
+                                            SharedPreferencesObject()
+                                                .clearSearchingHistory();
+                                            searchProvi.changeTemp();
+                                          },
+                                          child: Row(
+                                            children: const [
+                                              Text("Delete all"),
+                                              Icon(Icons.close_rounded),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Wrap(
+                                      spacing: 5,
+                                      runSpacing: 5,
+                                      children: [
+                                        for (var i in snapshot.data!)
+                                          searchingItem(i)
+                                      ],
+                                    ),
+                                  ]);
+                            } else {
+                              return Container();
+                            }
+                          }),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Column(
+                            children: [
+                              FutureBuilder(
+                                  future: SharedPreferencesObject()
+                                      .futureGetSearchingHistory(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<List<String>?> snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const Text("Lịch sử tìm kiếm"),
+                                                InkWell(
+                                                  onTap: () {
+                                                    SharedPreferencesObject()
+                                                        .clearSearchingHistory();
+                                                    searchProvi.changeTemp();
+                                                  },
+                                                  child: Row(
+                                                    children: const [
+                                                      Text("Xóa tất cả"),
+                                                      Icon(Icons.close_rounded),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            Wrap(
+                                              spacing: 5,
+                                              runSpacing: 5,
+                                              children: [
+                                                for (var i in snapshot.data!)
+                                                  searchingItem(i)
+                                              ],
+                                            ),
+                                          ]);
+                                    } else {
+                                      return Container();
+                                    }
+                                  }),
+                              const SizedBox(
+                                height: 10,
                               ),
-                            ),
-                          )
-                        ],
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-              )
-            ],
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Column(
-              children: [
-                FutureBuilder(
-                    future:
-                        SharedPreferencesObject().futureGetSearchingHistory(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<String>?> snapshot) {
-                      if (snapshot.hasData) {
-                        return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text("Lịch sử tìm kiếm"),
-                                  InkWell(
-                                    onTap: () {
-                                      SharedPreferencesObject()
-                                          .clearSearchingHistory();
-                                      searchProvi.changeTemp();
-                                    },
-                                    child: Row(
-                                      children: const [
-                                        Text("Xóa tất cả"),
-                                        Icon(Icons.close_rounded),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Wrap(
-                                spacing: 5,
-                                runSpacing: 5,
-                                children: [
-                                  for (var i in snapshot.data!) searchingItem(i)
-                                ],
-                              ),
-                            ]);
-                      } else {
-                        return Container();
-                      }
-                    }),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
-      ],
-    )));
+      ),
+    );
   }
 }
 
