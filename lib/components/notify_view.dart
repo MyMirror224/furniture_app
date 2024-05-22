@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:furniture_app/model/notify_model.dart';
 import 'package:furniture_app/pages/Invoice_history_page.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
-
 import 'package:furniture_app/state/notify/notify_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -19,7 +18,6 @@ class NotifyView extends HookConsumerWidget {
           final list = lists[index];
           return Container(
             margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-            height: 100,
             width: 100,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -48,10 +46,11 @@ class NotifyView extends HookConsumerWidget {
                       child: Text(
                         list.title!,
                         style: TextStyle(
-                            color: list.isread == 0 ? Colors.black : Colors.grey,
+                            color:
+                                list.isread == 0 ? Colors.black : Colors.grey,
                             fontSize: 14,
                             fontWeight: FontWeight.bold),
-                        overflow: TextOverflow.ellipsis,
+                        //overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                       ),
                     ),
@@ -82,16 +81,17 @@ class NotifyView extends HookConsumerWidget {
                       );
                     },
                     child: Container(
-                      constraints: BoxConstraints(maxWidth: 100 * 0.9),
+                      //constraints: BoxConstraints(maxWidth: 100 * 0.9),
                       padding: EdgeInsets.only(left: 10, right: 10),
                       child: Text(
                         list.body!,
                         style: TextStyle(
-                            color:list.isread == 0 ? Colors.black : Colors.grey,
+                            color:
+                                list.isread == 0 ? Colors.black : Colors.grey,
                             fontSize: 14,
                             fontWeight: FontWeight.normal),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+                        //overflow: TextOverflow.ellipsis,
+                        //maxLines: 2,
                       ),
                     ),
                   ),

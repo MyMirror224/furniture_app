@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:furniture_app/components/CartItemSampLes.dart';
-import 'package:furniture_app/components/HomeAppBar.dart';
 import 'package:furniture_app/extension/buildcontext/loc.dart';
 import 'package:furniture_app/pages/address_page.dart';
+import 'package:furniture_app/pages/navigator_bar.dart';
 import 'package:furniture_app/state/cart/cart_provider.dart';
 import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:gap/gap.dart';
@@ -40,6 +40,7 @@ class _CartPageState extends ConsumerState<CartPage> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final appThemeState = ref.watch(themeNotifierProvider);
+    final isHome = ref.watch(cartProvider).isHome;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -53,7 +54,41 @@ class _CartPageState extends ConsumerState<CartPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                HomeAppBar(),
+                Row(
+                  children: [
+                    Gap(20),
+                    Container(
+                      height: width * .1,
+                      width: width * .1,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(
+                          width * .08,
+                        )),
+                        color: Color(0xFF183D3D),
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          if (isHome == true) {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomeScreen(),
+                                ),
+                                (route) => false);
+                          } else {
+                            Navigator.pop(context);
+                            ref.read(cartProvider.notifier).setHome(true);
+                          }
+                        },
+                        icon: Icon(
+                          Icons.arrow_back_ios_sharp,
+                          color: Colors.white,
+                          size: width * .1 / 2.66,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -372,7 +407,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "\$$totalBefore",
+                        "\$${totalBefore.toStringAsFixed(2)}",
                         style: const TextStyle(
                           fontSize: 14,
                         ),
@@ -393,7 +428,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        '\$${total ?? 0}',
+                        '\$${total.toStringAsFixed(2)}',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

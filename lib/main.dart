@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:furniture_app/components/dialog/dialog_auth.dart';
 import 'package:furniture_app/components/dialog/dialog_model.dart';
 import 'package:furniture_app/components/loading/loading_screen.dart';
@@ -19,7 +19,6 @@ import 'package:furniture_app/state/auth/auth_state_provider.dart';
 import 'package:furniture_app/themes/app_theme.dart';
 import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   await Global.init();
@@ -44,7 +43,7 @@ class DarkModeSwitch extends HookConsumerWidget {
   }
 }
 
-class App extends ConsumerWidget {
+class App extends HookConsumerWidget {
   const App({
     Key? key,
   }) : super(key: key);

@@ -88,6 +88,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
         },
         child: Scaffold(
             appBar: AppBar(
+              backgroundColor: Color(0xff5d8374),
               title: Center(
                   child: Text(context.loc.supporter,
                       style: TextStyle(
@@ -112,6 +113,9 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                       );
                 },
                 messages: ref.watch(chatProvider).uiChatMessages,
+                inputOptions: InputOptions(
+                  inputTextStyle: TextStyle(fontSize: 16, color: Colors.black),
+                ),
               ),
             )),
       ),

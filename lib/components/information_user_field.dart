@@ -53,9 +53,11 @@ class InformationFields extends ConsumerWidget {
             left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
         child: Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
+            color:
+                appThemeState == ThemeMode.dark ? Colors.white : Colors.black,
           ),
         ),
       );

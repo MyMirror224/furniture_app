@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/extension/buildcontext/loc.dart';
-import 'package:furniture_app/pages/navigator_bar.dart';
 import 'package:furniture_app/provider/region_provider.dart';
+import 'package:furniture_app/state/auth/auth_state_provider.dart';
+import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class LanguagePage extends ConsumerWidget {
@@ -9,8 +10,19 @@ class LanguagePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeNotifierProvider);
     final locale = ref.watch(localeProvider);
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xff193d3d),
+        title: Text(context.loc.language),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -32,10 +44,7 @@ class LanguagePage extends ConsumerWidget {
                       ref
                           .read(localeProvider.notifier)
                           .setLocale(Locale('en', 'US'));
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
-                          (route) => false);
+                      return ref.refresh(authStateProvider.notifier);
                     },
                     child: Container(
                       child: Text('${context.loc.english}'),
@@ -43,7 +52,11 @@ class LanguagePage extends ConsumerWidget {
                   ),
                 ),
               ),
-              if (locale.languageCode == 'en') Icon(Icons.check_circle),
+              if (locale.languageCode == 'en')
+                Icon(Icons.check_circle,
+                    color: themeMode == ThemeMode.dark
+                        ? Colors.white
+                        : Colors.black),
             ]),
             Row(children: [
               Expanded(
@@ -63,10 +76,7 @@ class LanguagePage extends ConsumerWidget {
                       ref
                           .read(localeProvider.notifier)
                           .setLocale(Locale('vi', 'VN'));
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
-                          (route) => false);
+                      return ref.refresh(authStateProvider.notifier);
                     },
                     child: Container(
                       child: Text('${context.loc.vietnamese}'),
@@ -74,7 +84,11 @@ class LanguagePage extends ConsumerWidget {
                   ),
                 ),
               ),
-              if (locale.languageCode == 'vi') Icon(Icons.check_circle),
+              if (locale.languageCode == 'vi')
+                Icon(Icons.check_circle,
+                    color: themeMode == ThemeMode.dark
+                        ? Colors.white
+                        : Colors.black),
             ]),
           ],
         ),

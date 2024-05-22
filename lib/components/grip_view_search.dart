@@ -126,7 +126,7 @@ class ItemCard extends HookConsumerWidget {
               Gap(5),
               Flexible(
                 child: Text(
-                  title,
+                  title.length > 20 ? title.substring(0, 20) + '...' : title,
                   style: GoogleFonts.roboto(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

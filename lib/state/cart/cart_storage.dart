@@ -1,10 +1,6 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:furniture_app/model/cart_model.dart';
-import 'package:furniture_app/model/order_model.dart';
-
 import 'package:furniture_app/service/http_util.dart';
 
 class CartApi {
@@ -19,9 +15,9 @@ class CartApi {
       int type) async {
     try {
       print(items.first.price);
-      
-      
-      String jsonString = jsonEncode(items.map((item) => item.toJson()).toList());
+
+      String jsonString =
+          jsonEncode(items.map((item) => item.toJson()).toList());
       String url = '';
       if (type == 1) {
         final response = await HttpUtil().post(
@@ -36,8 +32,8 @@ class CartApi {
             'name': name,
           },
         );
-                
-        return OrderModel.fromJson(response['data']);
+
+        return response;
       }
       if (type == 2) {
         final response = await HttpUtil().post(
@@ -71,8 +67,6 @@ class CartApi {
         url = response['data'] as String;
         return url;
       }
-      
-      
     } catch (e) {
       return 'failed';
     }
@@ -107,7 +101,7 @@ class CartApi {
               id: item['id'],
               name: item['name'],
               price: double.parse(item['price']),
-              quantity: item['quantity'] ,
+              quantity: item['quantity'],
               image: item['image'],
               discountPrice: item['dicountPrice'] / 1.0,
               isSelected: true,

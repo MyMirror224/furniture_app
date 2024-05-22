@@ -207,7 +207,9 @@ class _PersonalPageState extends ConsumerState<PersonalPage> {
               width: size.width * 0.9,
               child: PersonalButton(
                 text: context.loc.logout,
-                onTap: () => ref.read(authStateProvider.notifier).logOut(),
+                onTap: () {
+                  ref.read(authStateProvider.notifier).logOut();
+                },
                 icon: FontAwesomeIcons.signOutAlt,
               ),
             ),

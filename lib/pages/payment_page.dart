@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:furniture_app/components/HomeAppBar.dart';
 import 'package:furniture_app/constant/appconstant.dart';
 import 'package:furniture_app/extension/buildcontext/loc.dart';
@@ -27,6 +28,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
   Widget build(BuildContext context) {
     final _cart = ref.watch(cartProvider);
     final userId = ref.watch(userIdProvider);
+    double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: SafeArea(
@@ -67,7 +69,6 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                       context.loc.cart,
                       style: TextStyle(
                         fontSize: 10,
-                        color: Color(0xff193d3d),
                       ),
                     ),
                   ],
@@ -120,7 +121,6 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                       context.loc.address,
                       style: TextStyle(
                         fontSize: 10,
-                        color: Color(0xff193d3d),
                       ),
                     ),
                   ],
@@ -173,7 +173,6 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                       context.loc.pay,
                       style: TextStyle(
                         fontSize: 10,
-                        color: Color(0xff193d3d),
                       ),
                     ),
                   ],
@@ -183,7 +182,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
             Gap(10),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 15),
-              child:  Text(context.loc.inforOrder,
+              child: Text(context.loc.inforOrder,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),
             Gap(10),
@@ -238,6 +237,20 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: _cart.cartItemsShow.length,
                 itemBuilder: (context, index) {
+                  final name = _cart.cartItemsShow[index].name
+                              .toString()
+                              .substring(
+                                  _cart.cartItemsShow[index].name!.indexOf(' '))
+                              .length >
+                          30
+                      ? _cart.cartItemsShow[index].name
+                              .toString()
+                              .substring(
+                                  _cart.cartItemsShow[index].name!.indexOf(' '))
+                              .substring(0, 30) +
+                          '...'
+                      : _cart.cartItemsShow[index].name.toString().substring(
+                          _cart.cartItemsShow[index].name!.indexOf(' '));
                   return Container(
                     padding: EdgeInsets.all(10),
                     margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -256,8 +269,13 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                           Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                    '${context.loc.name}: ${_cart.cartItemsShow[index].name.toString().substring(_cart.cartItemsShow[index].name!.indexOf(' '))}'),
+                                Row(children: [
+                                  Text(
+                                    '${context.loc.name}: ' + name,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                  ),
+                                ]),
                                 Gap(5),
                                 Text(
                                     '${context.loc.quantity}: ${_cart.cartItemsShow[index].quantity}'),
@@ -269,7 +287,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                   );
                 }),
             Container(
-              height: 40,
+              height: height * 0.1,
               decoration: BoxDecoration(
                 color: Color(0xff193d3d),
                 borderRadius: BorderRadius.circular(20),
@@ -414,14 +432,26 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
             await ref
                 .read(cartProvider.notifier)
                 .sendItemBuy(userId.toString());
-            if (_cart.isSelectDirect) {
+            final message = ref.watch(cartProvider).notifyBuy;
+            if (_cart.isSelectDirect && message == 'success') {
               final OrderModel? order = ref.watch(cartProvider.notifier).order;
+
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
                       OrderResults(order: order!, isSuccess: true),
                 ),
+              );
+            } else if (_cart.isSelectDirect && message != 'success') {
+              Fluttertoast.showToast(
+                msg: message,
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: const Color(0xff193d3d),
+                textColor: Colors.white,
+                fontSize: 16.0,
               );
             } else {
               Navigator.push(

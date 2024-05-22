@@ -11,11 +11,13 @@ import 'package:furniture_app/model/notify_model.dart';
 import 'package:furniture_app/pages/cart_page.dart';
 import 'package:furniture_app/pages/product_list_page.dart';
 import 'package:furniture_app/pages/search%20page/searchPage.dart';
-import 'package:furniture_app/pages/user_information/user_information.dart';
+import 'package:furniture_app/pages/user_information/detail_information.dart';
 import 'package:furniture_app/provider/isLockUser.dart';
+import 'package:furniture_app/provider/region_provider.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
 import 'package:furniture_app/services/laravel_echo.dart';
 import 'package:furniture_app/services/logger.dart';
+import 'package:furniture_app/state/cart/cart_provider.dart';
 import 'package:furniture_app/state/category/categogies_provider.dart';
 import 'package:furniture_app/state/notify/notify_provider.dart';
 import 'package:furniture_app/state/product/product_provider.dart';
@@ -82,6 +84,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       ref
           .read(lockUserProvider)
           .checkLock(ref.watch(userIdProvider).toString());
+      ref.read(cartProvider.notifier).setHome(true);
+      ref.read(notifyProvider).checkIsread();
     });
     // WidgetsBinding.instance.addPostFrameCallback((_)  {
 
@@ -106,6 +110,8 @@ class _HomePageState extends ConsumerState<HomePage> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final appThemeState = ref.watch(themeNotifierProvider);
+    final loca = ref.read(localeProvider);
+    final isread = ref.watch(notifyProvider).isRead;
     return KeyboardDismisser(
       child: StartUpContainer(
         onInit: () {
@@ -148,7 +154,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const UserInformation()));
+                                                  DeteilInformationPage(
+                                                      userId.toString())));
                                     },
                                     child: Container(
                                       width: 40,
@@ -169,14 +176,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   Container(
                                     padding: const EdgeInsets.only(bottom: 5.0),
                                     child: Text(
-                                      // longText.length > 15
-                                      //     ? "Hi, "
-                                      //         "...${longText.substring(9, longText.length)}"
-                                      //     : "Hi, $longText",
-                                      // with vn language
-                                      longText.length > 15
-                                          ? "${context.loc.hi}...${longText.substring(4, longText.length)}"
-                                          : "${context.loc.hi}$longText",
+                                      loca.languageCode == 'vi'
+                                          ? longText.length > 15
+                                              ? context.loc.hi +
+                                                  "...${longText.substring(9, longText.length)}"
+                                              : context.loc.hi + longText
+                                          : longText.length > 15
+                                              ? "${context.loc.hi}${longText.split(' ')[0]}..."
+                                              : "${context.loc.hi}$longText",
                                       maxLines: 1,
                                       overflow: TextOverflow.fade,
                                       style: GoogleFonts.roboto(
@@ -191,7 +198,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   IconButtonCircle(
-                                    icon: Icons.notifications,
+                                    icon: isread
+                                        ? Icons.notification_add
+                                        : Icons.notifications,
+                                    color: isread
+                                        ? Color.fromARGB(255, 197, 3, 3)
+                                        : Colors.black,
                                     onTap: () {
                                       ref
                                           .read(notifyProvider)
@@ -202,6 +214,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   IconButtonCircle(
                                     icon: Icons.shopping_cart,
                                     onTap: () {
+                                      ref.read(cartProvider).setHome(false);
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -342,7 +355,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               );
                             },
                             child: Text(
-                              'See All...',
+                              context.loc.seeAll,
                               style: GoogleFonts.roboto(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,

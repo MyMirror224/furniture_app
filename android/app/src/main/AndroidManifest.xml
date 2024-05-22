@@ -3,7 +3,8 @@
         <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
     </queries>
     <application
-        android:label="furniture_app"
+   
+        android:label="ANNT Store"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

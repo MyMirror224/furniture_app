@@ -30,9 +30,8 @@ class ProductNotifier extends ChangeNotifier {
 
   int get productLength => _products.length;
 
-  
   List<ProductModel?> newProducts = [];
-  
+
   List<ProductModel?> get products => _products;
 
   List<ProductModel?> get productCate => _productsCate;
@@ -53,21 +52,20 @@ class ProductNotifier extends ChangeNotifier {
     _productsforIDCate = respone;
     notifyListeners();
   }
-   
-  
+
   Future<void> newProduct() async {
     try {
       final respone = await ProductAPI.newProduct();
-    newProducts =respone;
-    
+      newProducts = respone;
     } catch (e) {
       print(e);
     }
-    
+
     notifyListeners();
   }
 
   void setProductsForCateloryId() {
+    _productsForCateloryId.clear();
     print(_products.length);
     for (var product in _products) {
       int index = getCategoryIndexById(product!.categoryId!);

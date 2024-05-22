@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:furniture_app/extension/buildcontext/loc.dart';
 
 // ignore: camel_case_types
 class nameInvoicede extends StatelessWidget {
@@ -21,10 +22,10 @@ class nameInvoicede extends StatelessWidget {
               color: Color.fromARGB(255, 88, 145, 145),
             ),
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(left: 1),
             child: Text(
-              "Invoice details",
+              context.loc.invoiceDetail,
               style: TextStyle(
                 fontSize: 23,
                 fontWeight: FontWeight.bold,

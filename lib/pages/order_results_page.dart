@@ -4,6 +4,7 @@ import 'package:furniture_app/model/order_model.dart';
 import 'package:furniture_app/pages/Invoice_history_page.dart';
 import 'package:furniture_app/pages/navigator_bar.dart';
 import 'package:furniture_app/provider/user_id_provider.dart';
+import 'package:furniture_app/themes/theme_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OrderResults extends HookConsumerWidget {
@@ -14,6 +15,7 @@ class OrderResults extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeNotifierProvider);
     final userId = ref.watch(userIdProvider);
     return Scaffold(
       // backgroundColor: Colors.green,oderfail
@@ -50,7 +52,9 @@ class OrderResults extends HookConsumerWidget {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: const Color(0xff193d3d),
+                            color: themeMode == ThemeMode.light
+                                ? Color(0xff193d3d)
+                                : Colors.white,
                           ),
                           textAlign: TextAlign.left,
                         ),
@@ -118,7 +122,6 @@ class OrderResults extends HookConsumerWidget {
                                   context.loc.name,
                                   style: TextStyle(
                                     fontSize: 10,
-                                    color: Colors.black,
                                   ),
                                 ),
                                 SizedBox(height: 5),
@@ -126,7 +129,6 @@ class OrderResults extends HookConsumerWidget {
                                   context.loc.orderid,
                                   style: TextStyle(
                                     fontSize: 10,
-                                    color: Colors.black,
                                   ),
                                 ),
                                 SizedBox(height: 5),
@@ -134,7 +136,6 @@ class OrderResults extends HookConsumerWidget {
                                   context.loc.address,
                                   style: TextStyle(
                                     fontSize: 10,
-                                    color: Colors.black,
                                   ),
                                 ),
                                 SizedBox(height: 5),
@@ -163,7 +164,6 @@ class OrderResults extends HookConsumerWidget {
                                     order.name,
                                     style: TextStyle(
                                       fontSize: 10,
-                                      color: const Color(0xff193d3d),
                                     ),
                                   ),
                                   SizedBox(height: 5),
@@ -171,7 +171,6 @@ class OrderResults extends HookConsumerWidget {
                                     order.id.toString(),
                                     style: TextStyle(
                                       fontSize: 10,
-                                      color: const Color(0xff193d3d),
                                     ),
                                   ),
                                   SizedBox(height: 5),
@@ -179,7 +178,6 @@ class OrderResults extends HookConsumerWidget {
                                     order.address.toString(),
                                     style: TextStyle(
                                       fontSize: 10,
-                                      color: const Color(0xff193d3d),
                                     ),
                                   ),
                                   SizedBox(height: 5),
@@ -389,7 +387,6 @@ class OrderResults extends HookConsumerWidget {
                         width: 300,
                         child: ElevatedButton(
                           onPressed: () {
-                            // Xử lý sự kiện khi nút "Track your order" được nhấn
                             print('Track your order button pressed!');
                             Navigator.pushAndRemoveUntil(
                                 context,
